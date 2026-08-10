@@ -220,3 +220,456 @@ function clearMyAuthCache() {
   cache.remove('SCHOOL_' + c.npsn);
   return { success: true };
 }
+
+function refreshMySchoolContext() {
+
+  const email =
+    getGoogleUserEmail_();
+
+  const normalizedEmail =
+    normalizeEmail_(email);
+
+  const cache =
+    CacheService.getScriptCache();
+
+
+  // =====================================================
+  // KEY CACHE
+  // =====================================================
+
+  const userContextKey =
+    'USER_CONTEXT_V3_' +
+    normalizedEmail
+      .replace(
+        /[^a-zA-Z0-9]/g,
+        '_'
+      );
+
+
+  const userKey =
+    'USER_' +
+    normalizedEmail
+      .replace(
+        /[^a-zA-Z0-9]/g,
+        '_'
+      );
+
+
+  // =====================================================
+  // HAPUS CACHE USER
+  // =====================================================
+
+  cache.remove(
+    userContextKey
+  );
+
+  cache.remove(
+    userKey
+  );
+
+
+  // =====================================================
+  // BACA USERS LANGSUNG DARI MASTER
+  // =====================================================
+
+  const usersSheet =
+    getUsersSheet_();
+
+
+  const userValues =
+    usersSheet
+      .getDataRange()
+      .getValues();
+
+
+  if (
+    userValues.length < 2
+  ) {
+
+    throw new Error(
+      'Data USERS kosong.'
+    );
+
+  }
+
+
+  const userHeaders =
+    userValues[0].map(
+      function(header) {
+
+        return String(
+          header || ''
+        )
+          .trim()
+          .toUpperCase();
+
+      }
+    );
+
+
+  const emailIndex =
+    userHeaders.indexOf(
+      'EMAIL'
+    );
+
+
+  if (
+    emailIndex === -1
+  ) {
+
+    throw new Error(
+      'Kolom EMAIL tidak ditemukan di USERS.'
+    );
+
+  }
+
+
+  let user =
+    null;
+
+
+  for (
+    let i = 1;
+    i < userValues.length;
+    i++
+  ) {
+
+    const rowEmail =
+      normalizeEmail_(
+        userValues[i][emailIndex]
+      );
+
+
+    if (
+      rowEmail ===
+      normalizedEmail
+    ) {
+
+      user = {};
+
+
+      userHeaders.forEach(
+        function(
+          header,
+          index
+        ) {
+
+          user[header] =
+            userValues[i][index];
+
+        }
+      );
+
+
+      break;
+
+    }
+
+  }
+
+
+  if (!user) {
+
+    throw new Error(
+      'Akun "' +
+      normalizedEmail +
+      '" tidak ditemukan di USERS.'
+    );
+
+  }
+
+
+  // =====================================================
+  // NPSN TERBARU
+  // =====================================================
+
+  const npsn =
+    String(
+      user.NPSN || ''
+    )
+      .trim();
+
+
+  if (!npsn) {
+
+    throw new Error(
+      'NPSN akun belum tersedia.'
+    );
+
+  }
+
+
+  // =====================================================
+  // HAPUS CACHE SCHOOL
+  // =====================================================
+
+  cache.remove(
+    'SCHOOL_' + npsn
+  );
+
+
+  // =====================================================
+  // BACA SCHOOLS LANGSUNG DARI MASTER
+  // =====================================================
+
+  const schoolsSheet =
+    getSchoolsSheet_();
+
+
+  const schoolValues =
+    schoolsSheet
+      .getDataRange()
+      .getValues();
+
+
+  if (
+    schoolValues.length < 2
+  ) {
+
+    throw new Error(
+      'Data SCHOOLS kosong.'
+    );
+
+  }
+
+
+  const schoolHeaders =
+    schoolValues[0].map(
+      function(header) {
+
+        return String(
+          header || ''
+        )
+          .trim()
+          .toUpperCase();
+
+      }
+    );
+
+
+  const npsnIndex =
+    schoolHeaders.indexOf(
+      'NPSN'
+    );
+
+
+  if (
+    npsnIndex === -1
+  ) {
+
+    throw new Error(
+      'Kolom NPSN tidak ditemukan di SCHOOLS.'
+    );
+
+  }
+
+
+  let school =
+    null;
+
+
+  for (
+    let i = 1;
+    i < schoolValues.length;
+    i++
+  ) {
+
+    const rowNpsn =
+      String(
+        schoolValues[i][npsnIndex] || ''
+      )
+        .trim();
+
+
+    if (
+      rowNpsn === npsn
+    ) {
+
+      school = {};
+
+
+      schoolHeaders.forEach(
+        function(
+          header,
+          index
+        ) {
+
+          school[header] =
+            schoolValues[i][index];
+
+        }
+      );
+
+
+      break;
+
+    }
+
+  }
+
+
+  if (!school) {
+
+    throw new Error(
+      'Sekolah dengan NPSN ' +
+      npsn +
+      ' tidak ditemukan di SCHOOLS.'
+    );
+
+  }
+
+
+  // =====================================================
+  // BUAT CONTEXT BARU
+  // =====================================================
+
+  const newContext = {
+
+    authenticated:
+      true,
+
+    email:
+      normalizedEmail,
+
+    userId:
+      String(
+        user.USER_ID || ''
+      ).trim(),
+
+    nip:
+      String(
+        user.NIP || ''
+      ).trim(),
+
+    nama:
+      String(
+        user.NAMA || ''
+      ).trim(),
+
+    role:
+      String(
+        user.ROLE || ''
+      )
+      .trim()
+      .toUpperCase(),
+
+    npsn:
+      npsn,
+
+    school: {
+
+      npsn:
+        npsn,
+
+      namaSekolah:
+        String(
+          school.NAMA_SEKOLAH || ''
+        ).trim(),
+
+      spreadsheetId:
+        String(
+          school.SPREADSHEET_ID || ''
+        ).trim(),
+
+      driveFolderId:
+        String(
+          school.DRIVE_FOLDER_ID || ''
+        ).trim(),
+
+      alamat:
+        String(
+          school.ALAMAT || ''
+        ).trim(),
+
+      logoUrl:
+        String(
+          school.LOGO_URL || ''
+        ).trim(),
+
+      tagline:
+        String(
+          school.TAGLINE || ''
+        ).trim(),
+
+      warnaUtama:
+        String(
+          school.WARNA_UTAMA || ''
+        ).trim(),
+
+      warnaSekunder:
+        String(
+          school.WARNA_SEKUNDER || ''
+        ).trim()
+
+    }
+
+  };
+
+
+  // =====================================================
+  // VALIDASI RESOURCE BARU
+  // =====================================================
+
+  if (
+    !newContext.school.spreadsheetId
+  ) {
+
+    throw new Error(
+      'SPREADSHEET_ID sekolah kosong.'
+    );
+
+  }
+
+
+  if (
+    !newContext.school.driveFolderId
+  ) {
+
+    throw new Error(
+      'DRIVE_FOLDER_ID sekolah kosong.'
+    );
+
+  }
+
+
+  // =====================================================
+  // SIMPAN CONTEXT BARU
+  // =====================================================
+
+  cache.put(
+    userContextKey,
+
+    JSON.stringify(
+      newContext
+    ),
+
+    AUTH_CONFIG.CACHE_SECONDS
+  );
+
+
+  return {
+
+    success:
+      true,
+
+    message:
+      'School Context berhasil di-refresh dari Master.',
+
+    email:
+      newContext.email,
+
+    npsn:
+      newContext.npsn,
+
+    sekolah:
+      newContext.school.namaSekolah,
+
+    spreadsheetId:
+      newContext.school.spreadsheetId,
+
+    driveFolderId:
+      newContext.school.driveFolderId
+
+  };
+
+}
