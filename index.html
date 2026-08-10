@@ -79,11 +79,29 @@
           <div class="small-label">Email</div>
           <div class="value" id="userEmail">-</div>
         </div>
+<button
+  id="btnRefreshContext"
+  class="btn btn-outline-danger"
+  onclick="refreshSchoolContext()">
+
+  REFRESH SCHOOL CONTEXT
+
+</button>
+
         <button
   id="btnSetupDatabase"
   class="btn btn-primary"
   onclick="setupDatabaseSekolahSaya()">
   SETUP DATABASE SEKOLAH
+</button>
+
+<button
+  id="btnSetupDrive"
+  class="btn btn-primary"
+  onclick="setupDriveSekolahSaya()">
+
+  SETUP FOLDER DRIVE
+
 </button>
       </div>
       <div id="loginError"
@@ -301,6 +319,141 @@ function setupDatabaseSekolahSaya() {
     )
     .setupDatabaseSekolahSaya();
 }
+
+
+function setupDriveSekolahSaya() {
+
+  const btn =
+    document.getElementById(
+      'btnSetupDrive'
+    );
+
+
+  btn.disabled = true;
+
+  btn.innerHTML =
+    '<span class="spinner-border spinner-border-sm me-2"></span>' +
+    'Menyiapkan Drive...';
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(result) {
+
+        btn.disabled = false;
+
+        btn.innerHTML =
+          'SETUP FOLDER DRIVE';
+
+
+        showResult(
+          result
+        );
+
+      }
+    )
+
+    .withFailureHandler(
+      function(error) {
+
+        btn.disabled = false;
+
+        btn.innerHTML =
+          'SETUP FOLDER DRIVE';
+
+
+        showResult({
+
+          success: false,
+
+          error:
+            error.message
+
+        });
+
+      }
+    )
+
+    .setupDriveSekolahSaya();
+
+}
+
+
+
+
+function refreshSchoolContext() {
+
+  const btn =
+    document.getElementById(
+      'btnRefreshContext'
+    );
+
+  btn.disabled = true;
+
+  btn.innerHTML =
+    '<span class="spinner-border spinner-border-sm me-2"></span>' +
+    'Refreshing...';
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(result) {
+
+        btn.disabled = false;
+
+        btn.innerHTML =
+          'REFRESH SCHOOL CONTEXT';
+
+
+        showResult(
+          result
+        );
+
+
+        /*
+         * Reload halaman supaya frontend
+         * menggunakan School Context terbaru.
+         */
+
+        setTimeout(
+          function() {
+
+            location.reload();
+
+          },
+          1000
+        );
+
+      }
+    )
+
+    .withFailureHandler(
+      function(error) {
+
+        btn.disabled = false;
+
+        btn.innerHTML =
+          'REFRESH SCHOOL CONTEXT';
+
+
+        showResult({
+
+          success: false,
+
+          error:
+            error.message
+
+        });
+
+      }
+    )
+
+    .refreshMySchoolContext();
+
+}
+
 </script>
 </body>
 </html>
