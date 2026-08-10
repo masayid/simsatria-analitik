@@ -666,11 +666,9 @@ function testSyncConfigSekolahA() {
     '20312345'
   );
 }
-
 function initializeTransactionSheets_(
   spreadsheet
 ) {
-
   const SYSTEM_HEADERS = [
     'TRANSACTION_ID',
     'TIMESTAMP',
@@ -680,30 +678,19 @@ function initializeTransactionSheets_(
     'NIP',
     'NAMA_USER',
     'ROLE'
-
   ];
-
-
   const definitions = {
-
     TRX_PRESENSI: [
-
       ...SYSTEM_HEADERS,
-
       'TANGGAL',
       'KELAS',
       'NISN',
       'NAMA_SISWA',
       'STATUS',
       'KETERANGAN'
-
     ],
-
-
     TRX_PRESTASI: [
-
       ...SYSTEM_HEADERS,
-
       'JENIS_PRESTASI',
       'TINGKAT',
       'NAMA_KEGIATAN',
@@ -711,14 +698,9 @@ function initializeTransactionSheets_(
       'NAMA_SISWA',
       'NISN',
       'BUKTI_FISIK'
-
     ],
-
-
     TRX_AGENDA_GURU: [
-
       ...SYSTEM_HEADERS,
-
       'TANGGAL',
       'KELAS',
       'SESI',
@@ -729,14 +711,9 @@ function initializeTransactionSheets_(
       'PRINSIP_PEMBELAJARAN',
       'MURID_TIDAK_MENGIKUTI_KBM',
       'BUKTI_FISIK'
-
     ],
-
-
     TRX_SBI: [
-
       ...SYSTEM_HEADERS,
-
       'INDIKATOR',
       'SUBINDIKATOR',
       'URAIAN_KEGIATAN',
@@ -744,50 +721,30 @@ function initializeTransactionSheets_(
       'SOLUSI',
       'KARAKTER',
       'BUKTI_FISIK'
-
     ],
-
-
     TRX_PARKIR: [
-
       ...SYSTEM_HEADERS,
-
       'TANGGAL',
       'KENDALA',
       'SOLUSI',
       'UPLOAD_FOTO_PARKIR'
-
     ],
-
-
     TRX_KEBERSIHAN: [
-
       ...SYSTEM_HEADERS,
-
       'TANGGAL',
       'KENDALA',
       'SOLUSI',
       'BUKTI_FISIK'
-
     ],
-
-
     TRX_KEAMANAN: [
-
       ...SYSTEM_HEADERS,
-
       'TANGGAL',
       'KENDALA',
       'SOLUSI',
       'BUKTI_FISIK'
-
     ],
-
-
     TRX_KERJA: [
-
       ...SYSTEM_HEADERS,
-
       'TANGGAL_PELAKSANAAN',
       'SESI',
       'BIDANG_TUGAS',
@@ -797,98 +754,64 @@ function initializeTransactionSheets_(
       'TINDAK_LANJUT',
       'REFLEKSI',
       'BUKTI_FISIK'
-
     ]
-
   };
-
-
   Object.keys(
     definitions
   ).forEach(
     function(sheetName) {
-
       let sheet =
         spreadsheet.getSheetByName(
           sheetName
         );
-
-
       if (!sheet) {
-
         sheet =
           spreadsheet.insertSheet(
             sheetName
           );
-
       }
-
-
       setupHeaders_(
         sheet,
         definitions[
           sheetName
         ]
       );
-
     }
   );
-
-
   return true;
-
 }
-
 /**
  * ==========================================================
  * MIGRASI TRANSACTION_ID
  * ==========================================================
  */
-
 function addTransactionIdHeader_(
   spreadsheet
 ) {
-
   const sheets =
     spreadsheet
       .getSheets();
-
-
   sheets.forEach(
     function(sheet) {
-
       const sheetName =
         sheet.getName();
-
-
       /*
        * Hanya sheet TRX_*
        */
-
       if (
         !sheetName.startsWith(
           'TRX_'
         )
       ) {
-
         return;
-
       }
-
-
       const lastColumn =
         sheet.getLastColumn();
-
-
       if (
         lastColumn < 1
       ) {
-
         return;
-
       }
-
-
       const headers =
         sheet
           .getRange(
@@ -900,39 +823,27 @@ function addTransactionIdHeader_(
           .getValues()[0]
           .map(
             function(header) {
-
               return String(
                 header || ''
               ).trim();
-
             }
           );
-
-
       /*
        * Jika sudah ada, jangan lakukan apa-apa.
        */
-
       if (
         headers.includes(
           'TRANSACTION_ID'
         )
       ) {
-
         return;
-
       }
-
-
       /*
        * Tambahkan kolom baru di paling depan.
        */
-
       sheet.insertColumnBefore(
         1
       );
-
-
       sheet
         .getRange(
           1,
@@ -941,8 +852,6 @@ function addTransactionIdHeader_(
         .setValue(
           'TRANSACTION_ID'
         );
-
-
       sheet
         .getRange(
           1,
@@ -951,66 +860,40 @@ function addTransactionIdHeader_(
         .setFontWeight(
           'bold'
         );
-
-
       sheet.setFrozenRows(
         1
       );
-
     }
   );
-
-
   return true;
-
 }
-
-
 function fillMissingTransactionIds_(
   spreadsheet
 ) {
-
   const sheets =
     spreadsheet
       .getSheets();
-
-
   sheets.forEach(
     function(sheet) {
-
       const sheetName =
         sheet.getName();
-
-
       if (
         !sheetName.startsWith(
           'TRX_'
         )
       ) {
-
         return;
-
       }
-
-
       const lastRow =
         sheet.getLastRow();
-
-
       const lastColumn =
         sheet.getLastColumn();
-
-
       if (
         lastRow < 2 ||
         lastColumn < 1
       ) {
-
         return;
-
       }
-
-
       const headers =
         sheet
           .getRange(
@@ -1020,30 +903,20 @@ function fillMissingTransactionIds_(
             lastColumn
           )
           .getValues()[0];
-
-
       const idColumn =
         headers.findIndex(
           function(header) {
-
             return String(
               header
             ).trim() ===
             'TRANSACTION_ID';
-
           }
         );
-
-
       if (
         idColumn === -1
       ) {
-
         return;
-
       }
-
-
       const range =
         sheet.getRange(
           2,
@@ -1051,47 +924,28 @@ function fillMissingTransactionIds_(
           lastRow - 1,
           1
         );
-
-
       const values =
         range.getValues();
-
-
       let changed =
         false;
-
-
       values.forEach(
         function(row) {
-
           if (
             !row[0]
           ) {
-
             row[0] =
               generateTransactionId_();
-
             changed =
               true;
-
           }
-
         }
       );
-
-
       if (changed) {
-
         range.setValues(
           values
         );
-
       }
-
     }
   );
-
-
   return true;
-
 }
