@@ -1,153 +1,235 @@
 <script>
+
+
 let CURRENT_USER_CONTEXT = null;
+
+
 /**
  * ==========================================================
  * START
  * ==========================================================
  */
+
 document.addEventListener(
   'DOMContentLoaded',
   function() {
+
     loadSystemInfo();
+
     checkAuthentication();
+
   }
 );
+
+
 /**
  * ==========================================================
  * SYSTEM INFO
  * ==========================================================
  */
+
 function loadSystemInfo() {
+
   google.script.run
+
     .withSuccessHandler(
       function(data) {
+
         if (!data) return;
+
+
         const element =
           document.getElementById(
             'systemVersion'
           );
+
+
         if (element) {
+
           element.textContent =
             'v' +
             data.version;
+
         }
+
       }
     )
+
     .getSystemInfo();
+
 }
+
+
 /**
  * ==========================================================
  * CHECK AUTH
  * ==========================================================
  */
+
 function checkAuthentication() {
+
   setLoginLoading(
     true
   );
+
+
   google.script.run
+
     .withSuccessHandler(
       function(context) {
+
         setLoginLoading(
           false
         );
+
+
         if (
           context &&
           context.authenticated
         ) {
+
           CURRENT_USER_CONTEXT =
             context;
+
+
           showUserContext(
             context
           );
+
+
           testSchoolConnection(
             context.npsn
           );
+
         }
+
       }
     )
+
     .withFailureHandler(
       function(error) {
+
         setLoginLoading(
           false
         );
+
+
         showAuthError(
           error.message ||
           'Autentikasi gagal.'
         );
+
       }
     )
+
     .getCurrentUserContext();
+
 }
+
+
 /**
  * ==========================================================
  * LOGIN
  * ==========================================================
  */
+
 function loginSatria() {
+
   checkAuthentication();
+
 }
+
+
 /**
  * ==========================================================
  * SHOW USER CONTEXT
  * ==========================================================
  */
+
 function showUserContext(
   context
 ) {
+
   const authCard =
     document.getElementById(
       'authCard'
     );
+
+
   const userCard =
     document.getElementById(
       'userContextCard'
     );
+
+
   if (authCard) {
+
     authCard.classList
       .add('d-none');
+
   }
+
+
   if (userCard) {
+
     userCard.classList
       .remove('d-none');
+
   }
+
+
   /*
    * USER
    */
+
   document
     .getElementById(
       'userName'
     )
     .textContent =
       context.nama || '-';
+
+
   document
     .getElementById(
       'userEmail'
     )
     .textContent =
       context.email || '-';
+
+
   document
     .getElementById(
       'userRole'
     )
     .textContent =
       context.role || '-';
+
+
   document
     .getElementById(
       'userNpsn'
     )
     .textContent =
       context.npsn || '-';
+
+
   /*
    * SCHOOL
    */
+
   const school =
     context.school;
+
+
   document
     .getElementById(
       'schoolName'
     )
     .textContent =
       school.namaSekolah || '-';
+
+
   document
     .getElementById(
       'schoolNpsn'
@@ -155,21 +237,28 @@ function showUserContext(
     .textContent =
       'NPSN ' +
       (school.npsn || '-');
+
+
   document
     .getElementById(
       'schoolTagline'
     )
     .textContent =
       school.tagline || '';
+
+
   document
     .getElementById(
       'schoolStatus'
     )
     .textContent =
       school.status || 'ACTIVE';
+
+
   /*
    * COLORS
    */
+
   document.documentElement
     .style
     .setProperty(
@@ -177,6 +266,8 @@ function showUserContext(
       school.warnaUtama ||
       '#0B3D2E'
     );
+
+
   document.documentElement
     .style
     .setProperty(
@@ -184,55 +275,85 @@ function showUserContext(
       school.warnaSekunder ||
       '#2E7D32'
     );
+
+
   /*
    * LOGO
    */
+
   if (
     school.logoUrl
   ) {
+
     const logo =
       document.getElementById(
         'schoolLogo'
       );
+
+
     const fallback =
       document.getElementById(
         'schoolLogoFallback'
       );
+
+
     logo.onload =
       function() {
+
         logo.style.display =
           'block';
+
         fallback.style.display =
           'none';
+
       };
+
+
     logo.onerror =
       function() {
+
         logo.style.display =
           'none';
+
         fallback.style.display =
           'flex';
+
       };
+
+
     logo.src =
       school.logoUrl;
+
   }
+
 }
+
+
 /**
  * ==========================================================
  * SCHOOL CONNECTION
  * ==========================================================
  */
+
 function testSchoolConnection(
   npsn
 ) {
+
   google.script.run
+
     .withSuccessHandler(
       function(result) {
+
         if (
           !result ||
           !result.success
         ) {
+
           return;
+
         }
+
+
         document
           .getElementById(
             'databaseStatus'
@@ -241,6 +362,8 @@ function testSchoolConnection(
           result.database.connected
             ? 'Terhubung ✓'
             : 'Gagal';
+
+
         document
           .getElementById(
             'driveStatus'
@@ -249,84 +372,131 @@ function testSchoolConnection(
           result.drive.connected
             ? 'Terhubung ✓'
             : 'Gagal';
+
       }
     )
+
     .withFailureHandler(
       function(error) {
+
         document
           .getElementById(
             'databaseStatus'
           )
           .textContent =
           'Gagal';
+
+
         document
           .getElementById(
             'driveStatus'
           )
           .textContent =
           'Gagal';
+
+
         console.error(
           error
         );
+
       }
     )
+
     .testSchoolConnection(
       npsn
     );
+
 }
+
+
 /**
  * ==========================================================
  * LOGIN LOADING
  * ==========================================================
  */
+
 function setLoginLoading(
   loading
 ) {
+
   const button =
     document.getElementById(
       'btnLogin'
     );
+
+
   const text =
     document.getElementById(
       'btnLoginText'
     );
+
+
   const spinner =
     document.getElementById(
       'btnLoginSpinner'
     );
+
+
   if (!button) return;
+
+
   if (loading) {
+
     button.disabled =
       true;
+
+
     text.textContent =
       'Memeriksa akun...';
+
+
     spinner.classList
       .remove('d-none');
+
   } else {
+
     button.disabled =
       false;
+
+
     text.textContent =
       'Masuk ke SIM SATRIA';
+
+
     spinner.classList
       .add('d-none');
+
   }
+
 }
+
+
 /**
  * ==========================================================
  * ERROR
  * ==========================================================
  */
+
 function showAuthError(
   message
 ) {
+
   const element =
     document.getElementById(
       'authError'
     );
+
+
   if (!element) return;
+
+
   element.textContent =
     message;
+
+
   element.classList
     .remove('d-none');
+
 }
+
 </script>
