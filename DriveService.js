@@ -62,21 +62,14 @@ function uploadFileToSchoolDrive(dataUrl, fileName, moduleName) {
     url: file.getUrl()
   };
 }
-
 function setupDriveSekolahSaya() {
-
   const context =
     getCurrentUserContext();
-
   requirePermission(
     'MANAGE_KELAS'
   );
-
-
   const rootFolder =
     getSchoolDriveFolder_();
-
-
   const moduleFolders = [
     'PRESENSI',
     'AGENDA',
@@ -88,71 +81,45 @@ function setupDriveSekolahSaya() {
     'KERJA',
     'UMUM'
   ];
-
-
   const created = [];
   const existing = [];
-
-
   moduleFolders.forEach(
     function(folderName) {
-
       const folders =
         rootFolder.getFoldersByName(
           folderName
         );
-
-
       if (folders.hasNext()) {
-
         existing.push(
           folderName
         );
-
       } else {
-
         rootFolder.createFolder(
           folderName
         );
-
         created.push(
           folderName
         );
-
       }
-
     }
   );
-
-
   return {
-
     success: true,
-
     email:
       context.email,
-
     npsn:
       context.npsn,
-
     sekolah:
       context.school.namaSekolah,
-
     rootFolderId:
       rootFolder.getId(),
-
     rootFolderName:
       rootFolder.getName(),
-
     created:
       created,
-
     existing:
       existing,
-
     message:
       'Struktur folder Drive sekolah berhasil disiapkan.'
-
   };
-
 }
