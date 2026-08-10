@@ -4,156 +4,105 @@
  *
  * File : Database.gs
  ************************************************************/
-
-
 /**
  * ==========================================================
  * GET SCHOOL SPREADSHEET
  * ==========================================================
  */
-
 function getSchoolSpreadsheet_(
   context
 ) {
-
   if (!context) {
-
     throw new Error(
       'School Context tidak tersedia.'
     );
-
   }
-
-
   if (!context.spreadsheetId) {
-
     throw new Error(
       'Spreadsheet ID sekolah kosong.'
     );
-
   }
-
-
   try {
-
     return SpreadsheetApp.openById(
       context.spreadsheetId
     );
-
   } catch (error) {
-
     throw new Error(
       'Spreadsheet sekolah tidak dapat dibuka: ' +
       error.message
     );
-
   }
-
 }
-
-
 /**
  * ==========================================================
  * GET SCHOOL SHEET
  * ==========================================================
  */
-
 function getSchoolSheet_(
   context,
   sheetName
 ) {
-
   const ss =
     getSchoolSpreadsheet_(
       context
     );
-
-
   const sheet =
     ss.getSheetByName(
       sheetName
     );
-
-
   if (!sheet) {
-
     throw new Error(
       'Sheet "' +
       sheetName +
       '" tidak ditemukan pada database ' +
       context.namaSekolah
     );
-
   }
-
-
   return sheet;
-
 }
-
-
 /**
  * ==========================================================
  * SCHOOL DATABASE INFO
  * ==========================================================
  */
-
 function getSchoolDatabaseInfo_(
   context
 ) {
-
   const ss =
     getSchoolSpreadsheet_(
       context
     );
-
-
   return {
-
     connected:
       true,
-
     name:
       ss.getName(),
-
     id:
       ss.getId(),
-
     url:
       ss.getUrl(),
-
     sheets:
       ss
         .getSheets()
         .map(function(sheet) {
-
           return sheet.getName();
-
         })
-
   };
-
 }
-
-
 /**
  * ==========================================================
  * INITIALIZE SCHOOL DATABASE
  * ==========================================================
  */
-
 function initializeSchoolDatabase_(
   spreadsheet
 ) {
-
   const requiredSheets = [
-
     'CONFIG',
     'GURU',
     'KARYAWAN',
     'SISWA',
     'KELAS',
-
     'TRX_PRESENSI',
     'TRX_PRESTASI',
     'TRX_AGENDA_GURU',
@@ -162,77 +111,52 @@ function initializeSchoolDatabase_(
     'TRX_KEBERSIHAN',
     'TRX_KEAMANAN',
     'TRX_KERJA',
-
     'LOG'
-
   ];
-
-
   /*
    * Spreadsheet baru selalu mempunyai
    * minimal satu sheet.
    */
-
   const firstSheet =
     spreadsheet
       .getSheets()[0];
-
-
   if (
     firstSheet &&
     firstSheet.getName() === 'Sheet1'
   ) {
-
     firstSheet.setName(
       requiredSheets[0]
     );
-
   }
-
-
   const existing =
     spreadsheet
       .getSheets()
       .map(function(sheet) {
-
         return sheet.getName();
-
       });
-
-
   requiredSheets.forEach(
     function(sheetName) {
-
       if (
         existing.indexOf(
           sheetName
         ) === -1
       ) {
-
         spreadsheet.insertSheet(
           sheetName
         );
-
       }
-
     }
   );
-
-
   /*
    * CONFIG
    */
-
   setupSchoolConfigSheet_(
     spreadsheet
       .getSheetByName('CONFIG')
   );
-
-
   /*
    * MASTER SHEETS
    */
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName('GURU'),
     [
@@ -243,8 +167,6 @@ function initializeSchoolDatabase_(
       'EMAIL'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName('KARYAWAN'),
     [
@@ -255,8 +177,6 @@ function initializeSchoolDatabase_(
       'EMAIL'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName('SISWA'),
     [
@@ -268,8 +188,6 @@ function initializeSchoolDatabase_(
       'STATUS'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName('KELAS'),
     [
@@ -280,12 +198,9 @@ function initializeSchoolDatabase_(
       'STATUS'
     ]
   );
-
-
   /*
    * TRANSACTION SHEETS
    */
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_PRESENSI'
@@ -300,8 +215,6 @@ function initializeSchoolDatabase_(
       'KETERANGAN'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_PRESTASI'
@@ -316,8 +229,6 @@ function initializeSchoolDatabase_(
       'BUKTI_FISIK'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_AGENDA_GURU'
@@ -334,8 +245,6 @@ function initializeSchoolDatabase_(
       'MATERI_PEMBELAJARAN'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_SBI'
@@ -354,8 +263,6 @@ function initializeSchoolDatabase_(
       'BUKTI_FISIK'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_PARKIR'
@@ -370,8 +277,6 @@ function initializeSchoolDatabase_(
       'UPLOAD_FOTO_PARKIR'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_KEBERSIHAN'
@@ -386,8 +291,6 @@ function initializeSchoolDatabase_(
       'BUKTI_FISIK'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_KEAMANAN'
@@ -402,8 +305,6 @@ function initializeSchoolDatabase_(
       'BUKTI_FISIK'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'TRX_KERJA'
@@ -424,8 +325,6 @@ function initializeSchoolDatabase_(
       'BUKTI_FISIK'
     ]
   );
-
-
   setupMasterHeaders_(
     spreadsheet.getSheetByName(
       'LOG'
@@ -439,22 +338,16 @@ function initializeSchoolDatabase_(
       'KETERANGAN'
     ]
   );
-
 }
-
-
 /**
  * ==========================================================
  * CONFIG SCHOOL
  * ==========================================================
  */
-
 function setupSchoolConfigSheet_(
   sheet
 ) {
-
   const headers = [
-
     'NPSN',
     'NAMA_SEKOLAH',
     'KEPALA_SEKOLAH',
@@ -463,10 +356,7 @@ function setupSchoolConfigSheet_(
     'TAGLINE',
     'WARNA_UTAMA',
     'WARNA_SEKUNDER'
-
   ];
-
-
   sheet
     .getRange(
       1,
@@ -477,7 +367,6 @@ function setupSchoolConfigSheet_(
     .setValues([
       headers
     ]);
-
   sheet
     .getRange(
       1,
@@ -486,24 +375,17 @@ function setupSchoolConfigSheet_(
       headers.length
     )
     .setFontWeight('bold');
-
 }
-
-
 /**
  * ==========================================================
  * SETUP HEADERS
  * ==========================================================
  */
-
 function setupMasterHeaders_(
   sheet,
   headers
 ) {
-
   if (!sheet) return;
-
-
   sheet
     .getRange(
       1,
@@ -514,8 +396,6 @@ function setupMasterHeaders_(
     .setValues([
       headers
     ]);
-
-
   sheet
     .getRange(
       1,
@@ -524,58 +404,37 @@ function setupMasterHeaders_(
       headers.length
     )
     .setFontWeight('bold');
-
-
   sheet.setFrozenRows(1);
-
 }
-
-
 /**
  * ==========================================================
  * DATABASE TEST
  * ==========================================================
  */
-
 function testDatabase(
   npsn
 ) {
-
   const context =
     getSchoolContext(npsn);
-
-
   const info =
     getSchoolDatabaseInfo_(
       context
     );
-
-
   return {
-
     success: true,
-
     npsn:
       context.npsn,
-
     sekolah:
       context.namaSekolah,
-
     database:
       info
-
   };
-
 }
-
 function initializeMasterDataSheets_(
   spreadsheet
 ) {
-
   const definitions = {
-
     CONFIG: [
-
       'NPSN',
       'NAMA_SEKOLAH',
       'KEPALA_SEKOLAH',
@@ -585,12 +444,8 @@ function initializeMasterDataSheets_(
       'WARNA_UTAMA',
       'WARNA_SEKUNDER',
       'TAHUN_AJARAN_AKTIF'
-
     ],
-
-
     GURU: [
-
       'NIP',
       'NAMA',
       'NIK',
@@ -604,12 +459,8 @@ function initializeMasterDataSheets_(
       'EMAIL',
       'NO_HP',
       'STATUS'
-
     ],
-
-
     KARYAWAN: [
-
       'NIP',
       'NAMA',
       'NIK',
@@ -621,12 +472,8 @@ function initializeMasterDataSheets_(
       'EMAIL',
       'NO_HP',
       'STATUS'
-
     ],
-
-
     SISWA: [
-
       'NISN',
       'NIS',
       'NAMA',
@@ -640,12 +487,8 @@ function initializeMasterDataSheets_(
       'NO_HP_ORANG_TUA',
       'ALAMAT',
       'STATUS'
-
     ],
-
-
     KELAS: [
-
       'KODE_KELAS',
       'NAMA_KELAS',
       'TINGKAT',
@@ -655,48 +498,32 @@ function initializeMasterDataSheets_(
       'NAMA_WALI_KELAS',
       'TAHUN_AJARAN',
       'STATUS'
-
     ]
-
   };
-
-
   Object.keys(
     definitions
   ).forEach(
     function(sheetName) {
-
       let sheet =
         spreadsheet.getSheetByName(
           sheetName
         );
-
-
       if (!sheet) {
-
         sheet =
           spreadsheet.insertSheet(
             sheetName
           );
-
       }
-
-
       setupHeaders_(
         sheet,
         definitions[
           sheetName
         ]
       );
-
     }
   );
-
-
   return true;
-
 }
-
 /**
  * ==========================================================
  * SETUP HEADERS
@@ -709,47 +536,33 @@ function initializeMasterDataSheets_(
  * - initializeMasterDataSheets_()
  *
  */
-
-
 function setupHeaders_(sheet, headers) {
-
   if (!sheet) {
-
     throw new Error(
       'Sheet untuk setupHeaders_ tidak ditemukan.'
     );
-
   }
-
   if (!headers || !headers.length) {
-
     throw new Error(
       'Daftar header kosong.'
     );
-
   }
-
   /*
    * Pastikan jumlah kolom mencukupi.
    */
   const requiredColumns =
     headers.length;
-
   const currentColumns =
     sheet.getMaxColumns();
-
   if (
     currentColumns <
     requiredColumns
   ) {
-
     sheet.insertColumnsAfter(
       currentColumns,
       requiredColumns - currentColumns
     );
-
   }
-
   /*
    * Tulis header.
    */
@@ -763,7 +576,6 @@ function setupHeaders_(sheet, headers) {
     .setValues([
       headers
     ]);
-
   /*
    * Format header.
    */
@@ -777,47 +589,34 @@ function setupHeaders_(sheet, headers) {
     .setFontWeight(
       'bold'
     );
-
   /*
    * Bekukan baris pertama.
    */
   sheet.setFrozenRows(1);
-
 }
-
-
-
-
 function syncSchoolConfig(npsn) {
-
   const school =
     getSchoolByNpsn_(npsn);
-
   if (!school) {
     throw new Error(
       'Sekolah dengan NPSN ' + npsn + ' tidak ditemukan.'
     );
   }
-
   if (!school.SPREADSHEET_ID) {
     throw new Error(
       'Spreadsheet sekolah belum tersedia.'
     );
   }
-
   const ss =
     SpreadsheetApp.openById(
       school.SPREADSHEET_ID
     );
-
   let sheet =
     ss.getSheetByName('CONFIG');
-
   if (!sheet) {
     sheet =
       ss.insertSheet('CONFIG');
   }
-
   const headers = [
     'NPSN',
     'NAMA_SEKOLAH',
@@ -829,12 +628,10 @@ function syncSchoolConfig(npsn) {
     'WARNA_SEKUNDER',
     'TAHUN_AJARAN_AKTIF'
   ];
-
   setupHeaders_(
     sheet,
     headers
   );
-
   sheet
     .getRange(
       2,
@@ -853,21 +650,15 @@ function syncSchoolConfig(npsn) {
       school.WARNA_SEKUNDER || '#2E7D32',
       ''
     ]]);
-
   return {
     success: true,
     npsn: school.NPSN,
     namaSekolah: school.NAMA_SEKOLAH,
     spreadsheetId: ss.getId()
   };
-
 }
-
-
 function testSyncConfigSekolahA() {
-
   return syncSchoolConfig(
     '20312345'
   );
-
 }
