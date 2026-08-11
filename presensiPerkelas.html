@@ -1,495 +1,321 @@
-<style>
-  /* =====================================================
+<!-- =====================================================
      SIM SATRIA
      FASE 5.3
      PRESENSI PER KELAS
-     ===================================================== */
-  .pp-wrapper {
-    max-width: 1450px;
-    margin: 0 auto;
-  }
+     BOOTSTRAP ONLY
+     ===================================================== -->
 
-  .pp-card {
-    border: 0;
-    border-radius: 22px;
-    overflow: hidden;
-    background: #ffffff;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
-  }
+<div class="container-fluid px-2 px-md-3 py-2">
 
-  /* =====================================================
-     HEADER
-     ===================================================== */
-  .pp-header {
-    background: linear-gradient(135deg,
-        #0B3D2E 0%,
-        #1B5E20 60%,
-        #2E7D32 100%);
-    color: #ffffff;
-    padding: 20px 22px;
-  }
+  <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-  .pp-title {
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-
-  .pp-subtitle {
-    font-size: .76rem;
-    opacity: .86;
-    margin-top: 4px;
-  }
-
-  .pp-context {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-  }
-
-  .pp-context-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 9px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, .13);
-    border: 1px solid rgba(255, 255, 255, .16);
-    color: #ffffff;
-    font-size: .68rem;
-    font-weight: 600;
-  }
-
-  /* =====================================================
-     FILTER
-     ===================================================== */
-  .pp-filter {
-    padding: 18px;
-    background: #f7faf8;
-    border-bottom: 1px solid #e8eee9;
-  }
-
-  .pp-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #455a64;
-    font-size: .72rem;
-    font-weight: 700;
-  }
-
-  .pp-input,
-  .pp-select {
-    min-height: 43px;
-    border-radius: 11px !important;
-    border: 1px solid #dce5df !important;
-    font-size: .84rem !important;
-    background: #ffffff !important;
-  }
-
-  .pp-input:focus,
-  .pp-select:focus {
-    border-color: #2E7D32 !important;
-    box-shadow: 0 0 0 .2rem rgba(46, 125, 50, .10) !important;
-  }
-
-  .pp-btn-tampilkan {
-    width: 100%;
-    min-height: 43px;
-    border: 0;
-    border-radius: 11px;
-    background: #1B5E20;
-    color: #ffffff;
-    font-size: .78rem;
-    font-weight: 700;
-    transition: .15s ease;
-  }
-
-  .pp-btn-tampilkan:hover {
-    background: #0B3D2E;
-    color: #ffffff;
-  }
-
-  .pp-btn-tampilkan:disabled {
-    opacity: .65;
-    cursor: not-allowed;
-  }
-
-  /* =====================================================
-     TABLE
-     ===================================================== */
-  .pp-table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    padding: 0 14px 14px;
-  }
-
-  .pp-table {
-    width: 100%;
-    min-width: 760px;
-    margin: 0;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: .76rem;
-  }
-
-  .pp-table thead th {
-    padding: 10px 8px;
-    background: #f3f7f4;
-    color: #42574a;
-    border-bottom: 1px solid #dfe8e2;
-    font-size: .68rem;
-    font-weight: 700;
-    white-space: nowrap;
-    vertical-align: middle;
-  }
-
-  .pp-table tbody td {
-    padding: 8px;
-    border-bottom: 1px solid #edf1ee;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  .pp-table tbody tr:hover {
-    background: #fbfdfb;
-  }
-
-  .pp-no {
-    width: 40px;
-    text-align: center;
-    color: #90a39a;
-    font-weight: 600;
-  }
-
-  .pp-nisn {
-    color: #78909c;
-    font-size: .70rem;
-  }
-
-  .pp-nama {
-    min-width: 200px;
-    color: #26352c;
-    font-weight: 600;
-  }
-
-  /* =====================================================
-     STATUS BUTTON
-     ===================================================== */
-  .pp-status-cell {
-    text-align: center;
-    width: 70px;
-  }
-
-  .pp-status-group {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .pp-status-btn {
-    width: 32px;
-    height: 29px;
-    padding: 0;
-    border: 1px solid #dce5df;
-    border-radius: 8px;
-    background: #ffffff;
-    color: #78909c;
-    font-size: .66rem;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all .14s ease;
-  }
-
-  .pp-status-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
-  }
-
-  .pp-status-btn.active {
-    color: #ffffff;
-    border-color: transparent;
-  }
-
-  .pp-status-btn[data-status="HADIR"].active {
-    background: #2E7D32;
-  }
-
-  .pp-status-btn[data-status="IZIN"].active {
-    background: #0277BD;
-  }
-
-  .pp-status-btn[data-status="SAKIT"].active {
-    background: #EF6C00;
-  }
-
-  .pp-status-btn[data-status="ALPA"].active {
-    background: #C62828;
-  }
-
-  /* =====================================================
-     FOOTER
-     ===================================================== */
-  .pp-footer {
-    padding: 14px 18px;
-    background: #fafcfb;
-    border-top: 1px solid #e8eee9;
-  }
-
-  .pp-rekap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .pp-rekap-item {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 10px;
-    border-radius: 9px;
-    background: #f1f5f2;
-    color: #54665a;
-    font-size: .70rem;
-    font-weight: 700;
-  }
-
-  .pp-btn-simpan {
-    min-height: 42px;
-    padding: 0 20px;
-    border: 0;
-    border-radius: 11px;
-    background: #0B3D2E;
-    color: #ffffff;
-    font-size: .78rem;
-    font-weight: 700;
-  }
-
-  .pp-btn-simpan:hover {
-    background: #1B5E20;
-    color: #ffffff;
-  }
-
-  .pp-btn-simpan:disabled {
-    opacity: .65;
-    cursor: not-allowed;
-  }
-
-  /* =====================================================
-     EMPTY / LOADING
-     ===================================================== */
-  .pp-empty {
-    padding: 50px 20px;
-    text-align: center;
-    color: #90a39a;
-  }
-
-  .pp-empty-icon {
-    margin-bottom: 8px;
-    font-size: 2rem;
-  }
-
-  .pp-empty-title {
-    color: #607269;
-    font-size: .90rem;
-    font-weight: 700;
-  }
-
-  .pp-empty-text {
-    margin-top: 4px;
-    color: #90a39a;
-    font-size: .74rem;
-  }
-
-  .pp-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    padding: 35px;
-    color: #607269;
-    font-size: .78rem;
-  }
-
-  /* =====================================================
-     ALERT
-     ===================================================== */
-  .pp-alert {
-    margin: 15px;
-    padding: 12px 14px;
-    border-radius: 11px;
-    font-size: .76rem;
-  }
-
-  /* =====================================================
-     MOBILE
-     ===================================================== */
-  @media (max-width: 768px) {
-    .pp-header {
-      padding: 16px;
-    }
-
-    .pp-filter {
-      padding: 14px;
-    }
-
-    .pp-title {
-      font-size: 1rem;
-    }
-
-    .pp-table-wrapper {
-      padding-left: 7px;
-      padding-right: 7px;
-    }
-
-    .pp-nama {
-      min-width: 170px;
-    }
-
-    .pp-btn-tampilkan,
-    .pp-btn-simpan {
-      width: 100%;
-    }
-
-    .pp-footer {
-      padding: 13px;
-    }
-  }
-</style>
-<div class="pp-wrapper">
-  <div class="pp-card">
     <!-- =================================================
          HEADER
          ================================================= -->
-    <div class="pp-header">
-      <div class="pp-title">
+
+    <div class="card-header bg-success text-white border-0 p-3 p-md-4">
+
+      <div class="fw-bold fs-5">
         Presensi Per Kelas
       </div>
-      <div class="pp-subtitle" id="ppSekolah">
+
+      <div
+        id="ppSekolah"
+        class="small opacity-75 mt-1">
+
         Memuat School Context...
+
       </div>
-      <div class="pp-context" id="ppContext">
+
+      <div
+        id="ppContext"
+        class="d-flex flex-wrap gap-2 mt-3">
+
       </div>
+
     </div>
+
+
     <!-- =================================================
-         FILTER
+         FILTER PRESENSI
          ================================================= -->
-    <div class="pp-filter">
+
+    <div class="card-body bg-light border-bottom">
+
       <div class="row g-2 align-items-end">
+
         <!-- TANGGAL -->
+
         <div class="col-12 col-md-3">
-          <label class="pp-label" for="ppTanggal">
+
+          <label
+            for="ppTanggal"
+            class="form-label small fw-semibold text-secondary mb-1">
+
             Tanggal
+
           </label>
-          <input type="date" id="ppTanggal" class="form-control pp-input">
+
+          <input
+            type="date"
+            id="ppTanggal"
+            class="form-control form-control-sm rounded-3">
+
         </div>
+
+
         <!-- KELAS -->
+
         <div class="col-12 col-md-5">
-          <label class="pp-label" for="ppKelas">
+
+          <label
+            for="ppKelas"
+            class="form-label small fw-semibold text-secondary mb-1">
+
             Kelas
+
           </label>
-          <!--
-            PENTING:
-            ID menggunakan ppKelas agar konsisten
-            dengan modul Presensi Perkelas.
-          -->
-          <select id="ppKelas" class="form-select pp-select">
+
+          <select
+            id="ppKelas"
+            class="form-select form-select-sm rounded-3">
+
             <option value="">
               Memuat kelas...
             </option>
+
           </select>
+
         </div>
+
+
         <!-- BUTTON -->
+
         <div class="col-12 col-md-4">
-          <button type="button" id="ppBtnTampilkan" class="pp-btn-tampilkan" onclick="PP_tampilkan()">
-            <span id="ppSpinnerTampilkan" class="spinner-border spinner-border-sm me-2 d-none">
+
+          <button
+            type="button"
+            id="ppBtnTampilkan"
+            class="btn btn-primary btn-sm w-100 rounded-3 fw-semibold"
+            onclick="PP_tampilkan()">
+
+            <span
+              id="ppSpinnerTampilkan"
+              class="spinner-border spinner-border-sm me-2 d-none">
             </span>
+
             <span id="ppTextTampilkan">
               TAMPILKAN
             </span>
+
           </button>
+
         </div>
+
       </div>
+
     </div>
-    <!-- =====================================================
-     CETAK PRESENSI
-     ===================================================== -->
-    <div class="pp-print-panel">
-      <div class="pp-print-title">
-        <span>🖨️</span>
+
+
+    <!-- =================================================
+         CETAK PRESENSI
+         ================================================= -->
+
+    <div class="card-body border-bottom">
+
+      <div class="fw-semibold small text-primary mb-3">
+
+        <span class="me-1">🖨️</span>
         Cetak Presensi
+
       </div>
+
+
       <div class="row g-2 align-items-end">
+
+
         <!-- TANGGAL AWAL -->
+
         <div class="col-12 col-md-3">
-          <label class="pp-label" for="ppTanggalAwal">
+
+          <label
+            for="ppTanggalAwal"
+            class="form-label small fw-semibold text-secondary mb-1">
+
             Tanggal Awal
+
           </label>
-          <input type="date" id="ppTanggalAwal" class="form-control pp-input">
+
+          <input
+            type="date"
+            id="ppTanggalAwal"
+            class="form-control form-control-sm rounded-3">
+
         </div>
+
+
         <!-- TANGGAL AKHIR -->
+
         <div class="col-12 col-md-3">
-          <label class="pp-label" for="ppTanggalAkhir">
+
+          <label
+            for="ppTanggalAkhir"
+            class="form-label small fw-semibold text-secondary mb-1">
+
             Tanggal Akhir
+
           </label>
-          <input type="date" id="ppTanggalAkhir" class="form-control pp-input">
+
+          <input
+            type="date"
+            id="ppTanggalAkhir"
+            class="form-control form-control-sm rounded-3">
+
         </div>
+
+
         <!-- KELAS -->
+
         <div class="col-12 col-md-3">
-          <label class="pp-label" for="ppKelasCetak">
+
+          <label
+            for="ppKelasCetak"
+            class="form-label small fw-semibold text-secondary mb-1">
+
             Kelas
+
           </label>
-          <select id="ppKelasCetak" class="form-select pp-select">
+
+          <select
+            id="ppKelasCetak"
+            class="form-select form-select-sm rounded-3">
+
             <option value="">
               Pilih kelas...
             </option>
+
           </select>
+
         </div>
+
+
         <!-- BUTTON -->
+
         <div class="col-12 col-md-3">
-          <button type="button" id="ppBtnCetakPDF" class="pp-btn-tampilkan" onclick="PP_cetakPDF()">
-            <span id="ppSpinnerCetak" class="spinner-border spinner-border-sm me-2 d-none">
+
+          <button
+            type="button"
+            id="ppBtnCetakPDF"
+            class="btn btn-primary btn-sm w-100 rounded-3 fw-semibold"
+            onclick="PP_cetakPDF()">
+
+            <span
+              id="ppSpinnerCetak"
+              class="spinner-border spinner-border-sm me-2 d-none">
             </span>
+
             <span id="ppTextCetak">
               🖨️ CETAK PDF
             </span>
+
           </button>
+
         </div>
+
+
       </div>
+
     </div>
+
+
     <!-- =================================================
-         TABLE
+         ALERT / TABLE
          ================================================= -->
-    <div id="ppTableContainer">
-      <div class="pp-empty">
-        <div class="pp-empty-icon">
+
+    <div
+      id="ppTableContainer"
+      class="table-responsive">
+
+
+      <!-- EMPTY -->
+
+      <div class="text-center py-5 px-3 text-secondary">
+
+        <div class="fs-1 mb-2">
           📋
         </div>
-        <div class="pp-empty-title">
+
+        <div class="fw-semibold">
           Belum ada data presensi
         </div>
-        <div class="pp-empty-text">
+
+        <div class="small mt-1 text-muted">
+
           Pilih tanggal dan kelas,
           kemudian klik TAMPILKAN.
+
         </div>
+
       </div>
+
+
     </div>
+
+
     <!-- =================================================
          FOOTER
          ================================================= -->
-    <div id="ppFooter" class="pp-footer d-none">
-      <div class="d-flex flex-column flex-md-row
+
+    <div
+      id="ppFooter"
+      class="card-footer bg-light border-top d-none">
+
+      <div
+        class="d-flex flex-column flex-md-row
                justify-content-between
                align-items-md-center
                gap-3">
-        <div id="ppRekap" class="pp-rekap">
+
+
+        <!-- REKAP -->
+
+        <div
+          id="ppRekap"
+          class="d-flex flex-wrap gap-2">
+
         </div>
-        <button type="button" id="ppBtnSimpan" class="pp-btn-simpan" onclick="PP_simpan()">
-          <span id="ppSpinnerSimpan" class="spinner-border spinner-border-sm me-2 d-none">
+
+
+        <!-- SIMPAN -->
+
+        <button
+          type="button"
+          id="ppBtnSimpan"
+          class="btn btn-success btn-sm rounded-3 fw-semibold px-4"
+          onclick="PP_simpan()">
+
+
+          <span
+            id="ppSpinnerSimpan"
+            class="spinner-border spinner-border-sm me-2 d-none">
           </span>
+
+
           <span id="ppTextSimpan">
+
             SIMPAN PRESENSI
+
           </span>
+
+
         </button>
+
+
       </div>
+
     </div>
+
+
   </div>
+
 </div>
