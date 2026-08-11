@@ -245,45 +245,25 @@
      * 1-30 siswa
      * ukuran normal
      */
-    /*
-     * 31-40 siswa
-     */
-    <? if (data.siswa.length > 30 && data.siswa.length <= 40) { ?>
-      .page-content {
-        zoom: 0.92;
-      }
-    <? } ?>
-    /*
-     * 41-50 siswa
-     */
-    <? if (data.siswa.length > 40 && data.siswa.length <= 50) { ?>
-      .page-content {
-        zoom: 0.82;
-      }
-    <? } ?>
-    /*
-     * 51-60 siswa
-     */
-    <? if (data.siswa.length > 50 && data.siswa.length <= 60) { ?>
-      .page-content {
-        zoom: 0.72;
-      }
-    <? } ?>
-    /*
-     * >60 siswa
-     */
-    <? if (data.siswa.length > 60) { ?>
-      .page-content {
-        zoom: 0.62;
-      }
-    <? } ?>
+    .page.compact-31-40 .page-content {
+      zoom: 0.92;
+    }
+    .page.compact-41-50 .page-content {
+      zoom: 0.82;
+    }
+    .page.compact-51-60 .page-content {
+      zoom: 0.72;
+    }
+    .page.compact-60plus .page-content {
+      zoom: 0.62;
+    }
   </style>
 </head>
 <body>
   <!-- =====================================================
        A4 PORTRAIT
        ===================================================== -->
-  <div class="page">
+  <div class="page<? if (data.siswa.length > 30 && data.siswa.length <= 40) { ?> compact-31-40<? } ?><? if (data.siswa.length > 40 && data.siswa.length <= 50) { ?> compact-41-50<? } ?><? if (data.siswa.length > 50 && data.siswa.length <= 60) { ?> compact-51-60<? } ?><? if (data.siswa.length > 60) { ?> compact-60plus<? } ?>">
     <div class="page-content">
       <!-- =================================================
            HEADER
@@ -428,10 +408,10 @@
            KETERANGAN
            ================================================= -->
       <div class="status-note">
-        H = Hadir &nbsp;&nbsp;
-        S = Sakit &nbsp;&nbsp;
-        I = Izin &nbsp;&nbsp;
-        A = Alpa &nbsp;&nbsp;
+        H = Hadir 
+        S = Sakit 
+        I = Izin 
+        A = Alpa 
         L = Lainnya
       </div>
       <!-- =================================================
