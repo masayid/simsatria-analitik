@@ -1,13 +1,10 @@
 <!-- SIDEBAR -->
 <div class="col-md-3 col-lg-3 sidebar p-3">
-
     <h4 class="fw-bold mb-1 text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.4);">
         SIM SATRIA
     </h4>
     <p class="small mb-4 text-white" style="opacity:0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
-        
     </p>
-
     <!-- DASHBOARD -->
     <a href="javascript:void(0)" onclick="menuKoneksi()" class="menu-item">
         <i class="bi bi-speedometer2 me-2"></i>
@@ -17,7 +14,6 @@
         <i class="bi bi-speedometer2 me-2"></i>
         Dashboard
     </a>
-
     <!-- DROPDOWN PROGRAM PRIORITAS -->
     <div class="accordion mb-3" id="accordionProgram">
         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
@@ -29,7 +25,6 @@
             </h2>
             <div id="collapseProgram" class="accordion-collapse collapse" data-bs-parent="#accordionProgram">
                 <div class="accordion-body p-2">
-
                     <!-- MENU SEKOLAH BERINTEGRITAS -->
                     <div class="accordion mt-2" id="accordionSBI">
                         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(180deg, #f8fff9, #eefbf1); border: 1px solid rgba(64,145,108,.15);">
@@ -75,7 +70,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- SEKOLAH MANTAP -->
                     <div class="accordion mt-2" id="accordionMantap">
                         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(180deg, #f8fff9, #eefbf1); border: 1px solid rgba(64,145,108,.15);">
@@ -125,7 +119,6 @@
                             </div>
                         </div>
                     </div>
-
                     <a href="javascript:void(0)" onclick="menuLitnum()" class="submenu-item" id="programLitnum">
                         <i class="bi bi-calculator-fill me-2"></i>
                         Program LitNum
@@ -142,7 +135,6 @@
             </div>
         </div>
     </div>
-
     <!-- DROPDOWN GURU -->
     <div class="accordion mb-3" id="accordionGuru">
         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
@@ -170,12 +162,10 @@
                         <i class="bi bi-clock-history me-2"></i>
                         Satria Guru Piket 
                     </a>
-                    
                 </div>
             </div>
         </div>
     </div>
-
     <!-- DROPDOWN KARYAWAN -->
     <div class="accordion" id="accordionKaryawan">
         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
@@ -207,7 +197,6 @@
             </div>
         </div>
     </div>
-
     <!-- ACCORDION SATRIA MURID -->
     <div class="accordion mt-3" id="accordionMurid">
         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
@@ -247,7 +236,6 @@
             </div>
         </div>
     </div>
-
     <!-- DROPDOWN CETAK LAPORAN -->
     <div class="accordion" id="accordionLaporan">
         <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
@@ -300,15 +288,9 @@
                         Sinkronisasi Moodle
                     </a>
                 </div>
-
             </div>
-
-                 
         </div>
-
-       
     </div>
-
     <!-- KELUAR APLIKASI -->
     <style>
         #accordionKeluar .accordion-item {
@@ -347,8 +329,6 @@
             background: linear-gradient(135deg, #b71c1c, #ff5252) !important;
             color: white !important;
         }
-
-
 #btnSatriaAI{
     position:fixed;
     right:22px;
@@ -358,32 +338,25 @@
     border:none;
     border-radius:50%;
     z-index:99999;
-
     /* GRADASI ABU-ABU: Dari abu-abu terang ke abu-abu sangat tua */
     background: linear-gradient(135deg, #FFE082 0%, #FFB300 50%, #FF6F00 100%);
     color:white;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     cursor:pointer;
-
     /* Shadow disesuaikan dengan nuansa abu-abu/hitam */
     box-shadow:
         0 10px 28px rgba(0, 0, 0, 0.35),
         0 0 0 6px rgba(214, 216, 219, 0.25);
-
     transition:.25s;
 }
-
 #btnSatriaAI:hover{
     transform:translateY(-4px) scale(1.08);
     box-shadow:
         0 18px 40px rgba(0, 0, 0, 0.45),
         0 0 0 10px rgba(214, 216, 219, 0.35);
 }
-
 #btnSatriaAI img{
     width:40px;
     height:40px;
@@ -391,16 +364,13 @@
     /* Memberikan efek bayangan halus pada ikon agar menonjol di atas latar belakang */
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
-
 #btnSatriaAI::after{
     content:"SATRIA AI";
     position:absolute;
     right:82px;
-
     /* Latar belakang tooltip disesuaikan ke abu-abu gelap */
     background:#212529;
     color:white;
-
     padding:8px 14px;
     border-radius:20px;
     font-weight:700;
@@ -411,12 +381,10 @@
     white-space:nowrap;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
-
 #btnSatriaAI:hover::after{
     opacity:1;
     transform:translateX(0);
 }
-
 @media(max-width:768px){
     #btnSatriaAI{
         width:64px;
@@ -424,27 +392,18 @@
         right:18px;
         bottom:18px;
     }
-
     #btnSatriaAI img{
         width:34px;
         height:34px;
     }
 }
-  
-
-
     </style>
-
 <!-- ===========================
       FLOATING BUTTON AI
 =========================== -->
-
 <button id="btnSatriaAI"
         title="SATRIA AI"
         onclick="openSatriaAI()">
-
     <i class="bi bi-stars" style="font-size: 20px; color: #0d6efd;"></i>
-
 </button>
-
 </div>
