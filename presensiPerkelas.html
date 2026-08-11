@@ -409,110 +409,52 @@
         </div>
       </div>
     </div>
-
-<!-- =====================================================
+    <!-- =====================================================
      CETAK PRESENSI
      ===================================================== -->
-
-<div class="pp-print-panel">
-
-  <div class="pp-print-title">
-    <span>🖨️</span>
-    Cetak Presensi
-  </div>
-
-  <div class="row g-2 align-items-end">
-
-    <!-- TANGGAL AWAL -->
-    <div class="col-12 col-md-3">
-
-      <label
-        class="pp-label"
-        for="ppTanggalAwal">
-
-        Tanggal Awal
-
-      </label>
-
-      <input
-        type="date"
-        id="ppTanggalAwal"
-        class="form-control pp-input">
-
+    <div class="pp-print-panel">
+      <div class="pp-print-title">
+        <span>🖨️</span>
+        Cetak Presensi
+      </div>
+      <div class="row g-2 align-items-end">
+        <!-- TANGGAL AWAL -->
+        <div class="col-12 col-md-3">
+          <label class="pp-label" for="ppTanggalAwal">
+            Tanggal Awal
+          </label>
+          <input type="date" id="ppTanggalAwal" class="form-control pp-input">
+        </div>
+        <!-- TANGGAL AKHIR -->
+        <div class="col-12 col-md-3">
+          <label class="pp-label" for="ppTanggalAkhir">
+            Tanggal Akhir
+          </label>
+          <input type="date" id="ppTanggalAkhir" class="form-control pp-input">
+        </div>
+        <!-- KELAS -->
+        <div class="col-12 col-md-3">
+          <label class="pp-label" for="ppKelasCetak">
+            Kelas
+          </label>
+          <select id="ppKelasCetak" class="form-select pp-select">
+            <option value="">
+              Pilih kelas...
+            </option>
+          </select>
+        </div>
+        <!-- BUTTON -->
+        <div class="col-12 col-md-3">
+          <button type="button" id="ppBtnCetakPDF" class="pp-btn-tampilkan" onclick="PP_cetakPDF()">
+            <span id="ppSpinnerCetak" class="spinner-border spinner-border-sm me-2 d-none">
+            </span>
+            <span id="ppTextCetak">
+              🖨️ CETAK PDF
+            </span>
+          </button>
+        </div>
+      </div>
     </div>
-
-
-    <!-- TANGGAL AKHIR -->
-    <div class="col-12 col-md-3">
-
-      <label
-        class="pp-label"
-        for="ppTanggalAkhir">
-
-        Tanggal Akhir
-
-      </label>
-
-      <input
-        type="date"
-        id="ppTanggalAkhir"
-        class="form-control pp-input">
-
-    </div>
-
-
-    <!-- KELAS -->
-    <div class="col-12 col-md-3">
-
-      <label
-        class="pp-label"
-        for="ppKelasCetak">
-
-        Kelas
-
-      </label>
-
-      <select
-        id="ppKelasCetak"
-        class="form-select pp-select">
-
-        <option value="">
-          Pilih kelas...
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- BUTTON -->
-    <div class="col-12 col-md-3">
-
-      <button
-        type="button"
-        id="ppBtnCetakPDF"
-        class="pp-btn-tampilkan"
-        onclick="PP_cetakPDF()">
-
-        <span
-          id="ppSpinnerCetak"
-          class="spinner-border spinner-border-sm me-2 d-none">
-        </span>
-
-        <span id="ppTextCetak">
-          🖨️ CETAK PDF
-        </span>
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-
     <!-- =================================================
          TABLE
          ================================================= -->
