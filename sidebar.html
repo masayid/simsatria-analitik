@@ -1,0 +1,450 @@
+<!-- SIDEBAR -->
+<div class="col-md-3 col-lg-3 sidebar p-3">
+
+    <h4 class="fw-bold mb-1 text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.4);">
+        SIM SATRIA
+    </h4>
+    <p class="small mb-4 text-white" style="opacity:0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">
+        
+    </p>
+
+    <!-- DASHBOARD -->
+    <a href="javascript:void(0)" onclick="menuKoneksi()" class="menu-item">
+        <i class="bi bi-speedometer2 me-2"></i>
+        Koneksi
+    </a>
+    <a href="javascript:void(0)" onclick="dashboard()" class="menu-item">
+        <i class="bi bi-speedometer2 me-2"></i>
+        Dashboard
+    </a>
+
+    <!-- DROPDOWN PROGRAM PRIORITAS -->
+    <div class="accordion mb-3" id="accordionProgram">
+        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProgram">
+                    <i class="bi bi-star-fill me-2"></i>
+                    Program Prioritas
+                </button>
+            </h2>
+            <div id="collapseProgram" class="accordion-collapse collapse" data-bs-parent="#accordionProgram">
+                <div class="accordion-body p-2">
+
+                    <!-- MENU SEKOLAH BERINTEGRITAS -->
+                    <div class="accordion mt-2" id="accordionSBI">
+                        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(180deg, #f8fff9, #eefbf1); border: 1px solid rgba(64,145,108,.15);">
+                            <!-- HEADER -->
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSBI" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 55%, #40916c 100%); border:none; padding:16px 18px; font-size:15px; letter-spacing:.3px;">
+                                    <i class="bi bi-shield-check me-2"></i>
+                                    Sekolah Berintegritas
+                                </button>
+                            </h2>
+                            <!-- BODY -->
+                            <div id="collapseSBI" class="accordion-collapse collapse" data-bs-parent="#accordionSBI">
+                                <div class="accordion-body p-2" style="background:transparent;">
+                                    <a href="javascript:void(0)" onclick="dashboardSBI()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-grid-1x2-fill me-2 text-success"></i>
+                                        Dashboard SBI
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuSBI()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-pencil-square me-2 text-success"></i>
+                                        Input Kegiatan SBI
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuJumatBersepeda()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-bicycle me-2 text-success"></i>
+                                        Jumat Bersepeda
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuBudayaPositif()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-heart-pulse-fill me-2 text-success"></i>
+                                        Budaya Positif
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuRefleksiSBI()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-journal-check me-2 text-success"></i>
+                                        Refleksi Karakter
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuBadgeSBI()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-patch-check-fill me-2 text-success"></i>
+                                        Badge Integritas
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuGaleriSBI()" class="submenu-item d-flex align-items-center" style="border-radius:14px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-images me-2 text-success"></i>
+                                        Galeri Integritas
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEKOLAH MANTAP -->
+                    <div class="accordion mt-2" id="accordionMantap">
+                        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(180deg, #f8fff9, #eefbf1); border: 1px solid rgba(64,145,108,.15);">
+                            <!-- HEADER -->
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed fw-bold text-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMantap" style="background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 55%, #40916c 100%); border:none; padding:16px 18px; font-size:15px; letter-spacing:.3px; box-shadow:none;">
+                                    <i class="bi bi-rocket-takeoff-fill me-2" style="font-size:14px;"></i>
+                                    Sekolah Mantap
+                                </button>
+                            </h2>
+                            <!-- BODY -->
+                            <div id="collapseMantap" class="accordion-collapse collapse" data-bs-parent="#accordionMantap">
+                                <div class="accordion-body p-2" style="background:transparent;">
+                                    <a href="javascript:void(0)" onclick="dashboardMantap()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600; transition:.2s;">
+                                        <i class="bi bi-grid-1x2-fill me-2 text-success"></i>
+                                        Dashboard MANTAP
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuMantap()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-person-badge-fill me-2 text-success"></i>
+                                        Profil Masa Depan
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuPelatihanMantap()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-lightbulb-fill me-2 text-success"></i>
+                                        Pelatihan Skill
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuPortofolioMantap()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-journal-bookmark-fill me-2 text-success"></i>
+                                        Portofolio Siswa
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuMagangMantap()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-building-fill-check me-2 text-success"></i>
+                                        Magang / PKL
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuBursaKerja()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-briefcase-fill me-2 text-success"></i>
+                                        Bursa Kerja
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuSertifikatMantap()" class="submenu-item d-flex align-items-center" style="border-radius:14px; margin-bottom:8px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-award-fill me-2 text-success"></i>
+                                        Sertifikat
+                                    </a>
+                                    <a href="javascript:void(0)" onclick="menuTracerAlumni()" class="submenu-item d-flex align-items-center" style="border-radius:14px; padding:12px 14px; background: rgba(255,255,255,.88); border: 1px solid #d8f3dc; color:#1b4332; font-weight:600;">
+                                        <i class="bi bi-search-heart-fill me-2 text-success"></i>
+                                        Tracer Alumni
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="javascript:void(0)" onclick="menuLitnum()" class="submenu-item" id="programLitnum">
+                        <i class="bi bi-calculator-fill me-2"></i>
+                        Program LitNum
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuSMSS(); return false;" class="submenu-item" id="programSMSS">
+                        <i class="bi bi-person-heart me-2"></i>
+                        Satu Murid Satu Satria
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuRKTBerintegritas(); return false;" class="submenu-item" id="programRKT">
+                        <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>
+                        RKT Berintegritas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DROPDOWN GURU -->
+    <div class="accordion mb-3" id="accordionGuru">
+        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGuru">
+                    <i class="bi bi-person-workspace me-2"></i>
+                    Satria Guru
+                </button>
+            </h2>
+            <div id="collapseGuru" class="accordion-collapse collapse" data-bs-parent="#accordionGuru">
+                <div class="accordion-body p-2">
+                    <a href="javascript:void(0)" onclick="menuAgenda()" class="submenu-item menu-guru">
+                        <i class="bi bi-easel-fill me-2"></i>
+                        Satria Mengajar
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuWaliKelas()" class="submenu-item menu-guru">
+                        <i class="bi bi-person-video3 me-2"></i>
+                        Satria Wali Kelas
+                    </a>
+                    <a href="" onclick="menuGuruWali(); return false;" class="submenu-item menu-guru">
+                        <i class="bi bi-person-heart me-2"></i>
+                        Satria Guru Wali 
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuGuruPiket(); return false;" class="submenu-item menu-guru">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Satria Guru Piket 
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DROPDOWN KARYAWAN -->
+    <div class="accordion" id="accordionKaryawan">
+        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseKaryawan">
+                    <i class="bi bi-person-gear me-2"></i>
+                    Satria Karyawan
+                </button>
+            </h2>
+            <div id="collapseKaryawan" class="accordion-collapse collapse" data-bs-parent="#accordionKaryawan">
+                <div class="accordion-body p-2">
+                    <a href="#" class="submenu-item menu-karyawan" id="btnMonitoringKerja">
+                        <i class="bi bi-clipboard-data-fill me-2"></i>
+                        Monitoring Kerja
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuMonitoringParkir()" class="submenu-item menu-karyawan">
+                        <i class="bi bi-p-circle-fill me-2"></i>
+                        Monitoring Parkir
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuMonitoringKebersihan()" class="submenu-item menu-karyawan">
+                        <i class="bi bi-sparkles me-2"></i>
+                        Monitoring Kebersihan
+                    </a>
+                    <a href="#" class="submenu-item menu-karyawan" id="btnMonitoringKeamanan">
+                        <i class="bi bi-shield-lock-fill me-2"></i>
+                        Monitoring Keamanan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACCORDION SATRIA MURID -->
+    <div class="accordion mt-3" id="accordionMurid">
+        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMurid">
+                    <i class="bi bi-backpack-fill me-2"></i>
+                    Satria Murid
+                </button>
+            </h2>
+            <div id="collapseMurid" class="accordion-collapse collapse" data-bs-parent="#accordionMurid">
+                <div class="accordion-body p-2">
+                    <a href="javascript:void(0)" onclick="menuPresensi()" class="submenu-item menu-siswa" id="presensiSiswa">
+                        <i class="bi bi-person-check-fill me-2"></i>
+                        Presensi Siswa
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuPresensiPerkelas()" class="submenu-item menu-siswa" id="presensiSiswaKelas">
+                        <i class="bi bi-building-check me-2"></i>
+                        Presensi Siswa per Kelas
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuPrestasi()" class="submenu-item" id="prestasiSiswa">
+                        <i class="bi bi-trophy-fill me-2"></i>
+                        Prestasi Siswa
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuPilihanTka()" class="submenu-item" id="pilihanTka">
+                        <i class="bi bi-trophy-fill me-2"></i>
+                        Angket Pilihan TKA
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuQuiz()" class="submenu-item" id="kuisMurid">
+                        <i class="bi bi-trophy-fill me-2"></i>
+                        Quiz
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuAssignment()" class="submenu-item" id="tugasMurid">
+                        <i class="bi bi-trophy-fill me-2"></i>
+                        Assignment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DROPDOWN CETAK LAPORAN -->
+    <div class="accordion" id="accordionLaporan">
+        <div class="accordion-item border-0 shadow-sm rounded-4 overflow-hidden">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLaporan">
+                    <i class="bi bi-printer-fill me-2"></i>
+                    Cetak Laporan
+                </button>
+            </h2>
+            <div id="collapseLaporan" class="accordion-collapse collapse" data-bs-parent="#accordionLaporan">
+                <div class="accordion-body p-2">
+                    <a href="javascript:void(0)" onclick="menuSampulLaporan(); return false;" class="submenu-item" id="menuSampulLaporan">
+                        <i class="bi bi-file-earmark-text-fill me-2"></i>
+                        Sampul Laporan
+                    </a>               
+                    <a href="javascript:void(0)" onclick="menuTabelAgendaGuru()" class="submenu-item" id="laporanGuru">
+                        <i class="bi bi-file-earmark-spreadsheet-fill me-2"></i>
+                        Laporan Satria Mengajar
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuDataTugasWaliKelas()" class="submenu-item" id="laporanWaliKelas">
+                        <i class="bi bi-file-earmark-person-fill me-2"></i>
+                        Laporan Satria Wali Kelas
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuDataGuruWali()" class="submenu-item" id="laporanGuruWali">
+                        <i class="bi bi-file-earmark-slides-fill me-2"></i>
+                        Laporan Satria Guru Wali
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuDataGuruPiket()" class="submenu-item" id="laporanGuruPiket">
+                        <i class="bi bi-file-earmark-check-fill me-2"></i>
+                        Laporan Satria Guru Piket
+                    </a>
+                    <a href="#" onclick="menuTabelMonitoringKerja(); return false;" class="submenu-item" id="laporanKaryawan">
+                        <i class="bi bi-file-earmark-ruled-fill me-2"></i>
+                        Laporan Satria Karyawan
+                    </a>
+                    <a href="#" onclick="menuLaporanKaryawan(); return false;" class="submenu-item" id="laporanKaryawanParkirKebersihanKeamanan">
+                        <i class="bi bi-file-earmark-lock-fill me-2"></i>
+                        Laporan Satria Par-Keb-Kea
+                    </a>
+                    <a href="#" onclick="menuLaporanPresensiKelas(); return false;" class="submenu-item" id="laporanPresensiKelas">
+                        <i class="bi bi-file-earmark-excel-fill me-2"></i>
+                        Laporan Presensi Kelas
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuSertifikatLitnum()" class="submenu-item" id="laporanLitnum">
+                        <i class="bi bi-file-earmark-binary-fill me-2"></i>
+                        Laporan Penguatan LitNum
+                    </a>
+                    <a href="javascript:void(0)" onclick="menuMoodleSinkron()" class="submenu-item" id="sinkronisasiMoodle">
+                        <i class="bi bi-file-earmark-binary-fill me-2"></i>
+                        Sinkronisasi Moodle
+                    </a>
+                </div>
+
+            </div>
+
+                 
+        </div>
+
+       
+    </div>
+
+    <!-- KELUAR APLIKASI -->
+    <style>
+        #accordionKeluar .accordion-item {
+            background: linear-gradient(135deg, #b71c1c, #f44336) !important;
+            border: none !important;
+        }
+        #accordionKeluar .accordion-button {
+            background: linear-gradient(135deg, #b71c1c, #f44336) !important;
+            color: white !important;
+            font-weight: bold;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        #accordionKeluar .accordion-button:not(.collapsed) {
+            background: linear-gradient(135deg, #b71c1c, #ff1744) !important;
+            color: white !important;
+        }
+        #accordionKeluar .accordion-button::after {
+            filter: brightness(0) invert(1);
+        }
+        #accordionKeluar .accordion-body {
+            background: linear-gradient(135deg, #ffcdd2, #ef9a9a) !important;
+        }
+        #accordionKeluar .submenu-item {
+            display: block;
+            padding: 12px 15px;
+            border-radius: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            background: linear-gradient(135deg, #d50000, #ff1744) !important;
+            color: white !important;
+            transition: 0.3s;
+        }
+        #accordionKeluar .submenu-item:hover {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, #b71c1c, #ff5252) !important;
+            color: white !important;
+        }
+
+
+#btnSatriaAI{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    width:72px;
+    height:72px;
+    border:none;
+    border-radius:50%;
+    z-index:99999;
+
+    /* GRADASI ABU-ABU: Dari abu-abu terang ke abu-abu sangat tua */
+    background: linear-gradient(135deg, #FFE082 0%, #FFB300 50%, #FF6F00 100%);
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    /* Shadow disesuaikan dengan nuansa abu-abu/hitam */
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.35),
+        0 0 0 6px rgba(214, 216, 219, 0.25);
+
+    transition:.25s;
+}
+
+#btnSatriaAI:hover{
+    transform:translateY(-4px) scale(1.08);
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.45),
+        0 0 0 10px rgba(214, 216, 219, 0.35);
+}
+
+#btnSatriaAI img{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    /* Memberikan efek bayangan halus pada ikon agar menonjol di atas latar belakang */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+#btnSatriaAI::after{
+    content:"SATRIA AI";
+    position:absolute;
+    right:82px;
+
+    /* Latar belakang tooltip disesuaikan ke abu-abu gelap */
+    background:#212529;
+    color:white;
+
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:700;
+    font-size:13px;
+    opacity:0;
+    transform:translateX(10px);
+    transition:.25s;
+    white-space:nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#btnSatriaAI:hover::after{
+    opacity:1;
+    transform:translateX(0);
+}
+
+@media(max-width:768px){
+    #btnSatriaAI{
+        width:64px;
+        height:64px;
+        right:18px;
+        bottom:18px;
+    }
+
+    #btnSatriaAI img{
+        width:34px;
+        height:34px;
+    }
+}
+  
+
+
+    </style>
+
+<!-- ===========================
+      FLOATING BUTTON AI
+=========================== -->
+
+<button id="btnSatriaAI"
+        title="SATRIA AI"
+        onclick="openSatriaAI()">
+
+    <i class="bi bi-stars" style="font-size: 20px; color: #0d6efd;"></i>
+
+</button>
+
+</div>
