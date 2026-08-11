@@ -1088,382 +1088,885 @@ function getPresensiPerkelasData(tanggal, kelas) {
  * MULTI SCHOOL SAFE
  * ============================================================
  */
-function simpanPresensiPerkelas(tanggal, kelas, data) {
+/**
+ * ============================================================
+ * SIM SATRIA
+ * PRESENSI PER KELAS
+ *
+ * INSERT / UPDATE
+ *
+ * UNIQUE LOGIC:
+ * TANGGAL + KELAS + NISN
+ *
+ * Jika sudah ada:
+ * UPDATE
+ *
+ * Jika belum:
+ * INSERT
+ * ============================================================
+ */
+function simpanPresensiPerkelas(
+  tanggal,
+  kelas,
+  data
+) {
+
   const log = {
     success: false,
     startedAt: new Date().toISOString(),
-    finishedAt: "",
-    step: "",
-    school: {},
-    user: {},
-    database: {},
+    finishedAt: '',
+    step: '',
     data: {
       jumlahDikirim: 0,
       jumlahValid: 0,
       inserted: 0,
-      updated: 0,
-    },
-    message: "",
-    error: "",
+      updated: 0
+    }
   };
+
+
   try {
+
     /* ======================================================
-       1. VALIDASI INPUT
+       VALIDASI
        ====================================================== */
-    log.step = "VALIDASI INPUT";
-    console.log("[PRESENSI] STEP 1 - Validasi input");
-    tanggal = String(tanggal || "").trim();
-    kelas = String(kelas || "").trim();
+
+    log.step =
+      'VALIDASI INPUT';
+
+
+    tanggal =
+      String(
+        tanggal || ''
+      ).trim();
+
+
+    kelas =
+      String(
+        kelas || ''
+      ).trim();
+
+
     if (!tanggal) {
-      throw new Error("Tanggal belum dipilih.");
+
+      throw new Error(
+        'Tanggal belum dipilih.'
+      );
+
     }
+
+
     if (!kelas) {
-      throw new Error("Kelas belum dipilih.");
+
+      throw new Error(
+        'Kelas belum dipilih.'
+      );
+
     }
-    if (!Array.isArray(data) || data.length === 0) {
-      throw new Error("Data presensi kosong.");
+
+
+    if (
+      !Array.isArray(data) ||
+      data.length === 0
+    ) {
+
+      throw new Error(
+        'Data presensi kosong.'
+      );
+
     }
-    log.data.jumlahDikirim = data.length;
+
+
+    log.data.jumlahDikirim =
+      data.length;
+
+
     /* ======================================================
-       2. SCHOOL CONTEXT
+       SCHOOL CONTEXT
        ====================================================== */
-    log.step = "MENGAMBIL SCHOOL CONTEXT";
-    console.log("[PRESENSI] STEP 2 - School Context");
-    const context = getCurrentUserContext();
+
+    log.step =
+      'SCHOOL CONTEXT';
+
+
+    const context =
+      getCurrentUserContext();
+
+
     if (!context) {
-      throw new Error("School Context tidak ditemukan.");
+
+      throw new Error(
+        'School Context tidak ditemukan.'
+      );
+
     }
-    /* ======================================================
-       3. IDENTITAS SEKOLAH
-       ====================================================== */
-    log.step = "MEMBACA IDENTITAS SEKOLAH";
-    const school = context.school || {};
-    const npsn = String(school.npsn || context.npsn || "").trim();
-    const namaSekolah = String(
-      school.namaSekolah || school.nama || context.sekolah || "",
-    ).trim();
-    const spreadsheetId = String(
-      school.spreadsheetId || context.spreadsheetId || "",
-    ).trim();
-    log.school = {
-      npsn: npsn,
-      namaSekolah: namaSekolah,
-      spreadsheetId: spreadsheetId,
-    };
-    console.log("[PRESENSI] SCHOOL:", JSON.stringify(log.school));
+
+
+    const school =
+      context.school ||
+      {};
+
+
+    const npsn =
+      String(
+        school.npsn ||
+        context.npsn ||
+        ''
+      ).trim();
+
+
+    const namaSekolah =
+      String(
+        school.namaSekolah ||
+        school.nama ||
+        context.sekolah ||
+        ''
+      ).trim();
+
+
+    const spreadsheetId =
+      String(
+        school.spreadsheetId ||
+        context.spreadsheetId ||
+        ''
+      ).trim();
+
+
     if (!spreadsheetId) {
-      throw new Error("Spreadsheet sekolah aktif tidak ditemukan.");
+
+      throw new Error(
+        'Spreadsheet sekolah aktif tidak ditemukan.'
+      );
+
     }
+
+
     /* ======================================================
-       4. IDENTITAS USER
+       USER
        ====================================================== */
-    log.step = "MEMBACA IDENTITAS USER";
-    const user = context.user || {};
-    const userId = String(
-      user.userId || user.id || context.userId || "",
-    ).trim();
-    const email = String(user.email || context.email || "").trim();
-    const nip = String(user.nip || context.nip || "").trim();
-    const namaUser = String(
-      user.nama || user.name || context.nama || "",
-    ).trim();
-    const role = String(user.role || context.role || "").trim();
-    log.user = {
-      userId: userId,
-      email: email,
-      nip: nip,
-      nama: namaUser,
-      role: role,
-    };
-    console.log("[PRESENSI] USER:", JSON.stringify(log.user));
+
+    const user =
+      context.user ||
+      {};
+
+
+    const userId =
+      String(
+        user.userId ||
+        user.id ||
+        context.userId ||
+        ''
+      ).trim();
+
+
+    const email =
+      String(
+        user.email ||
+        context.email ||
+        ''
+      ).trim();
+
+
+    const nip =
+      String(
+        user.nip ||
+        context.nip ||
+        ''
+      ).trim();
+
+
+    const namaUser =
+      String(
+        user.nama ||
+        user.name ||
+        context.nama ||
+        ''
+      ).trim();
+
+
+    const role =
+      String(
+        user.role ||
+        context.role ||
+        ''
+      ).trim();
+
+
     if (!userId) {
-      throw new Error("USER_ID tidak dapat diperoleh dari identitas login.");
+
+      throw new Error(
+        'USER_ID tidak ditemukan.'
+      );
+
     }
+
+
     if (!email) {
-      throw new Error("EMAIL tidak dapat diperoleh dari identitas login.");
+
+      throw new Error(
+        'EMAIL pengguna tidak ditemukan.'
+      );
+
     }
+
+
     /* ======================================================
-       5. BUKA DATABASE SEKOLAH AKTIF
+       DATABASE
        ====================================================== */
-    log.step = "MEMBUKA DATABASE SEKOLAH";
-    const ss = SpreadsheetApp.openById(spreadsheetId);
-    log.database = {
-      spreadsheetId: spreadsheetId,
-      spreadsheetName: ss.getName(),
-      sheetName: "TRX_PRESENSI",
-    };
-    console.log("[PRESENSI] DATABASE:", JSON.stringify(log.database));
-    /* ======================================================
-       6. CARI TRX_PRESENSI
-       ====================================================== */
-    log.step = "MENCARI TRX_PRESENSI";
-    const sheet = ss.getSheetByName("TRX_PRESENSI");
-    /*
-     * TIDAK MEMBUAT SHEET BARU.
-     */
+
+    log.step =
+      'MEMBUKA DATABASE';
+
+
+    const ss =
+      SpreadsheetApp.openById(
+        spreadsheetId
+      );
+
+
+    const sheet =
+      ss.getSheetByName(
+        'TRX_PRESENSI'
+      );
+
+
     if (!sheet) {
+
       throw new Error(
-        'Sheet "TRX_PRESENSI" tidak ditemukan pada Spreadsheet sekolah.',
+        'Sheet TRX_PRESENSI tidak ditemukan.'
       );
+
     }
+
+
     /* ======================================================
-       7. VALIDASI HEADER
+       HEADER
        ====================================================== */
-    log.step = "MEMERIKSA HEADER";
-    const lastColumn = sheet.getLastColumn();
-    const lastRow = sheet.getLastRow();
-    if (lastColumn === 0) {
-      throw new Error("TRX_PRESENSI tidak memiliki header.");
-    }
-    const headers = sheet
-      .getRange(1, 1, 1, lastColumn)
-      .getDisplayValues()[0]
-      .map(function (header) {
-        return String(header || "").trim();
-      });
-    console.log("[PRESENSI] HEADERS:", JSON.stringify(headers));
-    /* ======================================================
-       8. HEADER RESMI
-       ====================================================== */
-    const requiredHeaders = [
-      "TRANSACTION_ID",
-      "TIMESTAMP",
-      "NPSN",
-      "USER_ID",
-      "EMAIL",
-      "NIP",
-      "NAMA_USER",
-      "ROLE",
-      "TANGGAL",
-      "KELAS",
-      "NISN",
-      "NAMA_SISWA",
-      "STATUS",
-      "KETERANGAN",
-    ];
-    const col = {};
-    headers.forEach(function (header, index) {
-      col[header.toUpperCase().trim()] = index + 1;
-    });
-    const missingHeaders = requiredHeaders.filter(function (header) {
-      return !col[header];
-    });
-    if (missingHeaders.length > 0) {
-      throw new Error(
-        "Header TRX_PRESENSI belum lengkap: " + missingHeaders.join(", "),
-      );
-    }
-    /* ======================================================
-       9. BACA DATA LAMA
-       ====================================================== */
-    log.step = "MEMERIKSA DATA LAMA";
-    const existingRows =
-      lastRow >= 2
-        ? sheet.getRange(2, 1, lastRow - 1, headers.length).getDisplayValues()
-        : [];
-    console.log("[PRESENSI] DATA LAMA:", existingRows.length);
-    /* ======================================================
-       10. PROSES DATA
-       ====================================================== */
-    log.step = "MENYIMPAN DATA";
-    const now = new Date();
-    const transactionIds = [];
-    const allowedStatus = ["HADIR", "IZIN", "SAKIT", "ALPA"];
-    data.forEach(function (item, index) {
-      const nisn = String(item.nisn || "").trim();
-      const namaSiswa = String(item.nama || item.namaSiswa || "").trim();
-      const status = String(item.status || "HADIR")
-        .trim()
-        .toUpperCase();
-      const keterangan = String(item.keterangan || "").trim();
-      /*
-       * Nama siswa wajib ada.
-       */
-      if (!namaSiswa) {
-        console.log("[PRESENSI] SKIP:", index + 1, "Nama siswa kosong.");
-        return;
-      }
-      if (!allowedStatus.includes(status)) {
-        throw new Error(
-          "Status tidak valid untuk siswa " + namaSiswa + ": " + status,
+
+    const lastColumn =
+      sheet.getLastColumn();
+
+
+    const headers =
+      sheet
+        .getRange(
+          1,
+          1,
+          1,
+          lastColumn
+        )
+        .getDisplayValues()[0]
+        .map(
+          h =>
+            String(
+              h || ''
+            ).trim()
         );
+
+
+    const col = {};
+
+
+    headers.forEach(
+      function(header, index) {
+
+        col[
+          header.toUpperCase()
+        ] =
+          index + 1;
+
       }
-      log.data.jumlahValid++;
-      /* ==================================================
-           CARI DATA LAMA
-           ================================================== */
-      let existingIndex = -1;
-      for (let i = 0; i < existingRows.length; i++) {
-        const row = existingRows[i];
-        const oldTanggal = String(row[col.TANGGAL - 1] || "").trim();
-        const oldKelas = String(row[col.KELAS - 1] || "").trim();
-        const oldNisn = String(row[col.NISN - 1] || "").trim();
-        /*
-         * Identitas utama:
-         * tanggal + kelas + NISN
-         */
+    );
+
+
+    const required = [
+
+      'TRANSACTION_ID',
+      'TIMESTAMP',
+      'NPSN',
+      'USER_ID',
+      'EMAIL',
+      'NIP',
+      'NAMA_USER',
+      'ROLE',
+      'TANGGAL',
+      'KELAS',
+      'NISN',
+      'NAMA_SISWA',
+      'STATUS',
+      'KETERANGAN'
+
+    ];
+
+
+    const missing =
+      required.filter(
+        h => !col[h]
+      );
+
+
+    if (
+      missing.length
+    ) {
+
+      throw new Error(
+        'Header TRX_PRESENSI belum lengkap: ' +
+        missing.join(', ')
+      );
+
+    }
+
+
+    /* ======================================================
+       DATA LAMA
+       ====================================================== */
+
+    const lastRow =
+      sheet.getLastRow();
+
+
+    const existing =
+      lastRow >= 2
+
+        ? sheet
+            .getRange(
+              2,
+              1,
+              lastRow - 1,
+              headers.length
+            )
+            .getDisplayValues()
+
+        : [];
+
+
+    /* ======================================================
+       INDEX DATA
+       ======================================================
+
+       KUNCI:
+
+       TANGGAL
+       +
+       KELAS
+       +
+       NISN
+       ====================================================== */
+
+    const existingMap =
+      new Map();
+
+
+    existing.forEach(
+      function(row, index) {
+
+        const oldTanggal =
+          String(
+            row[
+              col.TANGGAL - 1
+            ] ||
+            ''
+          ).trim();
+
+
+        const oldKelas =
+          String(
+            row[
+              col.KELAS - 1
+            ] ||
+            ''
+          ).trim();
+
+
+        const oldNisn =
+          String(
+            row[
+              col.NISN - 1
+            ] ||
+            ''
+          ).trim();
+
+
         if (
-          oldTanggal === tanggal &&
-          oldKelas === kelas &&
-          oldNisn === nisn &&
-          nisn !== ""
+          oldTanggal &&
+          oldKelas &&
+          oldNisn
         ) {
-          existingIndex = i;
-          break;
+
+          const key =
+            [
+              oldTanggal,
+              oldKelas,
+              oldNisn
+            ].join('|');
+
+
+          existingMap.set(
+            key,
+            index + 2
+          );
+
         }
+
       }
-      /* ==================================================
-           TRANSACTION ID
+    );
+
+
+    /* ======================================================
+       PROSES
+       ====================================================== */
+
+    const now =
+      new Date();
+
+
+    const transactionId =
+      'PP-' +
+      Utilities.formatDate(
+        now,
+        Session.getScriptTimeZone(),
+        'yyyyMMdd-HHmmss'
+      ) +
+      '-' +
+      Utilities
+        .getUuid()
+        .substring(
+          0,
+          8
+        )
+        .toUpperCase();
+
+
+    data.forEach(
+      function(item) {
+
+        const nisn =
+          String(
+            item.nisn ||
+            ''
+          ).trim();
+
+
+        const namaSiswa =
+          String(
+            item.namaSiswa ||
+            item.nama ||
+            ''
+          ).trim();
+
+
+        const status =
+          String(
+            item.status ||
+            'HADIR'
+          )
+          .trim()
+          .toUpperCase();
+
+
+        const keterangan =
+          String(
+            item.keterangan ||
+            ''
+          ).trim();
+
+
+        if (!nisn) {
+
+          return;
+
+        }
+
+
+        if (!namaSiswa) {
+
+          return;
+
+        }
+
+
+        const allowed = [
+          'HADIR',
+          'IZIN',
+          'SAKIT',
+          'ALPA',
+          'LAINNYA'
+        ];
+
+
+        if (
+          !allowed.includes(
+            status
+          )
+        ) {
+
+          throw new Error(
+            'Status tidak valid untuk ' +
+            namaSiswa +
+            ': ' +
+            status
+          );
+
+        }
+
+
+        log.data.jumlahValid++;
+
+
+        /* ==================================================
+           KUNCI UNIQUE
            ================================================== */
-      const transactionId =
-        "PP-" +
-        Utilities.formatDate(
-          now,
-          Session.getScriptTimeZone(),
-          "yyyyMMdd-HHmmss",
-        ) +
-        "-" +
-        Utilities.getUuid().substring(0, 8).toUpperCase();
-      transactionIds.push(transactionId);
-      /* ==================================================
-           BUAT ROW
+
+        const key =
+          [
+            tanggal,
+            kelas,
+            nisn
+          ].join('|');
+
+
+        const targetRow =
+          existingMap.get(
+            key
+          );
+
+
+        /* ==================================================
+           ROW
            ================================================== */
-      const row = new Array(headers.length).fill("");
-      row[col.TRANSACTION_ID - 1] = transactionId;
-      row[col.TIMESTAMP - 1] = now;
-      row[col.NPSN - 1] = npsn;
-      row[col.USER_ID - 1] = userId;
-      row[col.EMAIL - 1] = email;
-      row[col.NIP - 1] = nip;
-      row[col.NAMA_USER - 1] = namaUser;
-      row[col.ROLE - 1] = role;
-      row[col.TANGGAL - 1] = tanggal;
-      row[col.KELAS - 1] = kelas;
-      row[col.NISN - 1] = nisn;
-      row[col.NAMA_SISWA - 1] = namaSiswa;
-      row[col.STATUS - 1] = status;
-      row[col.KETERANGAN - 1] = keterangan;
-      /* ==================================================
+
+        const row =
+          new Array(
+            headers.length
+          ).fill('');
+
+
+        row[
+          col.TRANSACTION_ID - 1
+        ] =
+          transactionId;
+
+
+        row[
+          col.TIMESTAMP - 1
+        ] =
+          now;
+
+
+        row[
+          col.NPSN - 1
+        ] =
+          npsn;
+
+
+        row[
+          col.USER_ID - 1
+        ] =
+          userId;
+
+
+        row[
+          col.EMAIL - 1
+        ] =
+          email;
+
+
+        row[
+          col.NIP - 1
+        ] =
+          nip;
+
+
+        row[
+          col.NAMA_USER - 1
+        ] =
+          namaUser;
+
+
+        row[
+          col.ROLE - 1
+        ] =
+          role;
+
+
+        row[
+          col.TANGGAL - 1
+        ] =
+          tanggal;
+
+
+        row[
+          col.KELAS - 1
+        ] =
+          kelas;
+
+
+        row[
+          col.NISN - 1
+        ] =
+          nisn;
+
+
+        row[
+          col.NAMA_SISWA - 1
+        ] =
+          namaSiswa;
+
+
+        row[
+          col.STATUS - 1
+        ] =
+          status;
+
+
+        row[
+          col.KETERANGAN - 1
+        ] =
+          keterangan;
+
+
+        /* ==================================================
            UPDATE
            ================================================== */
-      if (existingIndex >= 0) {
-        sheet
-          .getRange(existingIndex + 2, 1, 1, headers.length)
-          .setValues([row]);
-        log.data.updated++;
-        console.log("[PRESENSI] UPDATE:", namaSiswa, nisn, status);
-      } else {
-      /* ==================================================
+
+        if (
+          targetRow
+        ) {
+
+          sheet
+            .getRange(
+              targetRow,
+              1,
+              1,
+              headers.length
+            )
+            .setValues([
+              row
+            ]);
+
+
+          log.data.updated++;
+
+
+          console.log(
+            '[PRESENSI] UPDATE:',
+            tanggal,
+            kelas,
+            nisn
+          );
+
+        }
+
+
+        /* ==================================================
            INSERT
            ================================================== */
-        const targetRow = sheet.getLastRow() + 1;
-        sheet.getRange(targetRow, 1, 1, headers.length).setValues([row]);
-        log.data.inserted++;
-        console.log("[PRESENSI] INSERT:", namaSiswa, nisn, status);
+
+        else {
+
+          const newRow =
+            sheet.getLastRow() + 1;
+
+
+          sheet
+            .getRange(
+              newRow,
+              1,
+              1,
+              headers.length
+            )
+            .setValues([
+              row
+            ]);
+
+
+          existingMap.set(
+            key,
+            newRow
+          );
+
+
+          log.data.inserted++;
+
+
+          console.log(
+            '[PRESENSI] INSERT:',
+            tanggal,
+            kelas,
+            nisn
+          );
+
+        }
+
       }
-    });
+    );
+
+
     /* ======================================================
-       11. SELESAI
+       LOG
        ====================================================== */
-    log.step = "MENULIS LOG";
-    /* ======================================================
-   TULIS LOG TRANSAKSI
-   ====================================================== */
+
     const logTransactionId =
-      "PPB-" +
+      'PPB-' +
       Utilities.formatDate(
-        new Date(),
+        now,
         Session.getScriptTimeZone(),
-        "yyyyMMdd-HHmmss",
+        'yyyyMMdd-HHmmss'
       ) +
-      "-" +
-      Utilities.getUuid().substring(0, 8).toUpperCase();
-    const logResult = writePresensiLog_(spreadsheetId, {
-      /* ==============================
-         IDENTITAS SEKOLAH
-         ============================== */
-      npsn: npsn,
-      /* ==============================
-         IDENTITAS USER
-         ============================== */
-      userId: userId,
-      email: email,
-      nip: nip,
-      namaUser: namaUser,
-      role: role,
-      /* ==============================
-         LOG ACTION
-         ============================== */
-      action: "SIMPAN",
-      /* ==============================
-         LOG MODULE
-         ============================== */
-      module: "PRESENSI_PERKELAS",
-      /* ==============================
-         LOG DESCRIPTION
-         ============================== */
-      description:
-        "Presensi kelas " +
-        kelas +
-        " tanggal " +
-        tanggal +
-        ". Jumlah siswa: " +
-        log.data.jumlahValid +
-        ", INSERT: " +
-        log.data.inserted +
-        ", UPDATE: " +
-        log.data.updated,
-      /* ==============================
-         TRANSACTION ID
-         ============================== */
-      transactionId: logTransactionId,
-    });
-    log.logDatabase = logResult;
-    log.logDatabase = logResult;
-    log.step = "SELESAI";
-    log.success = true;
-    log.message = "Presensi berhasil disimpan.";
-    log.finishedAt = new Date().toISOString();
-    console.log("[PRESENSI] SELESAI");
-    console.log(JSON.stringify(log, null, 2));
+      '-' +
+      Utilities
+        .getUuid()
+        .substring(
+          0,
+          8
+        )
+        .toUpperCase();
+
+
+    const logResult =
+      writePresensiLog_(
+        spreadsheetId,
+        {
+
+          npsn:
+            npsn,
+
+          userId:
+            userId,
+
+          email:
+            email,
+
+          nip:
+            nip,
+
+          namaUser:
+            namaUser,
+
+          role:
+            role,
+
+          action:
+            'SIMPAN',
+
+          module:
+            'PRESENSI_PERKELAS',
+
+          description:
+            'Presensi kelas ' +
+            kelas +
+            ' tanggal ' +
+            tanggal +
+            '. Jumlah siswa: ' +
+            log.data.jumlahValid +
+            ', INSERT: ' +
+            log.data.inserted +
+            ', UPDATE: ' +
+            log.data.updated,
+
+          transactionId:
+            logTransactionId
+
+        }
+      );
+
+
+    /* ======================================================
+       SELESAI
+       ====================================================== */
+
+    log.success =
+      true;
+
+
+    log.finishedAt =
+      new Date().toISOString();
+
+
     return {
-      success: true,
+
+      success:
+        true,
+
       message:
-        "Presensi kelas " +
-        kelas +
-        " tanggal " +
-        tanggal +
-        " berhasil disimpan.",
-      sekolah: namaSekolah,
-      npsn: npsn,
-      userId: userId,
-      email: email,
-      nip: nip,
-      namaUser: namaUser,
-      role: role,
-      spreadsheetId: spreadsheetId,
-      spreadsheetName: ss.getName(),
-      sheetName: "TRX_PRESENSI",
-      tanggal: tanggal,
-      kelas: kelas,
-      jumlahData: log.data.jumlahValid,
-      inserted: log.data.inserted,
-      updated: log.data.updated,
-      transactionIds: transactionIds,
-      log: log,
+        'Presensi berhasil disimpan.',
+
+      sekolah:
+        namaSekolah,
+
+      npsn:
+        npsn,
+
+      userId:
+        userId,
+
+      email:
+        email,
+
+      tanggal:
+        tanggal,
+
+      kelas:
+        kelas,
+
+      inserted:
+        log.data.inserted,
+
+      updated:
+        log.data.updated,
+
+      transactionId:
+        transactionId,
+
+      logTransactionId:
+        logTransactionId,
+
+      logDatabase:
+        logResult,
+
+      log:
+        log
+
     };
-  } catch (error) {
-    log.success = false;
-    log.error = error && error.message ? error.message : String(error);
-    log.finishedAt = new Date().toISOString();
-    console.error("[PRESENSI] ERROR:", log.error);
-    console.error("[PRESENSI] LOG:", JSON.stringify(log, null, 2));
-    return {
-      success: false,
-      error: log.error,
-      log: log,
-    };
+
   }
+  catch (error) {
+
+    log.success =
+      false;
+
+    log.error =
+      error.message;
+
+    log.finishedAt =
+      new Date().toISOString();
+
+
+    console.error(
+      '[PRESENSI] ERROR:',
+      JSON.stringify(
+        log,
+        null,
+        2
+      )
+    );
+
+
+    return {
+
+      success:
+        false,
+
+      error:
+        error.message,
+
+      log:
+        log
+
+    };
+
+  }
+
 }
 /* =========================================================
    HELPER HEADER
