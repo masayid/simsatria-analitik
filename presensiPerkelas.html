@@ -8,6 +8,7 @@
     max-width: 1450px;
     margin: 0 auto;
   }
+
   .pp-card {
     border: 0;
     border-radius: 22px;
@@ -15,46 +16,50 @@
     background: #ffffff;
     box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
   }
+
   /* =====================================================
      HEADER
      ===================================================== */
   .pp-header {
-    background: linear-gradient(
-      135deg,
-      #0B3D2E 0%,
-      #1B5E20 60%,
-      #2E7D32 100%
-    );
+    background: linear-gradient(135deg,
+        #0B3D2E 0%,
+        #1B5E20 60%,
+        #2E7D32 100%);
     color: #ffffff;
     padding: 20px 22px;
   }
+
   .pp-title {
     font-size: 1.15rem;
     font-weight: 700;
     line-height: 1.3;
   }
+
   .pp-subtitle {
     font-size: .76rem;
     opacity: .86;
     margin-top: 4px;
   }
+
   .pp-context {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     margin-top: 12px;
   }
+
   .pp-context-badge {
     display: inline-flex;
     align-items: center;
     padding: 5px 9px;
     border-radius: 20px;
-    background: rgba(255,255,255,.13);
-    border: 1px solid rgba(255,255,255,.16);
+    background: rgba(255, 255, 255, .13);
+    border: 1px solid rgba(255, 255, 255, .16);
     color: #ffffff;
     font-size: .68rem;
     font-weight: 600;
   }
+
   /* =====================================================
      FILTER
      ===================================================== */
@@ -63,6 +68,7 @@
     background: #f7faf8;
     border-bottom: 1px solid #e8eee9;
   }
+
   .pp-label {
     display: block;
     margin-bottom: 5px;
@@ -70,6 +76,7 @@
     font-size: .72rem;
     font-weight: 700;
   }
+
   .pp-input,
   .pp-select {
     min-height: 43px;
@@ -78,11 +85,13 @@
     font-size: .84rem !important;
     background: #ffffff !important;
   }
+
   .pp-input:focus,
   .pp-select:focus {
     border-color: #2E7D32 !important;
-    box-shadow: 0 0 0 .2rem rgba(46,125,50,.10) !important;
+    box-shadow: 0 0 0 .2rem rgba(46, 125, 50, .10) !important;
   }
+
   .pp-btn-tampilkan {
     width: 100%;
     min-height: 43px;
@@ -94,14 +103,17 @@
     font-weight: 700;
     transition: .15s ease;
   }
+
   .pp-btn-tampilkan:hover {
     background: #0B3D2E;
     color: #ffffff;
   }
+
   .pp-btn-tampilkan:disabled {
     opacity: .65;
     cursor: not-allowed;
   }
+
   /* =====================================================
      TABLE
      ===================================================== */
@@ -110,6 +122,7 @@
     overflow-x: auto;
     padding: 0 14px 14px;
   }
+
   .pp-table {
     width: 100%;
     min-width: 760px;
@@ -118,6 +131,7 @@
     border-spacing: 0;
     font-size: .76rem;
   }
+
   .pp-table thead th {
     padding: 10px 8px;
     background: #f3f7f4;
@@ -128,30 +142,36 @@
     white-space: nowrap;
     vertical-align: middle;
   }
+
   .pp-table tbody td {
     padding: 8px;
     border-bottom: 1px solid #edf1ee;
     vertical-align: middle;
     white-space: nowrap;
   }
+
   .pp-table tbody tr:hover {
     background: #fbfdfb;
   }
+
   .pp-no {
     width: 40px;
     text-align: center;
     color: #90a39a;
     font-weight: 600;
   }
+
   .pp-nisn {
     color: #78909c;
     font-size: .70rem;
   }
+
   .pp-nama {
     min-width: 200px;
     color: #26352c;
     font-weight: 600;
   }
+
   /* =====================================================
      STATUS BUTTON
      ===================================================== */
@@ -159,11 +179,13 @@
     text-align: center;
     width: 70px;
   }
+
   .pp-status-group {
     display: flex;
     justify-content: center;
     gap: 4px;
   }
+
   .pp-status-btn {
     width: 32px;
     height: 29px;
@@ -177,26 +199,33 @@
     cursor: pointer;
     transition: all .14s ease;
   }
+
   .pp-status-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0,0,0,.08);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
   }
+
   .pp-status-btn.active {
     color: #ffffff;
     border-color: transparent;
   }
+
   .pp-status-btn[data-status="HADIR"].active {
     background: #2E7D32;
   }
+
   .pp-status-btn[data-status="IZIN"].active {
     background: #0277BD;
   }
+
   .pp-status-btn[data-status="SAKIT"].active {
     background: #EF6C00;
   }
+
   .pp-status-btn[data-status="ALPA"].active {
     background: #C62828;
   }
+
   /* =====================================================
      FOOTER
      ===================================================== */
@@ -205,11 +234,13 @@
     background: #fafcfb;
     border-top: 1px solid #e8eee9;
   }
+
   .pp-rekap {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
   }
+
   .pp-rekap-item {
     display: inline-flex;
     align-items: center;
@@ -220,6 +251,7 @@
     font-size: .70rem;
     font-weight: 700;
   }
+
   .pp-btn-simpan {
     min-height: 42px;
     padding: 0 20px;
@@ -230,14 +262,17 @@
     font-size: .78rem;
     font-weight: 700;
   }
+
   .pp-btn-simpan:hover {
     background: #1B5E20;
     color: #ffffff;
   }
+
   .pp-btn-simpan:disabled {
     opacity: .65;
     cursor: not-allowed;
   }
+
   /* =====================================================
      EMPTY / LOADING
      ===================================================== */
@@ -246,20 +281,24 @@
     text-align: center;
     color: #90a39a;
   }
+
   .pp-empty-icon {
     margin-bottom: 8px;
     font-size: 2rem;
   }
+
   .pp-empty-title {
     color: #607269;
     font-size: .90rem;
     font-weight: 700;
   }
+
   .pp-empty-text {
     margin-top: 4px;
     color: #90a39a;
     font-size: .74rem;
   }
+
   .pp-loading {
     display: flex;
     align-items: center;
@@ -269,6 +308,7 @@
     color: #607269;
     font-size: .78rem;
   }
+
   /* =====================================================
      ALERT
      ===================================================== */
@@ -278,6 +318,7 @@
     border-radius: 11px;
     font-size: .76rem;
   }
+
   /* =====================================================
      MOBILE
      ===================================================== */
@@ -285,23 +326,29 @@
     .pp-header {
       padding: 16px;
     }
+
     .pp-filter {
       padding: 14px;
     }
+
     .pp-title {
       font-size: 1rem;
     }
+
     .pp-table-wrapper {
       padding-left: 7px;
       padding-right: 7px;
     }
+
     .pp-nama {
       min-width: 170px;
     }
+
     .pp-btn-tampilkan,
     .pp-btn-simpan {
       width: 100%;
     }
+
     .pp-footer {
       padding: 13px;
     }
@@ -316,14 +363,10 @@
       <div class="pp-title">
         Presensi Per Kelas
       </div>
-      <div
-        class="pp-subtitle"
-        id="ppSekolah">
+      <div class="pp-subtitle" id="ppSekolah">
         Memuat School Context...
       </div>
-      <div
-        class="pp-context"
-        id="ppContext">
+      <div class="pp-context" id="ppContext">
       </div>
     </div>
     <!-- =================================================
@@ -333,21 +376,14 @@
       <div class="row g-2 align-items-end">
         <!-- TANGGAL -->
         <div class="col-12 col-md-3">
-          <label
-            class="pp-label"
-            for="ppTanggal">
+          <label class="pp-label" for="ppTanggal">
             Tanggal
           </label>
-          <input
-            type="date"
-            id="ppTanggal"
-            class="form-control pp-input">
+          <input type="date" id="ppTanggal" class="form-control pp-input">
         </div>
         <!-- KELAS -->
         <div class="col-12 col-md-5">
-          <label
-            class="pp-label"
-            for="ppKelas">
+          <label class="pp-label" for="ppKelas">
             Kelas
           </label>
           <!--
@@ -355,9 +391,7 @@
             ID menggunakan ppKelas agar konsisten
             dengan modul Presensi Perkelas.
           -->
-          <select
-            id="ppKelas"
-            class="form-select pp-select">
+          <select id="ppKelas" class="form-select pp-select">
             <option value="">
               Memuat kelas...
             </option>
@@ -365,14 +399,8 @@
         </div>
         <!-- BUTTON -->
         <div class="col-12 col-md-4">
-          <button
-            type="button"
-            id="ppBtnTampilkan"
-            class="pp-btn-tampilkan"
-            onclick="PP_tampilkan()">
-            <span
-              id="ppSpinnerTampilkan"
-              class="spinner-border spinner-border-sm me-2 d-none">
+          <button type="button" id="ppBtnTampilkan" class="pp-btn-tampilkan" onclick="PP_tampilkan()">
+            <span id="ppSpinnerTampilkan" class="spinner-border spinner-border-sm me-2 d-none">
             </span>
             <span id="ppTextTampilkan">
               TAMPILKAN
@@ -401,26 +429,15 @@
     <!-- =================================================
          FOOTER
          ================================================= -->
-    <div
-      id="ppFooter"
-      class="pp-footer d-none">
-      <div
-        class="d-flex flex-column flex-md-row
+    <div id="ppFooter" class="pp-footer d-none">
+      <div class="d-flex flex-column flex-md-row
                justify-content-between
                align-items-md-center
                gap-3">
-        <div
-          id="ppRekap"
-          class="pp-rekap">
+        <div id="ppRekap" class="pp-rekap">
         </div>
-        <button
-          type="button"
-          id="ppBtnSimpan"
-          class="pp-btn-simpan"
-          onclick="PP_simpan()">
-          <span
-            id="ppSpinnerSimpan"
-            class="spinner-border spinner-border-sm me-2 d-none">
+        <button type="button" id="ppBtnSimpan" class="pp-btn-simpan" onclick="PP_simpan()">
+          <span id="ppSpinnerSimpan" class="spinner-border spinner-border-sm me-2 d-none">
           </span>
           <span id="ppTextSimpan">
             SIMPAN PRESENSI
