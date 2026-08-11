@@ -9,10 +9,9 @@
  *   Google Account -> USERS -> NPSN -> SCHOOLS -> School Context
  */
 function doGet() {
-  return HtmlService
-    .createTemplateFromFile('index')
+  return HtmlService.createTemplateFromFile("index")
     .evaluate()
-    .setTitle('SIM SATRIA')
+    .setTitle("SIM SATRIA")
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 function include(filename) {
@@ -24,46 +23,51 @@ function include(filename) {
  */
 function setupMasterRegistry() {
   const ss = getMasterSpreadsheet_();
-  ensureSheetHeaders_(ss, 'SCHOOLS', [
-    'NPSN',
-    'NAMA_SEKOLAH',
-    'STATUS',
-    'SPREADSHEET_ID',
-    'DRIVE_FOLDER_ID',
-    'ALAMAT',
-    'LOGO_URL',
-    'TAGLINE',
-    'WARNA_UTAMA',
-    'WARNA_SEKUNDER'
+  ensureSheetHeaders_(ss, "SCHOOLS", [
+    "NPSN",
+    "NAMA_SEKOLAH",
+    "STATUS",
+    "SPREADSHEET_ID",
+    "DRIVE_FOLDER_ID",
+    "ALAMAT",
+    "LOGO_URL",
+    "TAGLINE",
+    "WARNA_UTAMA",
+    "WARNA_SEKUNDER",
   ]);
-  ensureSheetHeaders_(ss, 'USERS', [
-    'USER_ID',
-    'EMAIL',
-    'NIP',
-    'NAMA',
-    'NPSN',
-    'ROLE',
-    'STATUS'
+  ensureSheetHeaders_(ss, "USERS", [
+    "USER_ID",
+    "EMAIL",
+    "NIP",
+    "NAMA",
+    "NPSN",
+    "ROLE",
+    "STATUS",
   ]);
   return {
     success: true,
     spreadsheetId: ss.getId(),
     spreadsheetName: ss.getName(),
-    message: 'Registry Master siap.'
+    message: "Registry Master siap.",
   };
 }
 function ensureSheetHeaders_(ss, name, headers) {
   let sh = ss.getSheetByName(name);
   if (!sh) sh = ss.insertSheet(name);
-  const current = sh.getLastColumn() > 0
-    ? sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0]
-    : [];
-  if (!current.length || current.every(v => String(v).trim() === '')) {
+  const current =
+    sh.getLastColumn() > 0
+      ? sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0]
+      : [];
+  if (!current.length || current.every((v) => String(v).trim() === "")) {
     sh.getRange(1, 1, 1, headers.length).setValues([headers]);
     return;
   }
-  const normalized = current.map(v => String(v || '').trim().toUpperCase());
-  headers.forEach(h => {
+  const normalized = current.map((v) =>
+    String(v || "")
+      .trim()
+      .toUpperCase(),
+  );
+  headers.forEach((h) => {
     if (!normalized.includes(h.toUpperCase())) {
       sh.getRange(1, sh.getLastColumn() + 1).setValue(h);
     }
@@ -82,7 +86,7 @@ function getLoginInfo() {
       email: context.email,
       nip: context.nip,
       nama: context.nama,
-      role: context.role
+      role: context.role,
     },
     school: {
       npsn: context.npsn,
@@ -91,8 +95,8 @@ function getLoginInfo() {
       logoUrl: context.school.logoUrl,
       tagline: context.school.tagline,
       warnaUtama: context.school.warnaUtama,
-      warnaSekunder: context.school.warnaSekunder
-    }
+      warnaSekunder: context.school.warnaSekunder,
+    },
   };
 }
 function getSchoolContextInfo() {
@@ -107,7 +111,7 @@ function getSchoolContextInfo() {
     npsn: c.npsn,
     sekolah: c.school.namaSekolah,
     spreadsheetId: c.school.spreadsheetId,
-    driveFolderId: c.school.driveFolderId
+    driveFolderId: c.school.driveFolderId,
   };
 }
 /**
@@ -122,15 +126,15 @@ function testSchoolResources() {
     spreadsheet: {
       success: false,
       id: c.school.spreadsheetId,
-      name: '',
-      error: ''
+      name: "",
+      error: "",
     },
     drive: {
       success: false,
       id: c.school.driveFolderId,
-      name: '',
-      error: ''
-    }
+      name: "",
+      error: "",
+    },
   };
   try {
     const ss = SpreadsheetApp.openById(c.school.spreadsheetId);
@@ -153,23 +157,13 @@ function testSchoolContextSpeed() {
   const context = getSchoolContextInfo();
   return {
     elapsedMs: Date.now() - start,
-    context: context
+    context: context,
   };
 }
 //koneksi
 function getKoneksiView() {
-  const html =
-    HtmlService
-      .createHtmlOutputFromFile(
-        'koneksi'
-      )
-      .getContent();
-  let js =
-    HtmlService
-      .createHtmlOutputFromFile(
-        'koneksi_js'
-      )
-      .getContent();
+  const html = HtmlService.createHtmlOutputFromFile("koneksi").getContent();
+  let js = HtmlService.createHtmlOutputFromFile("koneksi_js").getContent();
   /*
    * koneksi_js.html menggunakan:
    *
@@ -181,56 +175,27 @@ function getKoneksiView() {
    * script element baru, wrapper tersebut
    * HARUS dibuang.
    */
-  js = js
-    .replace(
-      /^\s*<script[^>]*>/i,
-      ''
-    )
-    .replace(
-      /<\/script>\s*$/i,
-      ''
-    );
+  js = js.replace(/^\s*<script[^>]*>/i, "").replace(/<\/script>\s*$/i, "");
   return {
-    success:
-      true,
-    html:
-      html,
-    js:
-      js
+    success: true,
+    html: html,
+    js: js,
   };
 }
 //presensi kelas
 function getPresensiPerkelasView() {
   const html =
-    HtmlService
-      .createHtmlOutputFromFile(
-        'presensiPerkelas'
-      )
-      .getContent();
-  let js =
-    HtmlService
-      .createHtmlOutputFromFile(
-        'presensiPerkelas_js'
-      )
-      .getContent();
+    HtmlService.createHtmlOutputFromFile("presensiPerkelas").getContent();
+  let js = HtmlService.createHtmlOutputFromFile(
+    "presensiPerkelas_js",
+  ).getContent();
   /*
    * Hapus wrapper <script>
    */
-  js = js
-    .replace(
-      /^\s*<script[^>]*>/i,
-      ''
-    )
-    .replace(
-      /<\/script>\s*$/i,
-      ''
-    );
+  js = js.replace(/^\s*<script[^>]*>/i, "").replace(/<\/script>\s*$/i, "");
   return {
-    success:
-      true,
-    html:
-      html,
-    js:
-      js
+    success: true,
+    html: html,
+    js: js,
   };
 }
