@@ -1,17 +1,11 @@
-
 <div class="container-fluid py-3">
-
   <div class="row g-3">
-
     <!-- =====================================================
          HEADER KONEKSI
          ===================================================== -->
-
     <div class="col-12">
-
       <div class="card border-0 shadow-sm"
            style="border-radius:18px; overflow:hidden;">
-
         <div
           style="
             background:linear-gradient(
@@ -23,9 +17,7 @@
             color:white;
             padding:20px;
           ">
-
           <div class="d-flex align-items-center gap-3">
-
             <div
               style="
                 width:46px;
@@ -37,41 +29,28 @@
                 justify-content:center;
                 font-size:22px;
               ">
-
               🔗
-
             </div>
-
             <div>
-
               <div
                 style="
                   font-size:1.15rem;
                   font-weight:700;
                 ">
-
                 Koneksi SIM SATRIA
-
               </div>
-
               <div
                 style="
                   font-size:.75rem;
                   opacity:.85;
                   margin-top:3px;
                 ">
-
                 Autentikasi, School Context,
                 Database, Drive dan Transaction Engine
-
               </div>
-
             </div>
-
           </div>
-
           <div class="mt-3">
-
             <span
               id="loadingText"
               class="badge rounded-pill"
@@ -80,59 +59,37 @@
                 color:white;
                 padding:7px 12px;
               ">
-
               Menghubungkan...
-
             </span>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
-
     <!-- =====================================================
          IDENTITAS SEKOLAH
          ===================================================== -->
-
     <div class="col-12 col-xl-6">
-
       <div class="card border-0 shadow-sm h-100"
            style="border-radius:16px;">
-
         <div class="card-body">
-
           <div class="fw-bold mb-3"
                style="font-size:.9rem; color:#37474F;">
-
             <i class="bi bi-building me-2"></i>
             School Context
-
           </div>
-
-
           <div class="row g-2">
-
             <div class="col-12">
-
               <div
                 class="p-3 rounded-3"
                 style="background:#F5F8F6;">
-
                 <div
                   style="
                     font-size:.67rem;
                     color:#78909C;
                     font-weight:700;
                   ">
-
                   SEKOLAH
-
                 </div>
-
                 <div
                   id="schoolName"
                   style="
@@ -141,33 +98,22 @@
                     color:#26352C;
                     margin-top:3px;
                   ">
-
                   -
-
                 </div>
-
               </div>
-
             </div>
-
-
             <div class="col-6">
-
               <div
                 class="p-3 rounded-3"
                 style="background:#F5F8F6;">
-
                 <div
                   style="
                     font-size:.67rem;
                     color:#78909C;
                     font-weight:700;
                   ">
-
                   NPSN
-
                 </div>
-
                 <div
                   id="schoolNpsn"
                   style="
@@ -176,33 +122,22 @@
                     color:#26352C;
                     margin-top:3px;
                   ">
-
                   -
-
                 </div>
-
               </div>
-
             </div>
-
-
             <div class="col-6">
-
               <div
                 class="p-3 rounded-3"
                 style="background:#F5F8F6;">
-
                 <div
                   style="
                     font-size:.67rem;
                     color:#78909C;
                     font-weight:700;
                   ">
-
                   ROLE
-
                 </div>
-
                 <div
                   id="userRole"
                   style="
@@ -211,33 +146,22 @@
                     color:#26352C;
                     margin-top:3px;
                   ">
-
                   -
-
                 </div>
-
               </div>
-
             </div>
-
-
             <div class="col-12">
-
               <div
                 class="p-3 rounded-3"
                 style="background:#F5F8F6;">
-
                 <div
                   style="
                     font-size:.67rem;
                     color:#78909C;
                     font-weight:700;
                   ">
-
                   NAMA PENGGUNA
-
                 </div>
-
                 <div
                   id="userName"
                   style="
@@ -246,33 +170,22 @@
                     color:#26352C;
                     margin-top:3px;
                   ">
-
                   -
-
                 </div>
-
               </div>
-
             </div>
-
-
             <div class="col-12">
-
               <div
                 class="p-3 rounded-3"
                 style="background:#F5F8F6;">
-
                 <div
                   style="
                     font-size:.67rem;
                     color:#78909C;
                     font-weight:700;
                   ">
-
                   EMAIL
-
                 </div>
-
                 <div
                   id="userEmail"
                   style="
@@ -282,210 +195,129 @@
                     margin-top:3px;
                     word-break:break-all;
                   ">
-
                   -
-
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
-
           <div
             id="loginError"
             class="alert alert-danger mt-3 hidden"
             style="font-size:.75rem;">
           </div>
-
         </div>
-
       </div>
-
     </div>
-
-
     <!-- =====================================================
          TEST RESOURCES
          ===================================================== -->
-
     <div class="col-12 col-xl-6">
-
       <div class="card border-0 shadow-sm h-100"
            style="border-radius:16px;">
-
         <div class="card-body">
-
           <div class="fw-bold mb-3"
                style="font-size:.9rem; color:#37474F;">
-
             <i class="bi bi-hdd-stack me-2"></i>
             Pengujian Koneksi
-
           </div>
-
-
           <div class="d-grid gap-2">
-
             <button
               type="button"
               id="btnResource"
               class="btn btn-outline-success"
               onclick="testResources()">
-
               TEST SCHOOL RESOURCES
-
             </button>
-
-
             <button
               type="button"
               id="btnContext"
               class="btn btn-outline-success"
               onclick="testContext()">
-
               TEST SCHOOL CONTEXT
-
             </button>
-
-
             <button
               type="button"
               id="btnTransaction"
               class="btn btn-outline-success"
               onclick="testTransaction()">
-
               TEST TRANSACTION ENGINE
-
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
-
     <!-- =====================================================
          SETUP DATABASE & DRIVE
          ===================================================== -->
-
     <div class="col-12">
-
       <div class="card border-0 shadow-sm"
            style="border-radius:16px;">
-
         <div class="card-body">
-
           <div class="fw-bold mb-3"
                style="font-size:.9rem; color:#37474F;">
-
             <i class="bi bi-gear me-2"></i>
             Setup Resource Sekolah
-
           </div>
-
-
           <div class="row g-2">
-
             <div class="col-12 col-md-4">
-
               <button
                 type="button"
                 id="btnSetupDatabase"
                 class="btn btn-success w-100"
                 onclick="setupDatabaseSekolahSaya()">
-
                 SETUP DATABASE SEKOLAH
-
               </button>
-
             </div>
-
-
             <div class="col-12 col-md-4">
-
               <button
                 type="button"
                 id="btnSetupDrive"
                 class="btn btn-success w-100"
                 onclick="setupDriveSekolahSaya()">
-
                 SETUP FOLDER DRIVE
-
               </button>
-
             </div>
-
-
             <div class="col-12 col-md-4">
-
               <button
                 type="button"
                 id="btnRefreshContext"
                 class="btn btn-outline-success w-100"
                 onclick="refreshSchoolContext()">
-
                 REFRESH SCHOOL CONTEXT
-
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
-
     <!-- =====================================================
          RESULT
          ===================================================== -->
-
     <div class="col-12">
-
       <div class="card border-0 shadow-sm"
            style="border-radius:16px;">
-
         <div class="card-body">
-
           <div class="d-flex
                       justify-content-between
                       align-items-center
                       mb-2">
-
             <div
               class="fw-bold"
               style="
                 font-size:.9rem;
                 color:#37474F;
               ">
-
               Hasil Pengujian
-
             </div>
-
             <span
               class="badge rounded-pill"
               style="
                 background:#E8F5E9;
                 color:#2E7D32;
               ">
-
               Diagnostic
-
             </span>
-
           </div>
-
-
           <pre
             id="result"
             class="mb-0 p-3"
@@ -499,13 +331,8 @@
               font-size:.72rem;
               line-height:1.5;
             ">Belum ada pengujian.</pre>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
