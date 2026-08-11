@@ -1,11 +1,11 @@
 <script>
-function menuPresensiPerkelas() {
-  const content =
-    document.getElementById(
-      'content'
-    );
-  if (!content) return;
-  content.innerHTML = `
+  function menuPresensiPerkelas() {
+    const content =
+      document.getElementById(
+        'content'
+      );
+    if (!content) return;
+    content.innerHTML = `
     <div
       class="d-flex
              flex-column
@@ -18,55 +18,55 @@ function menuPresensiPerkelas() {
       </div>
     </div>
   `;
-  google.script.run
-    .withSuccessHandler(
-      function(view) {
-        if (
-          !view ||
-          !view.success ||
-          !view.html
-        ) {
-          content.innerHTML = `
+    google.script.run
+      .withSuccessHandler(
+        function (view) {
+          if (
+            !view ||
+            !view.success ||
+            !view.html
+          ) {
+            content.innerHTML = `
             <div class="alert alert-danger">
               Presensi Per Kelas gagal dimuat.
             </div>
           `;
-          return;
-        }
-        content.innerHTML =
-          view.html;
-        if (
-          view.js &&
-          view.js.trim()
-        ) {
-          const script =
-            document.createElement(
-              'script'
+            return;
+          }
+          content.innerHTML =
+            view.html;
+          if (
+            view.js &&
+            view.js.trim()
+          ) {
+            const script =
+              document.createElement(
+                'script'
+              );
+            script.type =
+              'text/javascript';
+            script.textContent =
+              view.js;
+            document.body.appendChild(
+              script
             );
-          script.type =
-            'text/javascript';
-          script.textContent =
-            view.js;
-          document.body.appendChild(
-            script
-          );
+          }
         }
-      }
-    )
-    .withFailureHandler(
-      function(error) {
-        content.innerHTML = `
+      )
+      .withFailureHandler(
+        function (error) {
+          content.innerHTML = `
           <div class="alert alert-danger">
             ${PP_escape(
-              error &&
+            error &&
               error.message
-                ? error.message
-                : 'Presensi gagal dimuat.'
-            )}
+              ? error.message
+              : 'Presensi gagal dimuat.'
+          )}
           </div>
         `;
-      }
-    )
-    .getPresensiPerkelasView();
-}
+        }
+      )
+      .getPresensiPerkelasView();
+  }
 </script>
