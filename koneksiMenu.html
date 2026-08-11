@@ -1,21 +1,21 @@
 <script>
-function menuKoneksi() {
-  const content =
-    document.getElementById(
-      'content'
-    );
-  if (!content) {
-    console.error(
-      'Element #content tidak ditemukan.'
-    );
-    return;
-  }
-  /*
-   * =====================================================
-   * LOADING
-   * =====================================================
-   */
-  content.innerHTML = `
+  function menuKoneksi() {
+    const content =
+      document.getElementById(
+        'content'
+      );
+    if (!content) {
+      console.error(
+        'Element #content tidak ditemukan.'
+      );
+      return;
+    }
+    /*
+     * =====================================================
+     * LOADING
+     * =====================================================
+     */
+    content.innerHTML = `
     <div
       class="d-flex
              flex-column
@@ -36,72 +36,72 @@ function menuKoneksi() {
       </div>
     </div>
   `;
-  /*
-   * =====================================================
-   * REQUEST HALAMAN
-   * =====================================================
-   */
-  google.script.run
-    .withSuccessHandler(
-      function(view) {
-        console.log(
-          'Koneksi view diterima:',
-          view
-        );
-        if (
-          !view ||
-          !view.success ||
-          !view.html
-        ) {
-          content.innerHTML = `
+    /*
+     * =====================================================
+     * REQUEST HALAMAN
+     * =====================================================
+     */
+    google.script.run
+      .withSuccessHandler(
+        function (view) {
+          console.log(
+            'Koneksi view diterima:',
+            view
+          );
+          if (
+            !view ||
+            !view.success ||
+            !view.html
+          ) {
+            content.innerHTML = `
             <div class="alert alert-danger m-3">
               <strong>
                 Halaman Koneksi gagal dimuat.
               </strong>
             </div>
           `;
-          return;
-        }
-        /*
-         * =================================================
-         * MASUKKAN HTML
-         * =================================================
-         */
-        content.innerHTML =
-          view.html;
-        /*
-         * =================================================
-         * EKSEKUSI JAVASCRIPT
-         * =================================================
-         */
-        if (
-          view.js &&
-          view.js.trim()
-        ) {
-          try {
-            const script =
-              document.createElement(
-                'script'
-              );
-            script.type =
-              'text/javascript';
-            script.textContent =
-              view.js;
-            document
-              .body
-              .appendChild(
-                script
-              );
-            console.log(
-              'koneksi_js berhasil dieksekusi.'
-            );
+            return;
           }
-          catch (error) {
-            console.error(
-              'Gagal menjalankan koneksi_js:',
-              error
-            );
-            content.innerHTML += `
+          /*
+           * =================================================
+           * MASUKKAN HTML
+           * =================================================
+           */
+          content.innerHTML =
+            view.html;
+          /*
+           * =================================================
+           * EKSEKUSI JAVASCRIPT
+           * =================================================
+           */
+          if (
+            view.js &&
+            view.js.trim()
+          ) {
+            try {
+              const script =
+                document.createElement(
+                  'script'
+                );
+              script.type =
+                'text/javascript';
+              script.textContent =
+                view.js;
+              document
+                .body
+                .appendChild(
+                  script
+                );
+              console.log(
+                'koneksi_js berhasil dieksekusi.'
+              );
+            }
+            catch (error) {
+              console.error(
+                'Gagal menjalankan koneksi_js:',
+                error
+              );
+              content.innerHTML += `
               <div class="alert alert-danger m-3">
                 <strong>
                   JavaScript Koneksi gagal dijalankan.
@@ -111,33 +111,32 @@ function menuKoneksi() {
                 </div>
               </div>
             `;
+            }
           }
         }
-      }
-    )
-    .withFailureHandler(
-      function(error) {
-        console.error(
-          'getKoneksiView ERROR:',
-          error
-        );
-        content.innerHTML = `
+      )
+      .withFailureHandler(
+        function (error) {
+          console.error(
+            'getKoneksiView ERROR:',
+            error
+          );
+          content.innerHTML = `
           <div class="alert alert-danger m-3">
             <strong>
               Gagal memuat halaman Koneksi
             </strong>
             <div class="mt-2">
-              ${
-                error &&
-                error.message
-                  ? error.message
-                  : 'Terjadi kesalahan pada server.'
-              }
+              ${error &&
+              error.message
+              ? error.message
+              : 'Terjadi kesalahan pada server.'
+            }
             </div>
           </div>
         `;
-      }
-    )
-    .getKoneksiView();
-}
+        }
+      )
+      .getKoneksiView();
+  }
 </script>
