@@ -8,7 +8,7 @@ function getSchoolContext() {
 function getSchoolSpreadsheet_() {
   const school = getSchoolContext();
   if (!school.spreadsheetId) {
-    throw new Error('SPREADSHEET_ID sekolah belum dikonfigurasi.');
+    throw new Error("SPREADSHEET_ID sekolah belum dikonfigurasi.");
   }
   return SpreadsheetApp.openById(school.spreadsheetId);
 }
@@ -17,8 +17,7 @@ function getSchoolSheet_(sheetName) {
   const sh = ss.getSheetByName(sheetName);
   if (!sh) {
     throw new Error(
-      'Sheet "' + sheetName +
-      '" tidak ditemukan pada Spreadsheet sekolah.'
+      'Sheet "' + sheetName + '" tidak ditemukan pada Spreadsheet sekolah.',
     );
   }
   return sh;
@@ -35,6 +34,6 @@ function getSchoolContextInfo() {
     npsn: c.npsn,
     sekolah: c.school.namaSekolah,
     spreadsheetId: c.school.spreadsheetId,
-    driveFolderId: c.school.driveFolderId
+    driveFolderId: c.school.driveFolderId,
   };
 }
