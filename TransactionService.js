@@ -6,24 +6,24 @@
 function generateTransactionId_() {
   const now = Utilities.formatDate(
     new Date(),
-    Session.getScriptTimeZone() || 'Asia/Jakarta',
-    'yyyyMMddHHmmss'
+    Session.getScriptTimeZone() || "Asia/Jakarta",
+    "yyyyMMddHHmmss",
   );
   const random = Utilities.getUuid()
-    .replace(/-/g, '')
+    .replace(/-/g, "")
     .substring(0, 12)
     .toUpperCase();
-  return 'TX-' + now + '-' + random;
+  return "TX-" + now + "-" + random;
 }
 function createTransaction_(options) {
   if (!options) {
-    throw new Error('Parameter transaksi kosong.');
+    throw new Error("Parameter transaksi kosong.");
   }
-  const sheetName = String(options.sheetName || '').trim();
-  const permission = String(options.permission || '').trim();
+  const sheetName = String(options.sheetName || "").trim();
+  const permission = String(options.permission || "").trim();
   const data = options.data || {};
   if (!sheetName) {
-    throw new Error('sheetName wajib diisi.');
+    throw new Error("sheetName wajib diisi.");
   }
   if (permission) requirePermission(permission);
   const context = getCurrentUserContext();
@@ -31,21 +31,22 @@ function createTransaction_(options) {
   let sheet = ss.getSheetByName(sheetName);
   if (!sheet) {
     throw new Error(
-      'Sheet transaksi "' + sheetName +
-      '" tidak ditemukan pada Spreadsheet sekolah.'
+      'Sheet transaksi "' +
+        sheetName +
+        '" tidak ditemukan pada Spreadsheet sekolah.',
     );
   }
   const transactionId = generateTransactionId_();
   const timestamp = new Date();
   const headers = setupHeaders_(sheet, [
-    'TRANSACTION_ID',
-    'TIMESTAMP',
-    'NPSN',
-    'USER_ID',
-    'EMAIL',
-    'NIP',
-    'NAMA_USER',
-    'ROLE'
+    "TRANSACTION_ID",
+    "TIMESTAMP",
+    "NPSN",
+    "USER_ID",
+    "EMAIL",
+    "NIP",
+    "NAMA_USER",
+    "ROLE",
   ]);
   const rowObject = Object.assign({}, data, {
     TRANSACTION_ID: transactionId,
@@ -55,21 +56,17 @@ function createTransaction_(options) {
     EMAIL: context.email,
     NIP: context.nip,
     NAMA_USER: context.nama,
-    ROLE: context.role
+    ROLE: context.role,
   });
-  const row = headers.map(h =>
-    Object.prototype.hasOwnProperty.call(rowObject, h)
-      ? rowObject[h]
-      : ''
+  const row = headers.map((h) =>
+    Object.prototype.hasOwnProperty.call(rowObject, h) ? rowObject[h] : "",
   );
-  sheet
-    .getRange(sheet.getLastRow() + 1, 1, 1, headers.length)
-    .setValues([row]);
+  sheet.getRange(sheet.getLastRow() + 1, 1, 1, headers.length).setValues([row]);
   writeAuditLog_({
-    action: 'CREATE',
+    action: "CREATE",
     module: sheetName,
-    description: 'Membuat transaksi baru',
-    transactionId: transactionId
+    description: "Membuat transaksi baru",
+    transactionId: transactionId,
   });
   return {
     success: true,
@@ -77,7 +74,7 @@ function createTransaction_(options) {
     npsn: context.npsn,
     email: context.email,
     school: context.school.namaSekolah,
-    sheetName: sheetName
+    sheetName: sheetName,
   };
 }
 function writeAuditLog_(entry) {
@@ -91,34 +88,34 @@ function writeAuditLog_(entry) {
     c.nip,
     c.nama,
     c.role,
-    entry.action || '',
-    entry.module || '',
-    entry.description || '',
-    entry.transactionId || ''
+    entry.action || "",
+    entry.module || "",
+    entry.description || "",
+    entry.transactionId || "",
   ]);
 }
 function testTransactionEngineSekolahB() {
   return createTransaction_({
-    sheetName: 'TRX_PARKIR',
-    permission: 'INPUT_MONITORING',
+    sheetName: "TRX_PARKIR",
+    permission: "INPUT_MONITORING",
     data: {
       TANGGAL: new Date(),
-      KENDALA: 'TEST TRANSACTION ENGINE',
-      SOLUSI: 'Transaction Engine multi-school berhasil',
-      UPLOAD_FOTO_PARKIR: ''
-    }
+      KENDALA: "TEST TRANSACTION ENGINE",
+      SOLUSI: "Transaction Engine multi-school berhasil",
+      UPLOAD_FOTO_PARKIR: "",
+    },
   });
 }
 function runTestTransaction() {
   try {
     return {
       success: true,
-      result: testTransactionEngineSekolahB()
+      result: testTransactionEngineSekolahB(),
     };
   } catch (e) {
     return {
       success: false,
-      error: e.message
+      error: e.message,
     };
   }
 }
