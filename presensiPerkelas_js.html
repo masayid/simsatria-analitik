@@ -6,667 +6,421 @@
    FRONTEND
    BOOTSTRAP STANDARD
    ========================================================= */
-
-
 /* =========================================================
    LOAD KELAS
    ========================================================= */
-
 function PP_loadKelas() {
-
   console.log(
     'PP: mulai memuat daftar kelas...'
   );
-
   const select =
     document.getElementById('ppKelas');
-
   if (!select) {
-
     console.error(
       'PP: #ppKelas tidak ditemukan.'
     );
-
     return;
   }
-
   select.disabled = true;
-
   select.innerHTML = `
     <option value="">
       Memuat kelas...
     </option>
   `;
-
-
   google.script.run
-
     .withSuccessHandler(
       function(result) {
-
         console.log(
           'PP: hasil getKelasPresensiPerkelas:',
           result
         );
-
-
         if (
           !result ||
           !result.success
         ) {
-
           select.innerHTML = `
             <option value="">
               Gagal memuat kelas
             </option>
           `;
-
           select.disabled = true;
-
           console.error(
             'PP: gagal memuat kelas',
             result
           );
-
           return;
         }
-
-
         const daftarKelas =
           Array.isArray(result.kelas)
             ? result.kelas
             : [];
-
-
         select.innerHTML = `
           <option value="">
             -- Pilih Kelas --
           </option>
         `;
-
-
         daftarKelas.forEach(
           function(namaKelas) {
-
             const option =
               document.createElement('option');
-
             option.value =
               namaKelas;
-
             option.textContent =
               namaKelas;
-
             select.appendChild(
               option
             );
-
           }
         );
-
-
         select.disabled = false;
-
-
         PP_renderContext(
           result
         );
-
-
         console.log(
           'PP: daftar kelas berhasil dimuat:',
           daftarKelas
         );
-
       }
     )
-
     .withFailureHandler(
       function(error) {
-
         console.error(
           'PP: error getKelasPresensiPerkelas:',
           error
         );
-
-
         select.innerHTML = `
           <option value="">
             Gagal memuat kelas
           </option>
         `;
-
         select.disabled = true;
-
-
         PP_renderError(
           error &&
           error.message
             ? error.message
             : 'Gagal memuat daftar kelas.'
         );
-
       }
     )
-
     .getKelasPresensiPerkelas();
-
 }
-
-
 /* =========================================================
    TAMPILKAN DATA
    ========================================================= */
-
 function PP_tampilkan() {
-
   console.log(
     'PP_tampilkan() dijalankan.'
   );
-
-
   const tanggal =
     document.getElementById(
       'ppTanggal'
     );
-
   const kelas =
     document.getElementById(
       'ppKelas'
     );
-
   const btn =
     document.getElementById(
       'ppBtnTampilkan'
     );
-
   const spinner =
     document.getElementById(
       'ppSpinnerTampilkan'
     );
-
   const text =
     document.getElementById(
       'ppTextTampilkan'
     );
-
   const container =
     document.getElementById(
       'ppTableContainer'
     );
-
-
   /* =======================================================
      VALIDASI ELEMENT
      ======================================================= */
-
   if (!tanggal || !kelas) {
-
     console.error(
       'PP: elemen tanggal atau kelas tidak ditemukan.'
     );
-
     return;
   }
-
-
   /* =======================================================
      VALIDASI TANGGAL
      ======================================================= */
-
   if (!tanggal.value) {
-
     PP_showAlert(
       'Silakan pilih tanggal terlebih dahulu.'
     );
-
     tanggal.focus();
-
     return;
   }
-
-
   /* =======================================================
      VALIDASI KELAS
      ======================================================= */
-
   if (!kelas.value) {
-
     PP_showAlert(
       'Silakan pilih kelas terlebih dahulu.'
     );
-
     kelas.focus();
-
     return;
   }
-
-
   /* =======================================================
      LOADING
      ======================================================= */
-
   if (btn) {
-
     btn.disabled = true;
-
   }
-
-
   if (spinner) {
-
     spinner.classList.remove(
       'd-none'
     );
-
   }
-
-
   if (text) {
-
     text.textContent =
       'MEMUAT...';
-
   }
-
-
   if (container) {
-
     container.innerHTML = `
-
       <div class="d-flex justify-content-center
                   align-items-center
                   gap-2
                   py-5
                   text-secondary">
-
         <span
           class="spinner-border spinner-border-sm">
         </span>
-
         <span>
           Memuat data siswa...
         </span>
-
       </div>
-
     `;
-
   }
-
-
   /* =======================================================
      BACKEND
      ======================================================= */
-
   google.script.run
-
     .withSuccessHandler(
       function(result) {
-
         console.log(
           'PP: hasil tampilkan:',
           result
         );
-
-
         PP_resetTampilkan();
-
-
         if (
           !result ||
           !result.success
         ) {
-
           PP_showAlert(
             result &&
             result.error
               ? result.error
               : 'Data presensi gagal dimuat.'
           );
-
           return;
         }
-
-
         PP_renderTable(
           result
         );
-
       }
     )
-
     .withFailureHandler(
       function(error) {
-
         console.error(
           'PP_tampilkan ERROR:',
           error
         );
-
-
         PP_resetTampilkan();
-
-
         PP_showAlert(
           error &&
           error.message
             ? error.message
             : 'Terjadi kesalahan saat mengambil data presensi.'
         );
-
       }
     )
-
     .getPresensiPerkelasData(
       tanggal.value,
       kelas.value
     );
-
 }
-
-
 /* =========================================================
    RESET BUTTON TAMPILKAN
    ========================================================= */
-
 function PP_resetTampilkan() {
-
   const btn =
     document.getElementById(
       'ppBtnTampilkan'
     );
-
   const spinner =
     document.getElementById(
       'ppSpinnerTampilkan'
     );
-
   const text =
     document.getElementById(
       'ppTextTampilkan'
     );
-
-
   if (btn) {
-
     btn.disabled = false;
-
   }
-
-
   if (spinner) {
-
     spinner.classList.add(
       'd-none'
     );
-
   }
-
-
   if (text) {
-
     text.textContent =
       'TAMPILKAN';
-
   }
-
 }
-
-
 /* =========================================================
    ALERT
    ========================================================= */
-
 function PP_showAlert(message) {
-
   const container =
     document.getElementById(
       'ppTableContainer'
     );
-
-
   if (!container) {
-
     return;
-
   }
-
-
   container.innerHTML = `
-
     <div class="alert alert-warning
                 mx-3 my-3
                 small"
          role="alert">
-
       <div class="fw-semibold">
-
         <i class="bi bi-exclamation-triangle-fill me-1"></i>
-
         Perhatian
-
       </div>
-
       <div class="mt-1">
-
         ${PP_escape(message)}
-
       </div>
-
     </div>
-
   `;
-
 }
-
-
 /* =========================================================
    RENDER TABLE
    ========================================================= */
-
 function PP_renderTable(result) {
-
   const container =
     document.getElementById(
       'ppTableContainer'
     );
-
-
   if (!container) {
-
     return;
-
   }
-
-
   const data =
     Array.isArray(result.data)
       ? result.data
       : [];
-
-
   /* =======================================================
      TIDAK ADA DATA
      ======================================================= */
-
   if (data.length === 0) {
-
     container.innerHTML = `
-
       <div class="text-center
                   py-5
                   px-3
                   text-secondary">
-
         <div class="fs-1 mb-2">
           👥
         </div>
-
         <div class="fw-semibold">
           Tidak ada siswa
         </div>
-
         <div class="small mt-1 text-muted">
-
           Tidak ditemukan siswa pada kelas
-
           <strong>
             ${PP_escape(result.kelas || '')}
           </strong>.
-
         </div>
-
       </div>
-
     `;
-
-
     const footer =
       document.getElementById(
         'ppFooter'
       );
-
-
     if (footer) {
-
       footer.classList.add(
         'd-none'
       );
-
     }
-
-
     return;
-
   }
-
-
   /* =======================================================
      TABLE
      ======================================================= */
-
   let html = `
-
     <div class="table-responsive">
-
       <table class="table
                     table-sm
                     table-hover
                     align-middle
                     mb-0">
-
         <thead class="table-light">
-
           <tr>
-
             <th
               class="text-center"
               style="width:45px;">
-
               No
-
             </th>
-
             <th
               class="text-center"
               style="width:110px;">
-
               NISN
-
             </th>
-
             <th>
               Nama Siswa
             </th>
-
             <th
               class="text-center"
               style="width:60px;">
-
               H
-
             </th>
-
             <th
               class="text-center"
               style="width:60px;">
-
               I
-
             </th>
-
             <th
               class="text-center"
               style="width:60px;">
-
               S
-
             </th>
-
             <th
               class="text-center"
               style="width:60px;">
-
               A
-
             </th>
-
           </tr>
-
         </thead>
-
         <tbody>
-
   `;
-
-
   data.forEach(
     function(row, index) {
-
       const nisn =
         row.nisn || '';
-
       const nama =
         row.nama || '';
-
       const status =
         row.status || 'HADIR';
-
-
       html += `
-
         <tr
           data-nisn="${PP_escape(nisn)}"
           data-nama="${PP_escape(nama)}">
-
           <td class="text-center text-muted">
-
             ${index + 1}
-
           </td>
-
           <td class="text-center text-secondary">
-
             ${PP_escape(nisn)}
-
           </td>
-
           <td class="fw-semibold">
-
             ${PP_escape(nama)}
-
           </td>
-
-
           <!-- HADIR -->
-
           <td class="text-center">
-
             <button
-
               type="button"
-
               class="btn
                      btn-sm
                      ${
@@ -676,26 +430,15 @@ function PP_renderTable(result) {
                      }
                      px-2
                      py-1"
-
               data-status="HADIR"
-
               onclick="PP_setStatus(this)">
-
               H
-
             </button>
-
           </td>
-
-
           <!-- IZIN -->
-
           <td class="text-center">
-
             <button
-
               type="button"
-
               class="btn
                      btn-sm
                      ${
@@ -705,26 +448,15 @@ function PP_renderTable(result) {
                      }
                      px-2
                      py-1"
-
               data-status="IZIN"
-
               onclick="PP_setStatus(this)">
-
               I
-
             </button>
-
           </td>
-
-
           <!-- SAKIT -->
-
           <td class="text-center">
-
             <button
-
               type="button"
-
               class="btn
                      btn-sm
                      ${
@@ -734,26 +466,15 @@ function PP_renderTable(result) {
                      }
                      px-2
                      py-1"
-
               data-status="SAKIT"
-
               onclick="PP_setStatus(this)">
-
               S
-
             </button>
-
           </td>
-
-
           <!-- ALPA -->
-
           <td class="text-center">
-
             <button
-
               type="button"
-
               class="btn
                      btn-sm
                      ${
@@ -763,250 +484,151 @@ function PP_renderTable(result) {
                      }
                      px-2
                      py-1"
-
               data-status="ALPA"
-
               onclick="PP_setStatus(this)">
-
               A
-
             </button>
-
           </td>
-
         </tr>
-
       `;
-
     }
   );
-
-
   html += `
-
         </tbody>
-
       </table>
-
     </div>
-
   `;
-
-
   container.innerHTML =
     html;
-
-
   /* =======================================================
      FOOTER
      ======================================================= */
-
   const footer =
     document.getElementById(
       'ppFooter'
     );
-
-
   if (footer) {
-
     footer.classList.remove(
       'd-none'
     );
-
   }
-
-
   PP_updateRekap();
-
 }
-
-
 /* =========================================================
    STATUS
    ========================================================= */
-
 function PP_setStatus(button) {
-
   if (!button) {
-
     return;
-
   }
-
-
   const row =
     button.closest('tr');
-
-
   if (!row) {
-
     return;
-
   }
-
-
   /* =======================================================
      SEMUA BUTTON STATUS PADA BARIS
      ======================================================= */
-
   const buttons =
     row.querySelectorAll(
       '[data-status]'
     );
-
-
   buttons.forEach(
     function(btn) {
-
       const status =
         btn.dataset.status;
-
-
       btn.classList.remove(
         'btn-success',
         'btn-primary',
         'btn-warning',
         'btn-danger'
       );
-
-
       btn.classList.remove(
         'btn-outline-success',
         'btn-outline-primary',
         'btn-outline-warning',
         'btn-outline-danger'
       );
-
-
       /*
        * Kembalikan menjadi
        * outline.
        */
-
       if (status === 'HADIR') {
-
         btn.classList.add(
           'btn-outline-success'
         );
-
       }
-
       else if (status === 'IZIN') {
-
         btn.classList.add(
           'btn-outline-primary'
         );
-
       }
-
       else if (status === 'SAKIT') {
-
         btn.classList.add(
           'btn-outline-warning'
         );
-
       }
-
       else if (status === 'ALPA') {
-
         btn.classList.add(
           'btn-outline-danger'
         );
-
       }
-
     }
   );
-
-
   /* =======================================================
      AKTIFKAN BUTTON YANG DIPILIH
      ======================================================= */
-
   const status =
     button.dataset.status;
-
-
   button.classList.remove(
     'btn-outline-success',
     'btn-outline-primary',
     'btn-outline-warning',
     'btn-outline-danger'
   );
-
-
   if (status === 'HADIR') {
-
     button.classList.add(
       'btn-success'
     );
-
   }
-
   else if (status === 'IZIN') {
-
     button.classList.add(
       'btn-primary'
     );
-
   }
-
   else if (status === 'SAKIT') {
-
     button.classList.add(
       'btn-warning'
     );
-
   }
-
   else if (status === 'ALPA') {
-
     button.classList.add(
       'btn-danger'
     );
-
   }
-
-
   PP_updateRekap();
-
 }
-
-
 /* =========================================================
    REKAP
    ========================================================= */
-
 function PP_updateRekap() {
-
   const rekap =
     document.getElementById(
       'ppRekap'
     );
-
-
   if (!rekap) {
-
     return;
-
   }
-
-
   const rows =
     document.querySelectorAll(
       '#ppTableContainer tbody tr'
     );
-
-
   let hadir = 0;
   let izin = 0;
   let sakit = 0;
   let alpa = 0;
-
-
   rows.forEach(
     function(row) {
-
       const active =
         row.querySelector(
           '[data-status].btn-success, ' +
@@ -1014,157 +636,90 @@ function PP_updateRekap() {
           '[data-status].btn-warning, ' +
           '[data-status].btn-danger'
         );
-
-
       if (!active) {
-
         return;
-
       }
-
-
       const status =
         active.dataset.status;
-
-
       if (status === 'HADIR') {
-
         hadir++;
-
       }
-
       else if (status === 'IZIN') {
-
         izin++;
-
       }
-
       else if (status === 'SAKIT') {
-
         sakit++;
-
       }
-
       else if (status === 'ALPA') {
-
         alpa++;
-
       }
-
     }
   );
-
-
   rekap.innerHTML = `
-
     <span class="badge text-bg-success">
-
       H ${hadir}
-
     </span>
-
     <span class="badge text-bg-primary">
-
       I ${izin}
-
     </span>
-
     <span class="badge text-bg-warning">
-
       S ${sakit}
-
     </span>
-
     <span class="badge text-bg-danger">
-
       A ${alpa}
-
     </span>
-
   `;
-
 }
-
-
 /* =========================================================
    SCHOOL CONTEXT
    ========================================================= */
-
 function PP_renderContext(result) {
-
   const sekolah =
     document.getElementById(
       'ppSekolah'
     );
-
-
   if (sekolah) {
-
     sekolah.textContent =
       result.sekolah
         ? result.sekolah
         : 'School Context aktif';
-
   }
-
-
   const context =
     document.getElementById(
       'ppContext'
     );
-
-
   if (!context) {
-
     return;
-
   }
-
-
   context.innerHTML = '';
-
-
   if (result.sekolah) {
-
     context.appendChild(
       PP_createBadge(
         '🏫 ' +
         result.sekolah
       )
     );
-
   }
-
-
   if (result.npsn) {
-
     context.appendChild(
       PP_createBadge(
         'NPSN ' +
         result.npsn
       )
     );
-
   }
-
-
   if (result.spreadsheetName) {
-
     context.appendChild(
       PP_createBadge(
         '📊 ' +
         result.spreadsheetName
       )
     );
-
   }
-
-
   if (
     typeof result.jumlah ===
     'number'
   ) {
-
     context.appendChild(
       PP_createBadge(
         '📚 ' +
@@ -1172,158 +727,100 @@ function PP_renderContext(result) {
         ' Kelas'
       )
     );
-
   }
-
 }
-
-
 /* =========================================================
    CREATE BADGE
    ========================================================= */
-
 function PP_createBadge(text) {
-
   const span =
     document.createElement(
       'span'
     );
-
-
   /*
    * Bootstrap badge.
    */
-
   span.className =
     'badge rounded-pill text-bg-light border';
-
-
   span.textContent =
     text;
-
-
   return span;
-
 }
-
-
 /* =========================================================
    ERROR
    ========================================================= */
-
 function PP_renderError(message) {
-
   const container =
     document.getElementById(
       'ppTableContainer'
     );
-
-
   if (!container) {
-
     return;
-
   }
-
-
   container.innerHTML = `
-
     <div class="alert alert-danger
                 mx-3 my-3
                 small"
          role="alert">
-
       <div class="fw-semibold">
-
         <i class="bi bi-exclamation-circle-fill me-1"></i>
-
         Koneksi Presensi bermasalah
-
       </div>
-
       <div class="mt-1">
-
         ${PP_escape(message)}
-
       </div>
-
     </div>
-
   `;
-
 }
-
-
 /* =========================================================
    ESCAPE
    ========================================================= */
-
 function PP_escape(value) {
-
   return String(
     value == null
       ? ''
       : value
   )
-
     .replace(
       /&/g,
       '&amp;'
     )
-
     .replace(
       /</g,
       '&lt;'
     )
-
     .replace(
       />/g,
       '&gt;'
     )
-
     .replace(
       /"/g,
       '&quot;'
     )
-
     .replace(
       /'/g,
       '&#039;'
     );
-
 }
-
-
 /* =========================================================
    INIT
    ========================================================= */
-
 function PP_init() {
-
   console.log(
     'PP: init Presensi Per Kelas'
   );
-
-
   const tanggal =
     document.getElementById(
       'ppTanggal'
     );
-
-
   if (
     tanggal &&
     !tanggal.value
   ) {
-
     const now =
       new Date();
-
-
     const year =
       now.getFullYear();
-
-
     const month =
       String(
         now.getMonth() + 1
@@ -1331,8 +828,6 @@ function PP_init() {
         2,
         '0'
       );
-
-
     const day =
       String(
         now.getDate()
@@ -1340,129 +835,85 @@ function PP_init() {
         2,
         '0'
       );
-
-
     tanggal.value =
       year +
       '-' +
       month +
       '-' +
       day;
-
   }
-
-
   PP_loadKelas();
-
 }
-
-
 /* =========================================================
    SIMPAN PRESENSI
    ========================================================= */
-
 function PP_simpan() {
-
   console.log(
     'PP_simpan() dijalankan.'
   );
-
-
   const tanggalEl =
     document.getElementById(
       'ppTanggal'
     );
-
   const kelasEl =
     document.getElementById(
       'ppKelas'
     );
-
   const btn =
     document.getElementById(
       'ppBtnSimpan'
     );
-
   const spinner =
     document.getElementById(
       'ppSpinnerSimpan'
     );
-
   const text =
     document.getElementById(
       'ppTextSimpan'
     );
-
-
   /* =======================================================
      VALIDASI
      ======================================================= */
-
   if (
     !tanggalEl ||
     !tanggalEl.value
   ) {
-
     PP_showAlert(
       'Tanggal belum dipilih.'
     );
-
     return;
-
   }
-
-
   if (
     !kelasEl ||
     !kelasEl.value
   ) {
-
     PP_showAlert(
       'Kelas belum dipilih.'
     );
-
     return;
-
   }
-
-
   /* =======================================================
      AMBIL SISWA
      ======================================================= */
-
   const rows =
     document.querySelectorAll(
       '#ppTableContainer tbody tr'
     );
-
-
   if (!rows.length) {
-
     PP_showAlert(
       'Belum ada data siswa yang dapat disimpan.'
     );
-
     return;
-
   }
-
-
   const data = [];
-
-
   rows.forEach(
     function(row) {
-
       const nisn =
         row.dataset.nisn ||
         '';
-
-
       const nama =
         row.dataset.nama ||
         '';
-
-
       const active =
         row.querySelector(
           '[data-status].btn-success, ' +
@@ -1470,119 +921,72 @@ function PP_simpan() {
           '[data-status].btn-warning, ' +
           '[data-status].btn-danger'
         );
-
-
       const status =
         active
           ? active.dataset.status
           : 'HADIR';
-
-
       data.push({
-
         nisn:
           nisn,
-
         nama:
           nama,
-
         status:
           status
-
       });
-
     }
   );
-
-
   if (!data.length) {
-
     PP_showAlert(
       'Tidak ada data presensi yang akan disimpan.'
     );
-
     return;
-
   }
-
-
   /* =======================================================
      KONFIRMASI
      ======================================================= */
-
   const yakin =
     confirm(
-
       'Simpan presensi kelas ' +
       kelasEl.value +
       ' untuk tanggal ' +
       tanggalEl.value +
       '?\n\n' +
-
       'Jumlah siswa: ' +
       data.length
-
     );
-
-
   if (!yakin) {
-
     return;
-
   }
-
-
   /* =======================================================
      LOADING
      ======================================================= */
-
   if (btn) {
-
     btn.disabled = true;
-
   }
-
-
   if (spinner) {
-
     spinner.classList.remove(
       'd-none'
     );
-
   }
-
-
   if (text) {
-
     text.textContent =
       'MENYIMPAN...';
-
   }
-
-
   /* =======================================================
      SERVER
      ======================================================= */
-
   google.script.run
-
     .withSuccessHandler(
       function(result) {
-
         console.log(
           'PP: HASIL SIMPAN:',
           result
         );
-
-
         PP_resetSimpan();
-
-
         if (
           !result ||
           !result.success
         ) {
-
           PP_showSaveResult(
             false,
             result &&
@@ -1590,17 +994,11 @@ function PP_simpan() {
               ? result.error
               : 'Presensi gagal disimpan.'
           );
-
           return;
-
         }
-
-
         let message =
           result.message ||
           'Presensi berhasil disimpan.';
-
-
         message +=
           '\n\n' +
           'Database: ' +
@@ -1608,74 +1006,53 @@ function PP_simpan() {
             result.spreadsheetName ||
             '-'
           );
-
-
         message +=
           '\nSheet: ' +
           (
             result.sheetName ||
             'TRX_PRESENSI'
           );
-
-
         message +=
           '\nUser ID: ' +
           (
             result.userId ||
             '-'
           );
-
-
         message +=
           '\nEmail: ' +
           (
             result.email ||
             '-'
           );
-
-
         message +=
           '\nData baru: ' +
           (
             result.inserted ||
             0
           );
-
-
         message +=
           '\nData diperbarui: ' +
           (
             result.updated ||
             0
           );
-
-
         PP_showSaveResult(
           true,
           message
         );
-
-
         console.log(
           'PP LOG:',
           result.log
         );
-
       }
     )
-
     .withFailureHandler(
       function(error) {
-
         console.error(
           'PP_simpan ERROR:',
           error
         );
-
-
         PP_resetSimpan();
-
-
         PP_showSaveResult(
           false,
           error &&
@@ -1683,606 +1060,386 @@ function PP_simpan() {
             ? error.message
             : 'Terjadi kesalahan saat menyimpan presensi.'
         );
-
       }
     )
-
     .simpanPresensiPerkelas(
       tanggalEl.value,
       kelasEl.value,
       data
     );
-
 }
-
-
 /* =========================================================
    RESET SIMPAN
    ========================================================= */
-
 function PP_resetSimpan() {
-
   const btn =
     document.getElementById(
       'ppBtnSimpan'
     );
-
   const spinner =
     document.getElementById(
       'ppSpinnerSimpan'
     );
-
   const text =
     document.getElementById(
       'ppTextSimpan'
     );
-
-
   if (btn) {
-
     btn.disabled =
       false;
-
   }
-
-
   if (spinner) {
-
     spinner.classList.add(
       'd-none'
     );
-
   }
-
-
   if (text) {
-
     text.textContent =
       'SIMPAN PRESENSI';
-
   }
-
 }
-
-
 /* =========================================================
    HASIL SIMPAN
    ========================================================= */
-
 function PP_showSaveResult(
   success,
   message
 ) {
-
   const container =
     document.getElementById(
       'ppTableContainer'
     );
-
-
   if (!container) {
-
     return;
-
   }
-
-
   const alert =
     document.createElement(
       'div'
     );
-
-
   alert.className =
     success
       ? 'alert alert-success mx-3 my-3 small'
       : 'alert alert-danger mx-3 my-3 small';
-
-
   alert.setAttribute(
     'role',
     'alert'
   );
-
-
   alert.innerHTML = `
-
     <div class="fw-semibold">
-
       ${
         success
           ? '✅ Presensi berhasil disimpan'
           : '❌ Presensi gagal disimpan'
       }
-
     </div>
-
     <div class="mt-1">
-
       ${PP_escape(message)}
-
     </div>
-
   `;
-
-
   container.prepend(
     alert
   );
-
-
   setTimeout(
     function() {
-
       if (
         alert &&
         alert.parentNode
       ) {
-
         alert.parentNode.removeChild(
           alert
         );
-
       }
-
     },
     5000
   );
-
 }
-
-
 /* =========================================================
    LOAD KELAS UNTUK CETAK
    ========================================================= */
-
 function PP_loadKelasCetak() {
-
   const tanggalAwal =
     document.getElementById(
       'ppTanggalAwal'
     ).value;
-
-
   const tanggalAkhir =
     document.getElementById(
       'ppTanggalAkhir'
     ).value;
-
-
   const select =
     document.getElementById(
       'ppKelasCetak'
     );
-
-
   select.innerHTML =
     '<option value="">Memuat kelas...</option>';
-
-
   if (
     !tanggalAwal ||
     !tanggalAkhir
   ) {
-
     select.innerHTML =
       '<option value="">Pilih tanggal dahulu...</option>';
-
     return;
-
   }
-
-
   if (
     tanggalAwal >
     tanggalAkhir
   ) {
-
     select.innerHTML =
       '<option value="">Rentang tanggal tidak valid</option>';
-
     return;
-
   }
-
-
   google.script.run
-
     .withSuccessHandler(
       function(kelasList) {
-
         select.innerHTML =
           '<option value="">Pilih kelas...</option>';
-
-
         if (
           !kelasList ||
           kelasList.length === 0
         ) {
-
           select.innerHTML =
             '<option value="">Tidak ada data kelas</option>';
-
           return;
-
         }
-
-
         kelasList.forEach(
           function(kelas) {
-
             const option =
               document.createElement(
                 'option'
               );
-
-
             option.value =
               kelas;
-
-
             option.textContent =
               kelas;
-
-
             select.appendChild(
               option
             );
-
           }
         );
-
       }
     )
-
     .withFailureHandler(
       function(error) {
-
         select.innerHTML =
           '<option value="">Gagal memuat kelas</option>';
-
-
         console.error(
           'PP_LOAD_KELAS_CETAK:',
           error
         );
-
       }
     )
-
     .getKelasUntukCetakPresensi(
       tanggalAwal,
       tanggalAkhir
     );
-
 }
-
-
 /* =========================================================
    EVENT TANGGAL CETAK
    ========================================================= */
-
 document.addEventListener(
   'change',
   function(event) {
-
     if (
       event.target &&
       (
         event.target.id ===
         'ppTanggalAwal' ||
-
         event.target.id ===
         'ppTanggalAkhir'
       )
     ) {
-
       PP_loadKelasCetak();
-
     }
-
   }
 );
-
-
 /* =========================================================
    CETAK SATU KELAS
    ========================================================= */
-
 function PP_cetakKelas(
   tanggalAwal,
   tanggalAkhir,
   kelas,
   button
 ) {
-
   const oldText =
     button.innerHTML;
-
-
   button.disabled =
     true;
-
-
   button.innerHTML = `
-
     <span
       class="spinner-border
              spinner-border-sm
              me-2">
     </span>
-
     Membuat PDF...
-
   `;
-
-
   google.script.run
-
     .withSuccessHandler(
       function(result) {
-
         button.disabled =
           false;
-
-
         button.innerHTML =
           oldText;
-
-
         if (
           !result ||
           !result.success
         ) {
-
           alert(
             result &&
             result.error
               ? result.error
               : 'Gagal membuat PDF.'
           );
-
           return;
-
         }
-
-
         window.open(
           result.url,
           '_blank'
         );
-
-
         console.log(
           '[PRESENSI PRINT]',
           result
         );
-
       }
     )
-
     .withFailureHandler(
       function(error) {
-
         button.disabled =
           false;
-
-
         button.innerHTML =
           oldText;
-
-
         alert(
           error.message ||
           'Gagal membuat PDF.'
         );
-
       }
     )
-
     .cetakPresensiPerkelas(
       tanggalAwal,
       tanggalAkhir,
       kelas
     );
-
 }
-
-
 /* =========================================================
    CETAK PDF
    ========================================================= */
-
 function PP_cetakPDF() {
-
   const tanggalAwal =
     document.getElementById(
       'ppTanggalAwal'
     ).value;
-
-
   const tanggalAkhir =
     document.getElementById(
       'ppTanggalAkhir'
     ).value;
-
-
   const kelas =
     document.getElementById(
       'ppKelasCetak'
     ).value;
-
-
   if (!tanggalAwal) {
-
     alert(
       'Tanggal awal belum dipilih.'
     );
-
     return;
-
   }
-
-
   if (!tanggalAkhir) {
-
     alert(
       'Tanggal akhir belum dipilih.'
     );
-
     return;
-
   }
-
-
   if (
     tanggalAwal >
     tanggalAkhir
   ) {
-
     alert(
       'Tanggal awal tidak boleh lebih besar dari tanggal akhir.'
     );
-
     return;
-
   }
-
-
   if (!kelas) {
-
     alert(
       'Kelas yang akan dicetak belum dipilih.'
     );
-
     return;
-
   }
-
-
   const btn =
     document.getElementById(
       'ppBtnCetakPDF'
     );
-
-
   const spinner =
     document.getElementById(
       'ppSpinnerCetak'
     );
-
-
   const text =
     document.getElementById(
       'ppTextCetak'
     );
-
-
   btn.disabled =
     true;
-
-
   spinner.classList.remove(
     'd-none'
   );
-
-
   text.textContent =
     'Membuat PDF...';
-
-
   google.script.run
-
     .withSuccessHandler(
       function(result) {
-
         btn.disabled =
           false;
-
-
         spinner.classList.add(
           'd-none'
         );
-
-
         text.textContent =
           '🖨️ CETAK PDF';
-
-
         if (
           !result ||
           !result.success
         ) {
-
           alert(
             result &&
             result.error
               ? result.error
               : 'Gagal membuat PDF.'
           );
-
           return;
-
         }
-
-
         console.log(
           '[PRESENSI PDF]',
           result
         );
-
-
         window.open(
           result.url,
           '_blank'
         );
-
       }
     )
-
     .withFailureHandler(
       function(error) {
-
         btn.disabled =
           false;
-
-
         spinner.classList.add(
           'd-none'
         );
-
-
         text.textContent =
           '🖨️ CETAK PDF';
-
-
         console.error(
           '[PRESENSI PDF ERROR]',
           error
         );
-
-
         alert(
           error.message ||
           'Gagal membuat PDF.'
         );
-
       }
     )
-
     .cetakPresensiPerkelas(
       tanggalAwal,
       tanggalAkhir,
       kelas
     );
-
 }
-
-
 /* =========================================================
    INIT
    ========================================================= */
-
 PP_init();
-
 </script>
