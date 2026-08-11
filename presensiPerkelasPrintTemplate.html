@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
   <meta charset="UTF-8">
-
   <style>
-
     /* =====================================================
        SIM SATRIA
        PRESENSI PER KELAS
        PDF A4 PORTRAIT - 1 HALAMAN
        ===================================================== */
-
     @page {
       size: A4 portrait;
       margin: 0;
     }
-
     * {
       box-sizing: border-box;
     }
-
     html,
     body {
       margin: 0;
@@ -30,831 +23,458 @@
       height: 297mm;
       background: #ffffff;
     }
-
     body {
       font-family: Arial, Helvetica, sans-serif;
       color: #222222;
       font-size: 7px;
       line-height: 1.05;
     }
-
     /* =====================================================
        HALAMAN A4
        ===================================================== */
-
     .page {
-
       position: relative;
-
       width: 210mm;
       height: 297mm;
-
       padding: 6mm 7mm 5mm 7mm;
-
       background: #ffffff;
-
       overflow: hidden;
-
       page-break-before: avoid !important;
       page-break-after: avoid !important;
       page-break-inside: avoid !important;
-
     }
-
-
     /* =====================================================
        ISI
        ===================================================== */
-
     .page-content {
-
       width: 100%;
-
       page-break-before: avoid !important;
       page-break-after: avoid !important;
       page-break-inside: avoid !important;
-
     }
-
-
     /* =====================================================
        HEADER
        ===================================================== */
-
     .header {
-
       width: 100%;
-
       text-align: center;
-
       border-bottom: 1.2px solid #1B5E20;
-
       padding-bottom: 2.5mm;
-
       margin-bottom: 2.5mm;
-
     }
-
-
     .school {
-
       font-size: 13px;
-
       font-weight: 700;
-
       text-transform: uppercase;
-
       line-height: 1.15;
-
     }
-
-
     .npsn {
-
       margin-top: 1mm;
-
       font-size: 7px;
-
       color: #555555;
-
     }
-
-
     .title {
-
       margin-top: 1.5mm;
-
       font-size: 10px;
-
       font-weight: 700;
-
       text-transform: uppercase;
-
     }
-
-
     .periode {
-
       margin-top: 1mm;
-
       font-size: 7px;
-
       color: #444444;
-
     }
-
-
     /* =====================================================
        INFORMASI KELAS
        ===================================================== */
-
     .info {
-
       width: 100%;
-
       border-collapse: collapse;
-
       margin-bottom: 2mm;
-
     }
-
-
     .info td {
-
       padding: 1mm 1.2mm;
-
       border: 1px solid #dddddd;
-
     }
-
-
     .info .label {
-
       width: 20mm;
-
       font-weight: 700;
-
       background: #f1f5f2;
-
     }
-
-
     /* =====================================================
        SUMMARY
        ===================================================== */
-
     .summary {
-
       width: 100%;
-
       border-collapse: collapse;
-
       margin-bottom: 2.5mm;
-
       table-layout: fixed;
-
     }
-
-
     .summary td {
-
       width: 20%;
-
       border: 1px solid #777777;
-
       text-align: center;
-
       padding: 1.2mm 1mm;
-
     }
-
-
     .summary-label {
-
       background: #e8f2ea;
-
       color: #26352c;
-
       font-size: 7px;
-
       font-weight: 700;
-
     }
-
-
     .summary-value {
-
       font-size: 9px;
-
       font-weight: 700;
-
     }
-
-
     /* =====================================================
        TABEL PRESENSI
        ===================================================== */
-
     table.presensi {
-
       width: 100%;
-
       border-collapse: collapse;
-
       table-layout: fixed;
-
       margin: 0;
-
       padding: 0;
-
       page-break-before: avoid !important;
       page-break-after: avoid !important;
       page-break-inside: avoid !important;
-
     }
-
-
     table.presensi thead {
-
       display: table-header-group;
-
     }
-
-
     table.presensi tr {
-
       page-break-inside: avoid !important;
-
       page-break-after: auto;
-
     }
-
-
     table.presensi th,
     table.presensi td {
-
       border: 1px solid #666666;
-
       padding: 1.05mm 1mm;
-
       vertical-align: middle;
-
     }
-
-
     table.presensi th {
-
       background: #e8f2ea;
-
       color: #26352c;
-
       text-align: center;
-
       font-size: 6.5px;
-
       font-weight: 700;
-
       line-height: 1;
-
     }
-
-
     table.presensi td {
-
       font-size: 6.5px;
-
       line-height: 1;
-
     }
-
-
     .center {
-
       text-align: center;
-
     }
-
-
     .nama {
-
       font-weight: 600;
-
       white-space: nowrap;
-
       overflow: hidden;
-
       text-overflow: ellipsis;
-
     }
-
-
     /* =====================================================
        LEBAR KOLOM
        ===================================================== */
-
     .col-no {
-
       width: 6%;
-
     }
-
-
     .col-nisn {
-
       width: 19%;
-
     }
-
-
     .col-nama {
-
       width: 43%;
-
     }
-
-
     .col-status {
-
       width: 8%;
-
     }
-
-
     /* =====================================================
        KETERANGAN STATUS
        ===================================================== */
-
     .status-note {
-
       margin-top: 1.5mm;
-
       font-size: 5.8px;
-
       color: #666666;
-
     }
-
-
     /* =====================================================
        TANDA TANGAN
        ===================================================== */
-
     .signature-table {
-
       width: 100%;
-
       border-collapse: collapse;
-
       margin-top: 5mm;
-
       page-break-before: avoid !important;
       page-break-after: avoid !important;
       page-break-inside: avoid !important;
-
     }
-
-
     .signature-table td {
-
       width: 50%;
-
       text-align: center;
-
       vertical-align: top;
-
       padding: 0 3mm;
-
       font-size: 7px;
-
     }
-
-
     .signature-space {
-
       height: 18mm;
-
     }
-
-
     .signature-name {
-
       font-weight: 700;
-
       text-decoration: underline;
-
       white-space: nowrap;
-
     }
-
-
     .signature-nip {
-
       margin-top: 1mm;
-
       font-size: 6.5px;
-
     }
-
-
     /* =====================================================
        FOOTER
        ===================================================== */
-
     .generated {
-
       position: absolute;
-
       left: 7mm;
-
       right: 7mm;
-
       bottom: 2.5mm;
-
       text-align: right;
-
       font-size: 5px;
-
       color: #888888;
-
     }
-
-
     /* =====================================================
        AUTO COMPACT
        ===================================================== */
-
     /*
      * 1-30 siswa
      * ukuran normal
      */
-
-
     /*
      * 31-40 siswa
      */
-
     <? if (data.siswa.length > 30 && data.siswa.length <= 40) { ?>
-
       .page-content {
-
         zoom: 0.92;
-
       }
-
     <? } ?>
-
-
     /*
      * 41-50 siswa
      */
-
     <? if (data.siswa.length > 40 && data.siswa.length <= 50) { ?>
-
       .page-content {
-
         zoom: 0.82;
-
       }
-
     <? } ?>
-
-
     /*
      * 51-60 siswa
      */
-
     <? if (data.siswa.length > 50 && data.siswa.length <= 60) { ?>
-
       .page-content {
-
         zoom: 0.72;
-
       }
-
     <? } ?>
-
-
     /*
      * >60 siswa
      */
-
     <? if (data.siswa.length > 60) { ?>
-
       .page-content {
-
         zoom: 0.62;
-
       }
-
     <? } ?>
-
-
   </style>
-
 </head>
-
-
 <body>
-
-
   <!-- =====================================================
        A4 PORTRAIT
        ===================================================== -->
-
   <div class="page">
-
-
     <div class="page-content">
-
-
       <!-- =================================================
            HEADER
            ================================================= -->
-
       <div class="header">
-
         <div class="school">
           <?= data.namaSekolah ?>
         </div>
-
         <div class="npsn">
           NPSN: <?= data.npsn ?>
         </div>
-
         <div class="title">
           REKAP PRESENSI SISWA
         </div>
-
         <div class="periode">
-
           Periode
-
           <?= data.tanggalAwal ?>
-
           s.d.
-
           <?= data.tanggalAkhir ?>
-
         </div>
-
       </div>
-
-
       <!-- =================================================
            KELAS
            ================================================= -->
-
       <table class="info">
-
         <tr>
-
           <td class="label">
             Kelas
           </td>
-
           <td>
             : <?= data.kelas ?>
           </td>
-
         </tr>
-
       </table>
-
-
       <!-- =================================================
            SUMMARY
            ================================================= -->
-
       <table class="summary">
-
         <tr>
-
           <td class="summary-label">
             HADIR
           </td>
-
           <td class="summary-label">
             SAKIT
           </td>
-
           <td class="summary-label">
             IZIN
           </td>
-
           <td class="summary-label">
             ALPA
           </td>
-
           <td class="summary-label">
             LAINNYA
           </td>
-
         </tr>
-
-
         <tr>
-
           <td class="summary-value">
             <?= data.total.hadir ?>
           </td>
-
           <td class="summary-value">
             <?= data.total.sakit ?>
           </td>
-
           <td class="summary-value">
             <?= data.total.izin ?>
           </td>
-
           <td class="summary-value">
             <?= data.total.alpa ?>
           </td>
-
           <td class="summary-value">
             <?= data.total.lainnya ?>
           </td>
-
         </tr>
-
       </table>
-
-
       <!-- =================================================
            TABEL SISWA
            ================================================= -->
-
       <table class="presensi">
-
         <thead>
-
           <tr>
-
             <th class="col-no">
               No
             </th>
-
             <th class="col-nisn">
               NISN
             </th>
-
             <th class="col-nama">
               Nama Siswa
             </th>
-
             <th class="col-status">
               H
             </th>
-
             <th class="col-status">
               S
             </th>
-
             <th class="col-status">
               I
             </th>
-
             <th class="col-status">
               A
             </th>
-
             <th class="col-status">
               L
             </th>
-
           </tr>
-
         </thead>
-
-
         <tbody>
-
           <? for (
             var i = 0;
             i < data.siswa.length;
             i++
           ) { ?>
-
             <tr>
-
               <td class="center">
                 <?= i + 1 ?>
               </td>
-
               <td class="center">
                 <?= data.siswa[i].nisn ?>
               </td>
-
               <td class="nama">
                 <?= data.siswa[i].nama ?>
               </td>
-
               <td class="center">
                 <?= data.siswa[i].hadir ?>
               </td>
-
               <td class="center">
                 <?= data.siswa[i].sakit ?>
               </td>
-
               <td class="center">
                 <?= data.siswa[i].izin ?>
               </td>
-
               <td class="center">
                 <?= data.siswa[i].alpa ?>
               </td>
-
               <td class="center">
                 <?= data.siswa[i].lainnya ?>
               </td>
-
             </tr>
-
           <? } ?>
-
         </tbody>
-
       </table>
-
-
       <!-- =================================================
            KETERANGAN
            ================================================= -->
-
       <div class="status-note">
-
         H = Hadir &nbsp;&nbsp;
         S = Sakit &nbsp;&nbsp;
         I = Izin &nbsp;&nbsp;
         A = Alpa &nbsp;&nbsp;
         L = Lainnya
-
       </div>
-
-
       <!-- =================================================
            TANDA TANGAN
            ================================================= -->
-
       <table class="signature-table">
-
         <tr>
-
-
           <!-- =============================================
                KEPALA SEKOLAH
                ============================================= -->
-
           <td>
-
             Kepala Sekolah
-
             <div class="signature-space"></div>
-
             <div class="signature-name">
-
               <?= data.kepalaSekolah.nama || '................................................' ?>
-
             </div>
-
             <div class="signature-nip">
-
               NIP.
-
               <?= data.kepalaSekolah.nip || '................................' ?>
-
             </div>
-
           </td>
-
-
           <!-- =============================================
                GURU / WALI KELAS
                ============================================= -->
-
           <td>
-
             Guru / Wali Kelas
-
             <div class="signature-space"></div>
-
             <div class="signature-name">
-
               ....................................................
-
             </div>
-
             <div class="signature-nip">
-
               NIP. ....................................
-
             </div>
-
           </td>
-
-
         </tr>
-
       </table>
-
-
     </div>
-
-
     <!-- ===================================================
          FOOTER
          =================================================== -->
-
     <div class="generated">
-
       Dicetak melalui SIM SATRIA
-
     </div>
-
-
   </div>
-
-
 </body>
-
 </html>
