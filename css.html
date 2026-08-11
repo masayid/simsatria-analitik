@@ -1,1133 +1,664 @@
 <style>
-
-/* =========================================
+    /* =========================================
    ROOT COLOR SYSTEM
    PALET SESUAI GAMBAR REFERENSI
 ========================================= */
-
-:root {
-
-    --primary: #3C3332;
-    --primary-dark: #2D2524;
-    --primary-light: #4D3D3D;
-
-    --sidebar: #3C3332;
-    --sidebar-soft: #4D3D3D;
-
-    --bg: #F7F4F3;
-
-    --white: #FFFFFF;
-
-    --text: #463B3A;
-    --text-soft: #7A6464;
-
-    --border: #DED5D4;
-
-    --shadow:
-        0 8px 24px rgba(60, 51, 50, .10);
-}
-
-
-/* =========================================
+    :root {
+        --primary: #3C3332;
+        --primary-dark: #2D2524;
+        --primary-light: #4D3D3D;
+        --sidebar: #3C3332;
+        --sidebar-soft: #4D3D3D;
+        --bg: #F7F4F3;
+        --white: #FFFFFF;
+        --text: #463B3A;
+        --text-soft: #7A6464;
+        --border: #DED5D4;
+        --shadow:
+            0 8px 24px rgba(60, 51, 50, .10);
+    }
+    /* =========================================
    BODY
 ========================================= */
-
-body {
-
-    background:
-        linear-gradient(
-            180deg,
-            #F7F4F3 0%,
-            #A27E7D 100%
-        );
-
-    font-family:
-        Arial,
-        sans-serif;
-
-}
-
-
-/* =========================================
+    body {
+        background:
+            linear-gradient(180deg,
+                #F7F4F3 0%,
+                #A27E7D 100%);
+        font-family:
+            Arial,
+            sans-serif;
+    }
+    /* =========================================
    LOGIN
 ========================================= */
-
-.login-box {
-
-    min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #3C3332,
-            #4D3D3D,
-            #7A6464,
-            #A27E7D
-        );
-
-}
-
-
-.login-card {
-
-    border: none;
-
-    border-radius: 25px;
-
-    overflow: hidden;
-
-}
-
-
-/* =========================================
+    .login-box {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background:
+            linear-gradient(135deg,
+                #3C3332,
+                #4D3D3D,
+                #7A6464,
+                #A27E7D);
+    }
+    .login-card {
+        border: none;
+        border-radius: 25px;
+        overflow: hidden;
+    }
+    /* =========================================
    SIDEBAR LINK
 ========================================= */
-
-.sidebar a {
-
-    display: block;
-
-    color: #FFFFFF;
-
-    text-decoration: none;
-
-    padding: 12px 16px;
-
-    border-radius: 12px;
-
-    margin-bottom: 8px;
-
-    transition: .3s;
-
-}
-
-
-.sidebar a:hover {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .16
-        );
-
-}
-
-
-/* =========================================
+    .sidebar a {
+        display: block;
+        color: #FFFFFF;
+        text-decoration: none;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        transition: .3s;
+    }
+    .sidebar a:hover {
+        background:
+            rgba(255,
+                255,
+                255,
+                .16);
+    }
+    /* =========================================
    HEADER TITLE
 ========================================= */
-
-.header-title {
-
-    font-size: 28px;
-
-    font-weight: bold;
-
-    color:
-        #3C3332;
-
-}
-
-
-.header-subtitle {
-
-    color:
-        #7A6464;
-
-    margin-bottom:
-        20px;
-
-}
-
-
-/* =========================================
+    .header-title {
+        font-size: 28px;
+        font-weight: bold;
+        color:
+            #3C3332;
+    }
+    .header-subtitle {
+        color:
+            #7A6464;
+        margin-bottom:
+            20px;
+    }
+    /* =========================================
    SIDEBAR
 ========================================= */
-
-.sidebar {
-
-    min-height: 100vh;
-
-    background:
-        linear-gradient(
-            180deg,
-            #3C3332 0%,
-            #4D3D3D 45%,
-            #7A6464 75%,
-            #A27E7D 100%
-        );
-
-    padding:
-        20px;
-
-    color:
-        #FFFFFF;
-
-}
-
-
-/* =========================================
+    .sidebar {
+        min-height: 100vh;
+        background:
+            linear-gradient(180deg,
+                #3C3332 0%,
+                #4D3D3D 45%,
+                #7A6464 75%,
+                #A27E7D 100%);
+        padding:
+            20px;
+        color:
+            #FFFFFF;
+    }
+    /* =========================================
    CONTENT
 ========================================= */
-
-#content {
-
-    animation:
-        fadeIn .3s ease;
-
-}
-
-
-@keyframes fadeIn {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(10px);
-
+    #content {
+        animation:
+            fadeIn .3s ease;
     }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0);
-
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform:
+                translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform:
+                translateY(0);
+        }
     }
-
-}
-
-
-/* =========================================
+    /* =========================================
    BODY
 ========================================= */
-
-body {
-
-    background:
-        linear-gradient(
-            180deg,
-            #F7F4F3 0%,
-            #A27E7D 100%
-        );
-
-    font-family:
-        'Segoe UI',
-        sans-serif;
-
-    color:
-        var(--text);
-
-}
-
-
-/* =========================================
+    body {
+        background:
+            linear-gradient(180deg,
+                #F7F4F3 0%,
+                #A27E7D 100%);
+        font-family:
+            'Segoe UI',
+            sans-serif;
+        color:
+            var(--text);
+    }
+    /* =========================================
    SIDEBAR
 ========================================= */
-
-.sidebar {
-
-    background:
-        linear-gradient(
-            180deg,
-            #3C3332 0%,
-            #4D3D3D 45%,
-            #7A6464 75%,
-            #A27E7D 100%
-        );
-
-    min-height:
-        100vh;
-
-    padding:
-        24px 18px;
-
-    position:
-        relative;
-
-    overflow:
-        hidden;
-
-    box-shadow:
-        4px 0 25px
-        rgba(
-            60,
-            51,
-            50,
-            .15
-        );
-
-}
-
-
-/* =========================================
+    .sidebar {
+        background:
+            linear-gradient(180deg,
+                #3C3332 0%,
+                #4D3D3D 45%,
+                #7A6464 75%,
+                #A27E7D 100%);
+        min-height:
+            100vh;
+        padding:
+            24px 18px;
+        position:
+            relative;
+        overflow:
+            hidden;
+        box-shadow:
+            4px 0 25px rgba(60,
+                51,
+                50,
+                .15);
+    }
+    /* =========================================
    DEKORASI SIDEBAR
 ========================================= */
-
-.sidebar::before {
-
-    content: "";
-
-    position:
-        absolute;
-
-    top:
-        -60px;
-
-    right:
-        -60px;
-
-    width:
-        180px;
-
-    height:
-        180px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .10
-        );
-
-    border-radius:
-        50%;
-
-}
-
-
-.sidebar::after {
-
-    content: "";
-
-    position:
-        absolute;
-
-    bottom:
-        -80px;
-
-    left:
-        -80px;
-
-    width:
-        220px;
-
-    height:
-        220px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .08
-        );
-
-    border-radius:
-        50%;
-
-}
-
-
-/* =========================================
+    .sidebar::before {
+        content: "";
+        position:
+            absolute;
+        top:
+            -60px;
+        right:
+            -60px;
+        width:
+            180px;
+        height:
+            180px;
+        background:
+            rgba(255,
+                255,
+                255,
+                .10);
+        border-radius:
+            50%;
+    }
+    .sidebar::after {
+        content: "";
+        position:
+            absolute;
+        bottom:
+            -80px;
+        left:
+            -80px;
+        width:
+            220px;
+        height:
+            220px;
+        background:
+            rgba(255,
+                255,
+                255,
+                .08);
+        border-radius:
+            50%;
+    }
+    /* =========================================
    SIDEBAR BRAND
 ========================================= */
-
-.sidebar-brand {
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    margin-bottom:
-        30px;
-
-    padding-bottom:
-        18px;
-
-    border-bottom:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            .18
-        );
-
-}
-
-
-.sidebar-brand h4 {
-
-    color:
-        #FFFFFF;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        .6px;
-
-    margin-bottom:
-        4px;
-
-    font-size:
-        24px;
-
-}
-
-
-.sidebar-brand p {
-
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            .82
-        );
-
-    font-size:
-        13px;
-
-    margin:
-        0;
-
-}
-
-
-/* =========================================
+    .sidebar-brand {
+        position:
+            relative;
+        z-index:
+            2;
+        margin-bottom:
+            30px;
+        padding-bottom:
+            18px;
+        border-bottom:
+            1px solid rgba(255,
+                255,
+                255,
+                .18);
+    }
+    .sidebar-brand h4 {
+        color:
+            #FFFFFF;
+        font-weight:
+            700;
+        letter-spacing:
+            .6px;
+        margin-bottom:
+            4px;
+        font-size:
+            24px;
+    }
+    .sidebar-brand p {
+        color:
+            rgba(255,
+                255,
+                255,
+                .82);
+        font-size:
+            13px;
+        margin:
+            0;
+    }
+    /* =========================================
    MENU ITEM
 ========================================= */
-
-.menu-item {
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    padding:
-        14px 16px;
-
-    margin-bottom:
-        12px;
-
-    border-radius:
-        16px;
-
-    color:
-        #FFFFFF;
-
-    text-decoration:
-        none;
-
-    font-weight:
-        600;
-
-    transition:
-        all .3s ease;
-
-    backdrop-filter:
-        blur(6px);
-
-}
-
-
-.menu-item:hover {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .18
-        );
-
-    color:
-        #FFFFFF;
-
-    transform:
-        translateX(5px);
-
-    box-shadow:
-        0 8px 18px
-        rgba(
-            60,
-            51,
-            50,
-            .16
-        );
-
-}
-
-
-.menu-item.active {
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(
+    .menu-item {
+        position:
+            relative;
+        z-index:
+            2;
+        display:
+            flex;
+        align-items:
+            center;
+        padding:
+            14px 16px;
+        margin-bottom:
+            12px;
+        border-radius:
+            16px;
+        color:
+            #FFFFFF;
+        text-decoration:
+            none;
+        font-weight:
+            600;
+        transition:
+            all .3s ease;
+        backdrop-filter:
+            blur(6px);
+    }
+    .menu-item:hover {
+        background:
+            rgba(255,
                 255,
                 255,
-                255,
-                .30
-            ) 0%,
-            rgba(
-                255,
-                255,
-                255,
-                .16
-            ) 100%
-        );
-
-    color:
-        #FFFFFF;
-
-    box-shadow:
-        0 10px 20px
-        rgba(
-            60,
-            51,
-            50,
-            .16
-        );
-
-}
-
-
-/* =========================================
+                .18);
+        color:
+            #FFFFFF;
+        transform:
+            translateX(5px);
+        box-shadow:
+            0 8px 18px rgba(60,
+                51,
+                50,
+                .16);
+    }
+    .menu-item.active {
+        background:
+            linear-gradient(135deg,
+                rgba(255,
+                    255,
+                    255,
+                    .30) 0%,
+                rgba(255,
+                    255,
+                    255,
+                    .16) 100%);
+        color:
+            #FFFFFF;
+        box-shadow:
+            0 10px 20px rgba(60,
+                51,
+                50,
+                .16);
+    }
+    /* =========================================
    ICON MENU
 ========================================= */
-
-.bi {
-
-    vertical-align:
-        -0.125em;
-
-    transition:
-        all .25s ease;
-
-}
-
-
-.menu-item i,
-.submenu-item i,
-.accordion-button i {
-
-    font-size:
-        18px;
-
-    margin-right:
-        12px;
-
-    opacity:
-        .95;
-
-}
-
-
-.menu-item:hover i,
-.submenu-item:hover i {
-
-    transform:
-        scale(1.08);
-
-}
-
-
-/* =========================================
+    .bi {
+        vertical-align:
+            -0.125em;
+        transition:
+            all .25s ease;
+    }
+    .menu-item i,
+    .submenu-item i,
+    .accordion-button i {
+        font-size:
+            18px;
+        margin-right:
+            12px;
+        opacity:
+            .95;
+    }
+    .menu-item:hover i,
+    .submenu-item:hover i {
+        transform:
+            scale(1.08);
+    }
+    /* =========================================
    ACCORDION
 ========================================= */
-
-.accordion {
-
-    position:
-        relative;
-
-    z-index:
-        2;
-
-}
-
-
-.accordion-item {
-
-    background:
-        transparent !important;
-
-    border:
-        none !important;
-
-    margin-bottom:
-        10px;
-
-}
-
-
-.accordion-button {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .12
-        ) !important;
-
-    color:
-        #FFFFFF !important;
-
-    border:
-        none !important;
-
-    border-radius:
-        16px !important;
-
-    box-shadow:
-        none !important;
-
-    font-weight:
-        600;
-
-    padding:
-        14px 16px;
-
-    transition:
-        all .3s ease;
-
-}
-
-
-.accordion-button:not(.collapsed) {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .22
-        ) !important;
-
-    color:
-        #FFFFFF !important;
-
-}
-
-
-.accordion-button:hover {
-
-    transform:
-        translateX(4px);
-
-}
-
-
-.accordion-button:focus {
-
-    box-shadow:
-        none !important;
-
-}
-
-
-/* =========================================
+    .accordion {
+        position:
+            relative;
+        z-index:
+            2;
+    }
+    .accordion-item {
+        background:
+            transparent !important;
+        border:
+            none !important;
+        margin-bottom:
+            10px;
+    }
+    .accordion-button {
+        background:
+            rgba(255,
+                255,
+                255,
+                .12) !important;
+        color:
+            #FFFFFF !important;
+        border:
+            none !important;
+        border-radius:
+            16px !important;
+        box-shadow:
+            none !important;
+        font-weight:
+            600;
+        padding:
+            14px 16px;
+        transition:
+            all .3s ease;
+    }
+    .accordion-button:not(.collapsed) {
+        background:
+            rgba(255,
+                255,
+                255,
+                .22) !important;
+        color:
+            #FFFFFF !important;
+    }
+    .accordion-button:hover {
+        transform:
+            translateX(4px);
+    }
+    .accordion-button:focus {
+        box-shadow:
+            none !important;
+    }
+    /* =========================================
    SUBMENU
 ========================================= */
-
-.submenu-item {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    padding:
-        11px 14px;
-
-    margin-top:
-        10px;
-
-    margin-bottom:
-        8px;
-
-    margin-left:
-        8px;
-
-    border-radius:
-        14px;
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .14
-        );
-
-    color:
-        #FFFFFF;
-
-    text-decoration:
-        none;
-
-    transition:
-        all .3s ease;
-
-    font-size:
-        14px;
-
-}
-
-
-.submenu-item:hover {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            .24
-        );
-
-    color:
-        #FFFFFF;
-
-    transform:
-        translateX(4px);
-
-}
-
-
-/* =========================================
+    .submenu-item {
+        display:
+            flex;
+        align-items:
+            center;
+        padding:
+            11px 14px;
+        margin-top:
+            10px;
+        margin-bottom:
+            8px;
+        margin-left:
+            8px;
+        border-radius:
+            14px;
+        background:
+            rgba(255,
+                255,
+                255,
+                .14);
+        color:
+            #FFFFFF;
+        text-decoration:
+            none;
+        transition:
+            all .3s ease;
+        font-size:
+            14px;
+    }
+    .submenu-item:hover {
+        background:
+            rgba(255,
+                255,
+                255,
+                .24);
+        color:
+            #FFFFFF;
+        transform:
+            translateX(4px);
+    }
+    /* =========================================
    CARD
 ========================================= */
-
-.card {
-
-    border:
-        none;
-
-    border-radius:
-        20px;
-
-    background:
-        #FFFFFF;
-
-    box-shadow:
-        var(--shadow);
-
-    overflow:
-        hidden;
-
-}
-
-
-/* =========================================
+    .card {
+        border:
+            none;
+        border-radius:
+            20px;
+        background:
+            #FFFFFF;
+        box-shadow:
+            var(--shadow);
+        overflow:
+            hidden;
+    }
+    /* =========================================
    CARD HEADER
 ========================================= */
-
-.card-header {
-
-    background:
-        linear-gradient(
-            135deg,
-            #3C3332 0%,
-            #4D3D3D 100%
-        ) !important;
-
-    color:
-        #FFFFFF !important;
-
-    border:
-        none !important;
-
-    padding:
-        18px 22px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================
+    .card-header {
+        background:
+            linear-gradient(135deg,
+                #3C3332 0%,
+                #4D3D3D 100%) !important;
+        color:
+            #FFFFFF !important;
+        border:
+            none !important;
+        padding:
+            18px 22px;
+        font-weight:
+            700;
+    }
+    /* =========================================
    FORM
 ========================================= */
-
-.form-control,
-.form-select {
-
-    border-radius:
-        12px;
-
-    padding:
-        12px 14px;
-
-    border:
-        1px solid
-        var(--border);
-
-    background:
-        #FFFFFF;
-
-    color:
-        var(--text);
-
-}
-
-
-.form-control:focus,
-.form-select:focus {
-
-    border-color:
-        #7A6464;
-
-    box-shadow:
-        0 0 0 .2rem
-        rgba(
-            122,
-            100,
-            100,
-            .15
-        );
-
-}
-
-
-/* =========================================
+    .form-control,
+    .form-select {
+        border-radius:
+            12px;
+        padding:
+            12px 14px;
+        border:
+            1px solid var(--border);
+        background:
+            #FFFFFF;
+        color:
+            var(--text);
+    }
+    .form-control:focus,
+    .form-select:focus {
+        border-color:
+            #7A6464;
+        box-shadow:
+            0 0 0 .2rem rgba(122,
+                100,
+                100,
+                .15);
+    }
+    /* =========================================
    BUTTON
 ========================================= */
-
-.btn {
-
-    border-radius:
-        12px;
-
-    padding:
-        11px 18px;
-
-    font-weight:
-        600;
-
-}
-
-
-.btn-primary {
-
-    background:
-        linear-gradient(
-            135deg,
-            #3C3332 0%,
-            #4D3D3D 100%
-        ) !important;
-
-    border:
-        none !important;
-
-    color:
-        #FFFFFF !important;
-
-    transition:
-        all .25s ease;
-
-}
-
-
-.btn-primary:hover {
-
-    transform:
-        translateY(-2px);
-
-    box-shadow:
-        0 10px 20px
-        rgba(
-            60,
-            51,
-            50,
-            .20
-        );
-
-}
-
-
-/* =========================================
+    .btn {
+        border-radius:
+            12px;
+        padding:
+            11px 18px;
+        font-weight:
+            600;
+    }
+    .btn-primary {
+        background:
+            linear-gradient(135deg,
+                #3C3332 0%,
+                #4D3D3D 100%) !important;
+        border:
+            none !important;
+        color:
+            #FFFFFF !important;
+        transition:
+            all .25s ease;
+    }
+    .btn-primary:hover {
+        transform:
+            translateY(-2px);
+        box-shadow:
+            0 10px 20px rgba(60,
+                51,
+                50,
+                .20);
+    }
+    /* =========================================
    TABLE
 ========================================= */
-
-.table {
-
-    color:
-        var(--text);
-
-}
-
-
-.table thead {
-
-    background:
-        linear-gradient(
-            135deg,
-            #3C3332 0%,
-            #4D3D3D 100%
-        );
-
-    color:
-        #FFFFFF;
-
-}
-
-
-.table-striped>
-tbody>
-tr:nth-of-type(odd)>* {
-
-    background:
-        #EEE3E1;
-
-}
-
-
-.table-striped>
-tbody>
-tr:nth-of-type(even)>* {
-
-    background:
-        #FFFFFF;
-
-}
-
-
-/* =========================================
+    .table {
+        color:
+            var(--text);
+    }
+    .table thead {
+        background:
+            linear-gradient(135deg,
+                #3C3332 0%,
+                #4D3D3D 100%);
+        color:
+            #FFFFFF;
+    }
+    .table-striped>tbody>tr:nth-of-type(odd)>* {
+        background:
+            #EEE3E1;
+    }
+    .table-striped>tbody>tr:nth-of-type(even)>* {
+        background:
+            #FFFFFF;
+    }
+    /* =========================================
    TEXT
 ========================================= */
-
-.text-primary {
-
-    color:
-        #3C3332 !important;
-
-}
-
-
-.header-title {
-
-    font-size:
-        28px;
-
-    font-weight:
-        700;
-
-    color:
-        #463B3A;
-
-}
-
-
-.header-subtitle {
-
-    color:
-        #7A6464;
-
-}
-
-
-/* =========================================
+    .text-primary {
+        color:
+            #3C3332 !important;
+    }
+    .header-title {
+        font-size:
+            28px;
+        font-weight:
+            700;
+        color:
+            #463B3A;
+    }
+    .header-subtitle {
+        color:
+            #7A6464;
+    }
+    /* =========================================
    MODAL
 ========================================= */
-
-.modal-content {
-
-    border:
-        none;
-
-    border-radius:
-        20px;
-
-    overflow:
-        hidden;
-
-}
-
-
-.modal-header {
-
-    background:
-        linear-gradient(
-            135deg,
-            #3C3332 0%,
-            #4D3D3D 100%
-        );
-
-    color:
-        #FFFFFF;
-
-    border:
-        none;
-
-}
-
-
-.modal-footer {
-
-    border-top:
-        1px solid
-        #DED5D4;
-
-}
-
-
-/* =========================================
+    .modal-content {
+        border:
+            none;
+        border-radius:
+            20px;
+        overflow:
+            hidden;
+    }
+    .modal-header {
+        background:
+            linear-gradient(135deg,
+                #3C3332 0%,
+                #4D3D3D 100%);
+        color:
+            #FFFFFF;
+        border:
+            none;
+    }
+    .modal-footer {
+        border-top:
+            1px solid #DED5D4;
+    }
+    /* =========================================
    SCROLLBAR
 ========================================= */
-
-::-webkit-scrollbar {
-
-    width:
-        10px;
-
-}
-
-
-::-webkit-scrollbar-track {
-
-    background:
-        #EEE3E1;
-
-}
-
-
-::-webkit-scrollbar-thumb {
-
-    background:
-        linear-gradient(
-            180deg,
-            #3C3332,
-            #7A6464
-        );
-
-    border-radius:
-        10px;
-
-}
-
-
-/* =========================================
+    ::-webkit-scrollbar {
+        width:
+            10px;
+    }
+    ::-webkit-scrollbar-track {
+        background:
+            #EEE3E1;
+    }
+    ::-webkit-scrollbar-thumb {
+        background:
+            linear-gradient(180deg,
+                #3C3332,
+                #7A6464);
+        border-radius:
+            10px;
+    }
+    /* =========================================
    BUTTON OUTLINE PRIMARY
    MENGIKUTI PALET CSS UTAMA
 ========================================= */
-
-.btn-outline-primary {
-
-    color:
-        #3C3332 !important;
-
-    border:
-        1px solid #4D3D3D !important;
-
-    background:
-        #FFFFFF !important;
-
-    border-radius:
-        12px !important;
-
-    font-weight:
-        600;
-
-    transition:
-        all .25s ease;
-
-}
-
-
-.btn-outline-primary:hover,
-.btn-outline-primary:focus,
-.btn-outline-primary:active {
-
-    color:
-        #FFFFFF !important;
-
-    background:
-        linear-gradient(
-            135deg,
-            #3C3332 0%,
-            #4D3D3D 100%
-        ) !important;
-
-    border-color:
-        #3C3332 !important;
-
-    box-shadow:
-        0 8px 16px
-        rgba(
-            60,
-            51,
-            50,
-            .18
-        ) !important;
-
-}
-
-/* =========================================
+    .btn-outline-primary {
+        color:
+            #3C3332 !important;
+        border:
+            1px solid #4D3D3D !important;
+        background:
+            #FFFFFF !important;
+        border-radius:
+            12px !important;
+        font-weight:
+            600;
+        transition:
+            all .25s ease;
+    }
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus,
+    .btn-outline-primary:active {
+        color:
+            #FFFFFF !important;
+        background:
+            linear-gradient(135deg,
+                #3C3332 0%,
+                #4D3D3D 100%) !important;
+        border-color:
+            #3C3332 !important;
+        box-shadow:
+            0 8px 16px rgba(60,
+                51,
+                50,
+                .18) !important;
+    }
+    /* =========================================
    RESPONSIVE
 ========================================= */
-
-@media(max-width:768px) {
-
-    html {
-
-        zoom:
-            1;
-
+    @media(max-width:768px) {
+        html {
+            zoom:
+                1;
+        }
+        body {
+            zoom:
+                1;
+            transform:
+                scale(1);
+            transform-origin:
+                top left;
+            width:
+                100% !important;
+            overflow-x:
+                hidden !important;
+        }
     }
-
-
-    body {
-
-        zoom:
-            1;
-
-        transform:
-            scale(1);
-
-        transform-origin:
-            top left;
-
-        width:
-            100% !important;
-
-        overflow-x:
-            hidden !important;
-
-    }
-
-}
-
-
-/* =====================================================
+    /* =====================================================
    CETAK PRESENSI KELAS
    ===================================================== */
-
 </style>
