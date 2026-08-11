@@ -1,266 +1,439 @@
 <div class="container-fluid py-3">
+
   <div class="row g-3">
+
     <!-- =====================================================
-         HEADER KONEKSI
+         HEADER KONEKSI — FULL WIDTH
          ===================================================== -->
+
     <div class="col-12">
-      <div class="card border-0 shadow-sm" style="border-radius:18px; overflow:hidden;">
-        <div style="
-            background:linear-gradient(
-              135deg,
-              #0B3D2E 0%,
-              #1B5E20 60%,
-              #2E7D32 100%
-            );
-            color:white;
-            padding:20px;
-          ">
+
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+        <div class="card-header text-white">
+
           <div class="d-flex align-items-center gap-3">
-            <div style="
-                width:46px;
-                height:46px;
-                border-radius:14px;
-                background:rgba(255,255,255,.14);
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:22px;
-              ">
+
+            <div class="
+              rounded-4
+              bg-white
+              bg-opacity-10
+              d-flex
+              align-items-center
+              justify-content-center
+              flex-shrink-0
+              p-3
+            ">
+
               🔗
+
             </div>
+
             <div>
-              <div style="
-                  font-size:1.15rem;
-                  font-weight:700;
-                ">
+
+              <div class="fs-5 fw-bold">
+
                 Koneksi SIM SATRIA
+
               </div>
-              <div style="
-                  font-size:.75rem;
-                  opacity:.85;
-                  margin-top:3px;
-                ">
+
+              <div class="small opacity-75">
+
                 Autentikasi, School Context,
                 Database, Drive dan Transaction Engine
+
               </div>
+
             </div>
+
           </div>
+
+
           <div class="mt-3">
-            <span id="loadingText" class="badge rounded-pill" style="
-                background:rgba(255,255,255,.15);
-                color:white;
-                padding:7px 12px;
+
+            <span
+              id="loadingText"
+              class="
+                badge
+                rounded-pill
+                bg-white
+                bg-opacity-10
+                text-white
+                px-3
+                py-2
               ">
+
               Menghubungkan...
+
             </span>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
+
     <!-- =====================================================
-         IDENTITAS SEKOLAH
+         KOLOM KIRI
+         SCHOOL CONTEXT
          ===================================================== -->
+
     <div class="col-12 col-xl-6">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+
+      <div class="card border-0 shadow-sm rounded-4 h-100">
+
         <div class="card-body">
-          <div class="fw-bold mb-3" style="font-size:.9rem; color:#37474F;">
+
+          <div class="fw-bold mb-3 text-primary">
+
             <i class="bi bi-building me-2"></i>
+
             School Context
+
           </div>
+
+
           <div class="row g-2">
+
+            <!-- SEKOLAH -->
+
             <div class="col-12">
-              <div class="p-3 rounded-3" style="background:#F5F8F6;">
-                <div style="
-                    font-size:.67rem;
-                    color:#78909C;
-                    font-weight:700;
-                  ">
+
+              <div class="p-3 rounded-3 bg-light">
+
+                <div class="small fw-bold text-secondary">
+
                   SEKOLAH
+
                 </div>
-                <div id="schoolName" style="
-                    font-size:.85rem;
-                    font-weight:700;
-                    color:#26352C;
-                    margin-top:3px;
-                  ">
+
+                <div
+                  id="schoolName"
+                  class="small fw-bold text-dark mt-1">
+
                   -
+
                 </div>
+
               </div>
+
             </div>
+
+
+            <!-- NPSN -->
+
             <div class="col-6">
-              <div class="p-3 rounded-3" style="background:#F5F8F6;">
-                <div style="
-                    font-size:.67rem;
-                    color:#78909C;
-                    font-weight:700;
-                  ">
+
+              <div class="p-3 rounded-3 bg-light">
+
+                <div class="small fw-bold text-secondary">
+
                   NPSN
+
                 </div>
-                <div id="schoolNpsn" style="
-                    font-size:.85rem;
-                    font-weight:700;
-                    color:#26352C;
-                    margin-top:3px;
-                  ">
+
+                <div
+                  id="schoolNpsn"
+                  class="small fw-bold text-dark mt-1">
+
                   -
+
                 </div>
+
               </div>
+
             </div>
+
+
+            <!-- ROLE -->
+
             <div class="col-6">
-              <div class="p-3 rounded-3" style="background:#F5F8F6;">
-                <div style="
-                    font-size:.67rem;
-                    color:#78909C;
-                    font-weight:700;
-                  ">
+
+              <div class="p-3 rounded-3 bg-light">
+
+                <div class="small fw-bold text-secondary">
+
                   ROLE
+
                 </div>
-                <div id="userRole" style="
-                    font-size:.85rem;
-                    font-weight:700;
-                    color:#26352C;
-                    margin-top:3px;
-                  ">
+
+                <div
+                  id="userRole"
+                  class="small fw-bold text-dark mt-1">
+
                   -
+
                 </div>
+
               </div>
+
             </div>
+
+
+            <!-- NAMA PENGGUNA -->
+
             <div class="col-12">
-              <div class="p-3 rounded-3" style="background:#F5F8F6;">
-                <div style="
-                    font-size:.67rem;
-                    color:#78909C;
-                    font-weight:700;
-                  ">
+
+              <div class="p-3 rounded-3 bg-light">
+
+                <div class="small fw-bold text-secondary">
+
                   NAMA PENGGUNA
+
                 </div>
-                <div id="userName" style="
-                    font-size:.85rem;
-                    font-weight:700;
-                    color:#26352C;
-                    margin-top:3px;
-                  ">
+
+                <div
+                  id="userName"
+                  class="small fw-bold text-dark mt-1">
+
                   -
+
                 </div>
+
               </div>
+
             </div>
+
+
+            <!-- EMAIL -->
+
             <div class="col-12">
-              <div class="p-3 rounded-3" style="background:#F5F8F6;">
-                <div style="
-                    font-size:.67rem;
-                    color:#78909C;
-                    font-weight:700;
-                  ">
+
+              <div class="p-3 rounded-3 bg-light">
+
+                <div class="small fw-bold text-secondary">
+
                   EMAIL
+
                 </div>
-                <div id="userEmail" style="
-                    font-size:.80rem;
-                    font-weight:600;
-                    color:#26352C;
-                    margin-top:3px;
-                    word-break:break-all;
-                  ">
+
+                <div
+                  id="userEmail"
+                  class="small fw-semibold text-dark mt-1 text-break">
+
                   -
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
-          <div id="loginError" class="alert alert-danger mt-3 hidden" style="font-size:.75rem;">
+
+
+          <!-- ERROR -->
+
+          <div
+            id="loginError"
+            class="alert alert-danger mt-3 d-none small">
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
+
     <!-- =====================================================
-         TEST RESOURCES
+         KOLOM KANAN
+         PENGUJIAN KONEKSI
          ===================================================== -->
+
     <div class="col-12 col-xl-6">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+
+      <div class="card border-0 shadow-sm rounded-4 h-100">
+
         <div class="card-body">
-          <div class="fw-bold mb-3" style="font-size:.9rem; color:#37474F;">
+
+          <div class="fw-bold mb-3 text-primary">
+
             <i class="bi bi-hdd-stack me-2"></i>
+
             Pengujian Koneksi
+
           </div>
+
+
           <div class="d-grid gap-2">
-            <button type="button" id="btnResource" class="btn btn-outline-success" onclick="testResources()">
+
+            <button
+              type="button"
+              id="btnResource"
+              class="btn btn-outline-primary"
+              onclick="testResources()">
+
               TEST SCHOOL RESOURCES
+
             </button>
-            <button type="button" id="btnContext" class="btn btn-outline-success" onclick="testContext()">
+
+
+            <button
+              type="button"
+              id="btnContext"
+              class="btn btn-outline-primary"
+              onclick="testContext()">
+
               TEST SCHOOL CONTEXT
+
             </button>
-            <button type="button" id="btnTransaction" class="btn btn-outline-success" onclick="testTransaction()">
+
+
+            <button
+              type="button"
+              id="btnTransaction"
+              class="btn btn-outline-primary"
+              onclick="testTransaction()">
+
               TEST TRANSACTION ENGINE
+
             </button>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
+
     <!-- =====================================================
-         SETUP DATABASE & DRIVE
+         SETUP RESOURCE SEKOLAH — FULL WIDTH
          ===================================================== -->
+
     <div class="col-12">
-      <div class="card border-0 shadow-sm" style="border-radius:16px;">
+
+      <div class="card border-0 shadow-sm rounded-4">
+
         <div class="card-body">
-          <div class="fw-bold mb-3" style="font-size:.9rem; color:#37474F;">
+
+          <div class="fw-bold mb-3 text-primary">
+
             <i class="bi bi-gear me-2"></i>
+
             Setup Resource Sekolah
+
           </div>
+
+
           <div class="row g-2">
+
             <div class="col-12 col-md-4">
-              <button type="button" id="btnSetupDatabase" class="btn btn-success w-100"
+
+              <button
+                type="button"
+                id="btnSetupDatabase"
+                class="btn btn-primary w-100"
                 onclick="setupDatabaseSekolahSaya()">
+
                 SETUP DATABASE SEKOLAH
+
               </button>
+
             </div>
+
+
             <div class="col-12 col-md-4">
-              <button type="button" id="btnSetupDrive" class="btn btn-success w-100" onclick="setupDriveSekolahSaya()">
+
+              <button
+                type="button"
+                id="btnSetupDrive"
+                class="btn btn-primary w-100"
+                onclick="setupDriveSekolahSaya()">
+
                 SETUP FOLDER DRIVE
+
               </button>
+
             </div>
+
+
             <div class="col-12 col-md-4">
-              <button type="button" id="btnRefreshContext" class="btn btn-outline-success w-100"
+
+              <button
+                type="button"
+                id="btnRefreshContext"
+                class="btn btn-outline-primary w-100"
                 onclick="refreshSchoolContext()">
+
                 REFRESH SCHOOL CONTEXT
+
               </button>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
+
+
     <!-- =====================================================
-         RESULT
+         HASIL PENGUJIAN — FULL WIDTH
          ===================================================== -->
+
     <div class="col-12">
-      <div class="card border-0 shadow-sm" style="border-radius:16px;">
+
+      <div class="card border-0 shadow-sm rounded-4">
+
         <div class="card-body">
-          <div class="d-flex
-                      justify-content-between
-                      align-items-center
-                      mb-2">
-            <div class="fw-bold" style="
-                font-size:.9rem;
-                color:#37474F;
-              ">
+
+          <div class="
+            d-flex
+            justify-content-between
+            align-items-center
+            mb-2
+          ">
+
+            <div class="fw-bold text-primary">
+
               Hasil Pengujian
+
             </div>
-            <span class="badge rounded-pill" style="
-                background:#E8F5E9;
-                color:#2E7D32;
+
+
+            <span
+              class="
+                badge
+                rounded-pill
+                bg-warning-subtle
+                text-warning-emphasis
               ">
+
               Diagnostic
+
             </span>
+
           </div>
-          <pre id="result" class="mb-0 p-3" style="
-              min-height:180px;
-              max-height:500px;
-              overflow:auto;
-              border-radius:12px;
-              background:#17221B;
-              color:#D9F5DE;
-              font-size:.72rem;
-              line-height:1.5;
+
+
+          <pre
+            id="result"
+            class="
+              mb-0
+              p-3
+              rounded-3
+              bg-dark
+              text-light
+              small
+              overflow-auto
             ">Belum ada pengujian.</pre>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
