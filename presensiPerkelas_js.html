@@ -1121,6 +1121,459 @@
       5000
     );
   }
+
+
+/**
+ * ============================================================
+ * LOAD KELAS UNTUK CETAK
+ * ============================================================
+ */
+
+function PP_loadKelasCetak() {
+
+  const tanggalAwal =
+    document.getElementById(
+      'ppTanggalAwal'
+    ).value;
+
+
+  const tanggalAkhir =
+    document.getElementById(
+      'ppTanggalAkhir'
+    ).value;
+
+
+  const select =
+    document.getElementById(
+      'ppKelasCetak'
+    );
+
+
+  select.innerHTML =
+    '<option value="">Memuat kelas...</option>';
+
+
+  if (
+    !tanggalAwal ||
+    !tanggalAkhir
+  ) {
+
+    select.innerHTML =
+      '<option value="">Pilih tanggal dahulu...</option>';
+
+    return;
+
+  }
+
+
+  if (
+    tanggalAwal >
+    tanggalAkhir
+  ) {
+
+    select.innerHTML =
+      '<option value="">Rentang tanggal tidak valid</option>';
+
+    return;
+
+  }
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(kelasList) {
+
+        select.innerHTML =
+          '<option value="">Pilih kelas...</option>';
+
+
+        if (
+          !kelasList ||
+          kelasList.length === 0
+        ) {
+
+          select.innerHTML =
+            '<option value="">Tidak ada data kelas</option>';
+
+          return;
+
+        }
+
+
+        kelasList.forEach(
+          function(kelas) {
+
+            const option =
+              document.createElement(
+                'option'
+              );
+
+
+            option.value =
+              kelas;
+
+
+            option.textContent =
+              kelas;
+
+
+            select.appendChild(
+              option
+            );
+
+          }
+        );
+
+      }
+    )
+
+    .withFailureHandler(
+      function(error) {
+
+        select.innerHTML =
+          '<option value="">Gagal memuat kelas</option>';
+
+        console.error(
+          'PP_LOAD_KELAS_CETAK:',
+          error
+        );
+
+      }
+    )
+
+    .getKelasUntukCetakPresensi(
+      tanggalAwal,
+      tanggalAkhir
+    );
+
+}
+
+
+document.addEventListener(
+  'change',
+  function(event) {
+
+    if (
+      event.target &&
+      (
+        event.target.id ===
+          'ppTanggalAwal' ||
+
+        event.target.id ===
+          'ppTanggalAkhir'
+      )
+    ) {
+
+      PP_loadKelasCetak();
+
+    }
+
+  }
+);
+
+
+
+/**
+ * ============================================================
+ * CETAK SATU KELAS
+ * ============================================================
+ */
+
+function PP_cetakKelas(
+  tanggalAwal,
+  tanggalAkhir,
+  kelas,
+  button
+) {
+
+  const oldText =
+    button.innerHTML;
+
+
+  button.disabled =
+    true;
+
+
+  button.innerHTML =
+    '<span class="spinner-border spinner-border-sm me-2"></span>' +
+    'Membuat PDF...';
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(result) {
+
+        button.disabled =
+          false;
+
+        button.innerHTML =
+          oldText;
+
+
+        if (
+          !result ||
+          !result.success
+        ) {
+
+          alert(
+            result &&
+            result.error
+              ? result.error
+              : 'Gagal membuat PDF.'
+          );
+
+          return;
+
+        }
+
+
+        /*
+         * Buka file hasil PDF.
+         */
+
+        window.open(
+          result.url,
+          '_blank'
+        );
+
+
+        /*
+         * Informasi.
+         */
+
+        console.log(
+          '[PRESENSI PRINT]',
+          result
+        );
+
+      }
+    )
+
+    .withFailureHandler(
+      function(error) {
+
+        button.disabled =
+          false;
+
+        button.innerHTML =
+          oldText;
+
+
+        alert(
+          error.message ||
+          'Gagal membuat PDF.'
+        );
+
+      }
+    )
+
+    .cetakPresensiPerkelas(
+      tanggalAwal,
+      tanggalAkhir,
+      kelas
+    );
+
+}
+
+
+/**
+ * ============================================================
+ * CETAK PDF
+ * ============================================================
+ */
+
+function PP_cetakPDF() {
+
+  const tanggalAwal =
+    document.getElementById(
+      'ppTanggalAwal'
+    ).value;
+
+
+  const tanggalAkhir =
+    document.getElementById(
+      'ppTanggalAkhir'
+    ).value;
+
+
+  const kelas =
+    document.getElementById(
+      'ppKelasCetak'
+    ).value;
+
+
+  if (!tanggalAwal) {
+
+    alert(
+      'Tanggal awal belum dipilih.'
+    );
+
+    return;
+
+  }
+
+
+  if (!tanggalAkhir) {
+
+    alert(
+      'Tanggal akhir belum dipilih.'
+    );
+
+    return;
+
+  }
+
+
+  if (
+    tanggalAwal >
+    tanggalAkhir
+  ) {
+
+    alert(
+      'Tanggal awal tidak boleh lebih besar dari tanggal akhir.'
+    );
+
+    return;
+
+  }
+
+
+  if (!kelas) {
+
+    alert(
+      'Kelas yang akan dicetak belum dipilih.'
+    );
+
+    return;
+
+  }
+
+
+  const btn =
+    document.getElementById(
+      'ppBtnCetakPDF'
+    );
+
+
+  const spinner =
+    document.getElementById(
+      'ppSpinnerCetak'
+    );
+
+
+  const text =
+    document.getElementById(
+      'ppTextCetak'
+    );
+
+
+  btn.disabled =
+    true;
+
+
+  spinner.classList.remove(
+    'd-none'
+  );
+
+
+  text.textContent =
+    'Membuat PDF...';
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(result) {
+
+        btn.disabled =
+          false;
+
+
+        spinner.classList.add(
+          'd-none'
+        );
+
+
+        text.textContent =
+          '🖨️ CETAK PDF';
+
+
+        if (
+          !result ||
+          !result.success
+        ) {
+
+          alert(
+            result &&
+            result.error
+              ? result.error
+              : 'Gagal membuat PDF.'
+          );
+
+          return;
+
+        }
+
+
+        console.log(
+          '[PRESENSI PDF]',
+          result
+        );
+
+
+        /*
+         * Buka PDF.
+         */
+
+        window.open(
+          result.url,
+          '_blank'
+        );
+
+      }
+    )
+
+    .withFailureHandler(
+      function(error) {
+
+        btn.disabled =
+          false;
+
+
+        spinner.classList.add(
+          'd-none'
+        );
+
+
+        text.textContent =
+          '🖨️ CETAK PDF';
+
+
+        console.error(
+          '[PRESENSI PDF ERROR]',
+          error
+        );
+
+
+        alert(
+          error.message ||
+          'Gagal membuat PDF.'
+        );
+
+      }
+    )
+
+    .cetakPresensiPerkelas(
+      tanggalAwal,
+      tanggalAkhir,
+      kelas
+    );
+
+}
+
+
   /* =========================================================
      JALANKAN INIT
      ========================================================= */
