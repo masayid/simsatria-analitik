@@ -4,318 +4,192 @@
      PRESENSI PER KELAS
      BOOTSTRAP ONLY
      ===================================================== -->
-
 <div class="container-fluid px-2 px-md-3 py-2">
-
   <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-
     <!-- =================================================
          HEADER
          ================================================= -->
-
     <div class="card-header bg-success text-white border-0 p-3 p-md-4">
-
       <div class="fw-bold fs-5">
         Presensi Per Kelas
       </div>
-
       <div
         id="ppSekolah"
         class="small opacity-75 mt-1">
-
         Memuat School Context...
-
       </div>
-
       <div
         id="ppContext"
         class="d-flex flex-wrap gap-2 mt-3">
-
       </div>
-
     </div>
-
-
     <!-- =================================================
          FILTER PRESENSI
          ================================================= -->
-
     <div class="card-body bg-light border-bottom">
-
       <div class="row g-2 align-items-end">
-
         <!-- TANGGAL -->
-
         <div class="col-12 col-md-3">
-
           <label
             for="ppTanggal"
             class="form-label small fw-semibold text-secondary mb-1">
-
             Tanggal
-
           </label>
-
           <input
             type="date"
             id="ppTanggal"
             class="form-control form-control-sm rounded-3">
-
         </div>
-
-
         <!-- KELAS -->
-
         <div class="col-12 col-md-5">
-
           <label
             for="ppKelas"
             class="form-label small fw-semibold text-secondary mb-1">
-
             Kelas
-
           </label>
-
           <select
             id="ppKelas"
             class="form-select form-select-sm rounded-3">
-
             <option value="">
               Memuat kelas...
             </option>
-
           </select>
-
         </div>
-
-
         <!-- BUTTON -->
-
         <div class="col-12 col-md-4">
-
           <button
             type="button"
             id="ppBtnTampilkan"
             class="btn btn-primary btn-sm w-100 rounded-3 fw-semibold"
             onclick="PP_tampilkan()">
-
             <span
               id="ppSpinnerTampilkan"
               class="spinner-border spinner-border-sm me-2 d-none">
             </span>
-
             <span id="ppTextTampilkan">
               TAMPILKAN
             </span>
-
           </button>
-
         </div>
-
       </div>
-
     </div>
-
-
     <!-- =================================================
          CETAK PRESENSI
          ================================================= -->
-
     <div class="card-body border-bottom">
-
       <div class="fw-semibold small text-primary mb-3">
-
         <span class="me-1">🖨️</span>
         Cetak Presensi
-
       </div>
-
-
       <div class="row g-2 align-items-end">
-
-
         <!-- TANGGAL AWAL -->
-
         <div class="col-12 col-md-3">
-
           <label
             for="ppTanggalAwal"
             class="form-label small fw-semibold text-secondary mb-1">
-
             Tanggal Awal
-
           </label>
-
           <input
             type="date"
             id="ppTanggalAwal"
             class="form-control form-control-sm rounded-3">
-
         </div>
-
-
         <!-- TANGGAL AKHIR -->
-
         <div class="col-12 col-md-3">
-
           <label
             for="ppTanggalAkhir"
             class="form-label small fw-semibold text-secondary mb-1">
-
             Tanggal Akhir
-
           </label>
-
           <input
             type="date"
             id="ppTanggalAkhir"
             class="form-control form-control-sm rounded-3">
-
         </div>
-
-
         <!-- KELAS -->
-
         <div class="col-12 col-md-3">
-
           <label
             for="ppKelasCetak"
             class="form-label small fw-semibold text-secondary mb-1">
-
             Kelas
-
           </label>
-
           <select
             id="ppKelasCetak"
             class="form-select form-select-sm rounded-3">
-
             <option value="">
               Pilih kelas...
             </option>
-
           </select>
-
         </div>
-
-
         <!-- BUTTON -->
-
         <div class="col-12 col-md-3">
-
           <button
             type="button"
             id="ppBtnCetakPDF"
             class="btn btn-primary btn-sm w-100 rounded-3 fw-semibold"
             onclick="PP_cetakPDF()">
-
             <span
               id="ppSpinnerCetak"
               class="spinner-border spinner-border-sm me-2 d-none">
             </span>
-
             <span id="ppTextCetak">
               🖨️ CETAK PDF
             </span>
-
           </button>
-
         </div>
-
-
       </div>
-
     </div>
-
-
     <!-- =================================================
          ALERT / TABLE
          ================================================= -->
-
     <div
       id="ppTableContainer"
       class="table-responsive">
-
-
       <!-- EMPTY -->
-
       <div class="text-center py-5 px-3 text-secondary">
-
         <div class="fs-1 mb-2">
           📋
         </div>
-
         <div class="fw-semibold">
           Belum ada data presensi
         </div>
-
         <div class="small mt-1 text-muted">
-
           Pilih tanggal dan kelas,
           kemudian klik TAMPILKAN.
-
         </div>
-
       </div>
-
-
     </div>
-
-
     <!-- =================================================
          FOOTER
          ================================================= -->
-
     <div
       id="ppFooter"
       class="card-footer bg-light border-top d-none">
-
       <div
         class="d-flex flex-column flex-md-row
                justify-content-between
                align-items-md-center
                gap-3">
-
-
         <!-- REKAP -->
-
         <div
           id="ppRekap"
           class="d-flex flex-wrap gap-2">
-
         </div>
-
-
         <!-- SIMPAN -->
-
         <button
           type="button"
           id="ppBtnSimpan"
           class="btn btn-success btn-sm rounded-3 fw-semibold px-4"
           onclick="PP_simpan()">
-
-
           <span
             id="ppSpinnerSimpan"
             class="spinner-border spinner-border-sm me-2 d-none">
           </span>
-
-
           <span id="ppTextSimpan">
-
             SIMPAN PRESENSI
-
           </span>
-
-
         </button>
-
-
       </div>
-
     </div>
-
-
   </div>
-
 </div>
