@@ -19,30 +19,88 @@
 </head>
 
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <?!= include('sidebar'); ?>
-      <!-- CONTENT -->
-      <div class="col-md-9 col-lg-9 p-3">
-        <!-- HEADER UTAMA DENGAN PROFIL USER DI KANAN ATAS -->
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-          <!-- SISI KIRI: JUDUL APLIKASI -->
-          <div>
-            <div class="header-title fw-bold text-success fs-4">
-              <h4 id="schoolName">
-                Memuat sekolah...
-              </h4>
-            </div>
-            <div class="header-subtitle text-muted small d-none d-sm-block">
-              Sistem Informasi Manajemen SINERGIS, AKUNTABEL, TERPADU, RAMAH, INTEGRITAS, ADAPTIF
-            </div>
+ <div class="container-fluid">
+
+  <div class="row">
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <?!= include('sidebar'); ?>
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <div class="col-md-9 col-lg-9 p-3">
+
+      <!-- ===================================================
+           HEADER UTAMA
+           =================================================== -->
+
+      <div
+        class="
+          d-flex
+          justify-content-between
+          align-items-center
+          mb-4
+          pb-3
+          border-bottom
+        "
+      >
+
+        <!-- ================================================
+             SISI KIRI
+             JUDUL APLIKASI
+             ================================================ -->
+
+        <div>
+
+          <div class="header-title">
+
+            <h4
+              id="schoolName"
+              class="mb-1 fw-bold"
+            >
+              Memuat sekolah...
+            </h4>
+
           </div>
+
+
+          <div
+            class="
+              header-subtitle
+              small
+              d-none
+              d-sm-block
+            "
+          >
+
+            Sistem Informasi Manajemen
+            SINERGIS, AKUNTABEL, TERPADU,
+            RAMAH, INTEGRITAS, ADAPTIF
+
+          </div>
+
         </div>
-        <!-- DYNAMIC CONTENT -->
-        <div id="content"></div>
+
       </div>
+
+
+      <!-- ===================================================
+           DYNAMIC CONTENT
+           =================================================== -->
+
+      <div id="content"></div>
+
     </div>
+
   </div>
+
+</div>
   <?!= include('koneksiMenu'); ?>
   <?!= include('presensiPerkelasMenu'); ?>
   <script>
