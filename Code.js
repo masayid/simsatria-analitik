@@ -156,26 +156,20 @@ function testSchoolContextSpeed() {
     context: context
   };
 }
-
 //koneksi
 function getKoneksiView() {
-
   const html =
     HtmlService
       .createHtmlOutputFromFile(
         'koneksi'
       )
       .getContent();
-
-
   let js =
     HtmlService
       .createHtmlOutputFromFile(
         'koneksi_js'
       )
       .getContent();
-
-
   /*
    * koneksi_js.html menggunakan:
    *
@@ -187,7 +181,6 @@ function getKoneksiView() {
    * script element baru, wrapper tersebut
    * HARUS dibuang.
    */
-
   js = js
     .replace(
       /^\s*<script[^>]*>/i,
@@ -197,50 +190,32 @@ function getKoneksiView() {
       /<\/script>\s*$/i,
       ''
     );
-
-
   return {
-
     success:
       true,
-
     html:
       html,
-
     js:
       js
-
   };
-
 }
-
-
-
-
-
 //presensi kelas
 function getPresensiPerkelasView() {
-
   const html =
     HtmlService
       .createHtmlOutputFromFile(
         'presensiPerkelas'
       )
       .getContent();
-
-
   let js =
     HtmlService
       .createHtmlOutputFromFile(
         'presensiPerkelas_js'
       )
       .getContent();
-
-
   /*
    * Hapus wrapper <script>
    */
-
   js = js
     .replace(
       /^\s*<script[^>]*>/i,
@@ -250,22 +225,12 @@ function getPresensiPerkelasView() {
       /<\/script>\s*$/i,
       ''
     );
-
-
   return {
-
     success:
       true,
-
     html:
       html,
-
     js:
       js
-
   };
-
 }
-
-
-
