@@ -1105,868 +1105,285 @@ function getPresensiPerkelasData(tanggal, kelas) {
  * INSERT
  * ============================================================
  */
-function simpanPresensiPerkelas(
-  tanggal,
-  kelas,
-  data
-) {
-
+function simpanPresensiPerkelas(tanggal, kelas, data) {
   const log = {
     success: false,
     startedAt: new Date().toISOString(),
-    finishedAt: '',
-    step: '',
+    finishedAt: "",
+    step: "",
     data: {
       jumlahDikirim: 0,
       jumlahValid: 0,
       inserted: 0,
-      updated: 0
-    }
+      updated: 0,
+    },
   };
-
-
   try {
-
     /* ======================================================
        VALIDASI
        ====================================================== */
-
-    log.step =
-      'VALIDASI INPUT';
-
-
-    tanggal =
-      String(
-        tanggal || ''
-      ).trim();
-
-
-    kelas =
-      String(
-        kelas || ''
-      ).trim();
-
-
+    log.step = "VALIDASI INPUT";
+    tanggal = String(tanggal || "").trim();
+    kelas = String(kelas || "").trim();
     if (!tanggal) {
-
-      throw new Error(
-        'Tanggal belum dipilih.'
-      );
-
+      throw new Error("Tanggal belum dipilih.");
     }
-
-
     if (!kelas) {
-
-      throw new Error(
-        'Kelas belum dipilih.'
-      );
-
+      throw new Error("Kelas belum dipilih.");
     }
-
-
-    if (
-      !Array.isArray(data) ||
-      data.length === 0
-    ) {
-
-      throw new Error(
-        'Data presensi kosong.'
-      );
-
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error("Data presensi kosong.");
     }
-
-
-    log.data.jumlahDikirim =
-      data.length;
-
-
+    log.data.jumlahDikirim = data.length;
     /* ======================================================
        SCHOOL CONTEXT
        ====================================================== */
-
-    log.step =
-      'SCHOOL CONTEXT';
-
-
-    const context =
-      getCurrentUserContext();
-
-
+    log.step = "SCHOOL CONTEXT";
+    const context = getCurrentUserContext();
     if (!context) {
-
-      throw new Error(
-        'School Context tidak ditemukan.'
-      );
-
+      throw new Error("School Context tidak ditemukan.");
     }
-
-
-    const school =
-      context.school ||
-      {};
-
-
-    const npsn =
-      String(
-        school.npsn ||
-        context.npsn ||
-        ''
-      ).trim();
-
-
-    const namaSekolah =
-      String(
-        school.namaSekolah ||
-        school.nama ||
-        context.sekolah ||
-        ''
-      ).trim();
-
-
-    const spreadsheetId =
-      String(
-        school.spreadsheetId ||
-        context.spreadsheetId ||
-        ''
-      ).trim();
-
-
+    const school = context.school || {};
+    const npsn = String(school.npsn || context.npsn || "").trim();
+    const namaSekolah = String(
+      school.namaSekolah || school.nama || context.sekolah || "",
+    ).trim();
+    const spreadsheetId = String(
+      school.spreadsheetId || context.spreadsheetId || "",
+    ).trim();
     if (!spreadsheetId) {
-
-      throw new Error(
-        'Spreadsheet sekolah aktif tidak ditemukan.'
-      );
-
+      throw new Error("Spreadsheet sekolah aktif tidak ditemukan.");
     }
-
-
     /* ======================================================
        USER
        ====================================================== */
-
-    const user =
-      context.user ||
-      {};
-
-
-    const userId =
-      String(
-        user.userId ||
-        user.id ||
-        context.userId ||
-        ''
-      ).trim();
-
-
-    const email =
-      String(
-        user.email ||
-        context.email ||
-        ''
-      ).trim();
-
-
-    const nip =
-      String(
-        user.nip ||
-        context.nip ||
-        ''
-      ).trim();
-
-
-    const namaUser =
-      String(
-        user.nama ||
-        user.name ||
-        context.nama ||
-        ''
-      ).trim();
-
-
-    const role =
-      String(
-        user.role ||
-        context.role ||
-        ''
-      ).trim();
-
-
+    const user = context.user || {};
+    const userId = String(
+      user.userId || user.id || context.userId || "",
+    ).trim();
+    const email = String(user.email || context.email || "").trim();
+    const nip = String(user.nip || context.nip || "").trim();
+    const namaUser = String(
+      user.nama || user.name || context.nama || "",
+    ).trim();
+    const role = String(user.role || context.role || "").trim();
     if (!userId) {
-
-      throw new Error(
-        'USER_ID tidak ditemukan.'
-      );
-
+      throw new Error("USER_ID tidak ditemukan.");
     }
-
-
     if (!email) {
-
-      throw new Error(
-        'EMAIL pengguna tidak ditemukan.'
-      );
-
+      throw new Error("EMAIL pengguna tidak ditemukan.");
     }
-
-
     /* ======================================================
        DATABASE
        ====================================================== */
-
-    log.step =
-      'MEMBUKA DATABASE';
-
-
-    const ss =
-      SpreadsheetApp.openById(
-        spreadsheetId
-      );
-
-
-    const sheet =
-      ss.getSheetByName(
-        'TRX_PRESENSI'
-      );
-
-
+    log.step = "MEMBUKA DATABASE";
+    const ss = SpreadsheetApp.openById(spreadsheetId);
+    const sheet = ss.getSheetByName("TRX_PRESENSI");
     if (!sheet) {
-
-      throw new Error(
-        'Sheet TRX_PRESENSI tidak ditemukan.'
-      );
-
+      throw new Error("Sheet TRX_PRESENSI tidak ditemukan.");
     }
-
-
     /* ======================================================
        HEADER
        ====================================================== */
-
-    const lastColumn =
-      sheet.getLastColumn();
-
-
-    const headers =
-      sheet
-        .getRange(
-          1,
-          1,
-          1,
-          lastColumn
-        )
-        .getDisplayValues()[0]
-        .map(
-          h =>
-            String(
-              h || ''
-            ).trim()
-        );
-
-
+    const lastColumn = sheet.getLastColumn();
+    const headers = sheet
+      .getRange(1, 1, 1, lastColumn)
+      .getDisplayValues()[0]
+      .map((h) => String(h || "").trim());
     const col = {};
-
-
-    headers.forEach(
-      function(header, index) {
-
-        col[
-          header.toUpperCase()
-        ] =
-          index + 1;
-
-      }
-    );
-
-
+    headers.forEach(function (header, index) {
+      col[header.toUpperCase()] = index + 1;
+    });
     const required = [
-
-      'TRANSACTION_ID',
-      'TIMESTAMP',
-      'NPSN',
-      'USER_ID',
-      'EMAIL',
-      'NIP',
-      'NAMA_USER',
-      'ROLE',
-      'TANGGAL',
-      'KELAS',
-      'NISN',
-      'NAMA_SISWA',
-      'STATUS',
-      'KETERANGAN'
-
+      "TRANSACTION_ID",
+      "TIMESTAMP",
+      "NPSN",
+      "USER_ID",
+      "EMAIL",
+      "NIP",
+      "NAMA_USER",
+      "ROLE",
+      "TANGGAL",
+      "KELAS",
+      "NISN",
+      "NAMA_SISWA",
+      "STATUS",
+      "KETERANGAN",
     ];
-
-
-    const missing =
-      required.filter(
-        h => !col[h]
-      );
-
-
-    if (
-      missing.length
-    ) {
-
+    const missing = required.filter((h) => !col[h]);
+    if (missing.length) {
       throw new Error(
-        'Header TRX_PRESENSI belum lengkap: ' +
-        missing.join(', ')
+        "Header TRX_PRESENSI belum lengkap: " + missing.join(", "),
       );
-
     }
-
-
     /* ======================================================
        DATA LAMA
        ====================================================== */
-
-    const lastRow =
-      sheet.getLastRow();
-
-
+    const lastRow = sheet.getLastRow();
     const existing =
       lastRow >= 2
-
-        ? sheet
-            .getRange(
-              2,
-              1,
-              lastRow - 1,
-              headers.length
-            )
-            .getDisplayValues()
-
+        ? sheet.getRange(2, 1, lastRow - 1, headers.length).getDisplayValues()
         : [];
-
-
     /* ======================================================
        INDEX DATA
        ======================================================
-
        KUNCI:
-
        TANGGAL
        +
        KELAS
        +
        NISN
        ====================================================== */
-
-    const existingMap =
-      new Map();
-
-
-    existing.forEach(
-      function(row, index) {
-
-        const oldTanggal =
-          String(
-            row[
-              col.TANGGAL - 1
-            ] ||
-            ''
-          ).trim();
-
-
-        const oldKelas =
-          String(
-            row[
-              col.KELAS - 1
-            ] ||
-            ''
-          ).trim();
-
-
-        const oldNisn =
-          String(
-            row[
-              col.NISN - 1
-            ] ||
-            ''
-          ).trim();
-
-
-        if (
-          oldTanggal &&
-          oldKelas &&
-          oldNisn
-        ) {
-
-          const key =
-            [
-              oldTanggal,
-              oldKelas,
-              oldNisn
-            ].join('|');
-
-
-          existingMap.set(
-            key,
-            index + 2
-          );
-
-        }
-
+    const existingMap = new Map();
+    existing.forEach(function (row, index) {
+      const oldTanggal = String(row[col.TANGGAL - 1] || "").trim();
+      const oldKelas = String(row[col.KELAS - 1] || "").trim();
+      const oldNisn = String(row[col.NISN - 1] || "").trim();
+      if (oldTanggal && oldKelas && oldNisn) {
+        const key = [oldTanggal, oldKelas, oldNisn].join("|");
+        existingMap.set(key, index + 2);
       }
-    );
-
-
+    });
     /* ======================================================
        PROSES
        ====================================================== */
-
-    const now =
-      new Date();
-
-
+    const now = new Date();
     const transactionId =
-      'PP-' +
+      "PP-" +
       Utilities.formatDate(
         now,
         Session.getScriptTimeZone(),
-        'yyyyMMdd-HHmmss'
+        "yyyyMMdd-HHmmss",
       ) +
-      '-' +
-      Utilities
-        .getUuid()
-        .substring(
-          0,
-          8
-        )
+      "-" +
+      Utilities.getUuid().substring(0, 8).toUpperCase();
+    data.forEach(function (item) {
+      const nisn = String(item.nisn || "").trim();
+      const namaSiswa = String(item.namaSiswa || item.nama || "").trim();
+      const status = String(item.status || "HADIR")
+        .trim()
         .toUpperCase();
-
-
-    data.forEach(
-      function(item) {
-
-        const nisn =
-          String(
-            item.nisn ||
-            ''
-          ).trim();
-
-
-        const namaSiswa =
-          String(
-            item.namaSiswa ||
-            item.nama ||
-            ''
-          ).trim();
-
-
-        const status =
-          String(
-            item.status ||
-            'HADIR'
-          )
-          .trim()
-          .toUpperCase();
-
-
-        const keterangan =
-          String(
-            item.keterangan ||
-            ''
-          ).trim();
-
-
-        if (!nisn) {
-
-          return;
-
-        }
-
-
-        if (!namaSiswa) {
-
-          return;
-
-        }
-
-
-        const allowed = [
-          'HADIR',
-          'IZIN',
-          'SAKIT',
-          'ALPA',
-          'LAINNYA'
-        ];
-
-
-        if (
-          !allowed.includes(
-            status
-          )
-        ) {
-
-          throw new Error(
-            'Status tidak valid untuk ' +
-            namaSiswa +
-            ': ' +
-            status
-          );
-
-        }
-
-
-        log.data.jumlahValid++;
-
-
-        /* ==================================================
+      const keterangan = String(item.keterangan || "").trim();
+      if (!nisn) {
+        return;
+      }
+      if (!namaSiswa) {
+        return;
+      }
+      const allowed = ["HADIR", "IZIN", "SAKIT", "ALPA", "LAINNYA"];
+      if (!allowed.includes(status)) {
+        throw new Error(
+          "Status tidak valid untuk " + namaSiswa + ": " + status,
+        );
+      }
+      log.data.jumlahValid++;
+      /* ==================================================
            KUNCI UNIQUE
            ================================================== */
-
-        const key =
-          [
-            tanggal,
-            kelas,
-            nisn
-          ].join('|');
-
-
-        const targetRow =
-          existingMap.get(
-            key
-          );
-
-
-        /* ==================================================
+      const key = [tanggal, kelas, nisn].join("|");
+      const targetRow = existingMap.get(key);
+      /* ==================================================
            ROW
            ================================================== */
-
-        const row =
-          new Array(
-            headers.length
-          ).fill('');
-
-
-        row[
-          col.TRANSACTION_ID - 1
-        ] =
-          transactionId;
-
-
-        row[
-          col.TIMESTAMP - 1
-        ] =
-          now;
-
-
-        row[
-          col.NPSN - 1
-        ] =
-          npsn;
-
-
-        row[
-          col.USER_ID - 1
-        ] =
-          userId;
-
-
-        row[
-          col.EMAIL - 1
-        ] =
-          email;
-
-
-        row[
-          col.NIP - 1
-        ] =
-          nip;
-
-
-        row[
-          col.NAMA_USER - 1
-        ] =
-          namaUser;
-
-
-        row[
-          col.ROLE - 1
-        ] =
-          role;
-
-
-        row[
-          col.TANGGAL - 1
-        ] =
-          tanggal;
-
-
-        row[
-          col.KELAS - 1
-        ] =
-          kelas;
-
-
-        row[
-          col.NISN - 1
-        ] =
-          nisn;
-
-
-        row[
-          col.NAMA_SISWA - 1
-        ] =
-          namaSiswa;
-
-
-        row[
-          col.STATUS - 1
-        ] =
-          status;
-
-
-        row[
-          col.KETERANGAN - 1
-        ] =
-          keterangan;
-
-
-        /* ==================================================
+      const row = new Array(headers.length).fill("");
+      row[col.TRANSACTION_ID - 1] = transactionId;
+      row[col.TIMESTAMP - 1] = now;
+      row[col.NPSN - 1] = npsn;
+      row[col.USER_ID - 1] = userId;
+      row[col.EMAIL - 1] = email;
+      row[col.NIP - 1] = nip;
+      row[col.NAMA_USER - 1] = namaUser;
+      row[col.ROLE - 1] = role;
+      row[col.TANGGAL - 1] = tanggal;
+      row[col.KELAS - 1] = kelas;
+      row[col.NISN - 1] = nisn;
+      row[col.NAMA_SISWA - 1] = namaSiswa;
+      row[col.STATUS - 1] = status;
+      row[col.KETERANGAN - 1] = keterangan;
+      /* ==================================================
            UPDATE
            ================================================== */
-
-        if (
-          targetRow
-        ) {
-
-          sheet
-            .getRange(
-              targetRow,
-              1,
-              1,
-              headers.length
-            )
-            .setValues([
-              row
-            ]);
-
-
-          log.data.updated++;
-
-
-          console.log(
-            '[PRESENSI] UPDATE:',
-            tanggal,
-            kelas,
-            nisn
-          );
-
-        }
-
-
-        /* ==================================================
+      if (targetRow) {
+        sheet.getRange(targetRow, 1, 1, headers.length).setValues([row]);
+        log.data.updated++;
+        console.log("[PRESENSI] UPDATE:", tanggal, kelas, nisn);
+      } else {
+      /* ==================================================
            INSERT
            ================================================== */
-
-        else {
-
-          const newRow =
-            sheet.getLastRow() + 1;
-
-
-          sheet
-            .getRange(
-              newRow,
-              1,
-              1,
-              headers.length
-            )
-            .setValues([
-              row
-            ]);
-
-
-          existingMap.set(
-            key,
-            newRow
-          );
-
-
-          log.data.inserted++;
-
-
-          console.log(
-            '[PRESENSI] INSERT:',
-            tanggal,
-            kelas,
-            nisn
-          );
-
-        }
-
+        const newRow = sheet.getLastRow() + 1;
+        sheet.getRange(newRow, 1, 1, headers.length).setValues([row]);
+        existingMap.set(key, newRow);
+        log.data.inserted++;
+        console.log("[PRESENSI] INSERT:", tanggal, kelas, nisn);
       }
-    );
-
-
+    });
     /* ======================================================
        LOG
        ====================================================== */
-
     const logTransactionId =
-      'PPB-' +
+      "PPB-" +
       Utilities.formatDate(
         now,
         Session.getScriptTimeZone(),
-        'yyyyMMdd-HHmmss'
+        "yyyyMMdd-HHmmss",
       ) +
-      '-' +
-      Utilities
-        .getUuid()
-        .substring(
-          0,
-          8
-        )
-        .toUpperCase();
-
-
-    const logResult =
-      writePresensiLog_(
-        spreadsheetId,
-        {
-
-          npsn:
-            npsn,
-
-          userId:
-            userId,
-
-          email:
-            email,
-
-          nip:
-            nip,
-
-          namaUser:
-            namaUser,
-
-          role:
-            role,
-
-          action:
-            'SIMPAN',
-
-          module:
-            'PRESENSI_PERKELAS',
-
-          description:
-            'Presensi kelas ' +
-            kelas +
-            ' tanggal ' +
-            tanggal +
-            '. Jumlah siswa: ' +
-            log.data.jumlahValid +
-            ', INSERT: ' +
-            log.data.inserted +
-            ', UPDATE: ' +
-            log.data.updated,
-
-          transactionId:
-            logTransactionId
-
-        }
-      );
-
-
+      "-" +
+      Utilities.getUuid().substring(0, 8).toUpperCase();
+    const logResult = writePresensiLog_(spreadsheetId, {
+      npsn: npsn,
+      userId: userId,
+      email: email,
+      nip: nip,
+      namaUser: namaUser,
+      role: role,
+      action: "SIMPAN",
+      module: "PRESENSI_PERKELAS",
+      description:
+        "Presensi kelas " +
+        kelas +
+        " tanggal " +
+        tanggal +
+        ". Jumlah siswa: " +
+        log.data.jumlahValid +
+        ", INSERT: " +
+        log.data.inserted +
+        ", UPDATE: " +
+        log.data.updated,
+      transactionId: logTransactionId,
+    });
     /* ======================================================
        SELESAI
        ====================================================== */
-
-    log.success =
-      true;
-
-
-    log.finishedAt =
-      new Date().toISOString();
-
-
+    log.success = true;
+    log.finishedAt = new Date().toISOString();
     return {
-
-      success:
-        true,
-
-      message:
-        'Presensi berhasil disimpan.',
-
-      sekolah:
-        namaSekolah,
-
-      npsn:
-        npsn,
-
-      userId:
-        userId,
-
-      email:
-        email,
-
-      tanggal:
-        tanggal,
-
-      kelas:
-        kelas,
-
-      inserted:
-        log.data.inserted,
-
-      updated:
-        log.data.updated,
-
-      transactionId:
-        transactionId,
-
-      logTransactionId:
-        logTransactionId,
-
-      logDatabase:
-        logResult,
-
-      log:
-        log
-
+      success: true,
+      message: "Presensi berhasil disimpan.",
+      sekolah: namaSekolah,
+      npsn: npsn,
+      userId: userId,
+      email: email,
+      tanggal: tanggal,
+      kelas: kelas,
+      inserted: log.data.inserted,
+      updated: log.data.updated,
+      transactionId: transactionId,
+      logTransactionId: logTransactionId,
+      logDatabase: logResult,
+      log: log,
     };
-
-  }
-  catch (error) {
-
-    log.success =
-      false;
-
-    log.error =
-      error.message;
-
-    log.finishedAt =
-      new Date().toISOString();
-
-
-    console.error(
-      '[PRESENSI] ERROR:',
-      JSON.stringify(
-        log,
-        null,
-        2
-      )
-    );
-
-
+  } catch (error) {
+    log.success = false;
+    log.error = error.message;
+    log.finishedAt = new Date().toISOString();
+    console.error("[PRESENSI] ERROR:", JSON.stringify(log, null, 2));
     return {
-
-      success:
-        false,
-
-      error:
-        error.message,
-
-      log:
-        log
-
+      success: false,
+      error: error.message,
+      log: log,
     };
-
   }
-
 }
 /* =========================================================
    HELPER HEADER
