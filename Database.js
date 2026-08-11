@@ -153,25 +153,47 @@ function ensureLogSheet_() {
   ]);
   return sh;
 }
+
+
 function setupDatabaseSekolahSaya() {
+
   const context =
     getCurrentUserContext();
+
   requirePermission(
     'MANAGE_KELAS'
   );
+
+  if (
+    !context ||
+    !context.school ||
+    !context.school.spreadsheetId
+  ) {
+
+    throw new Error(
+      'School Context tidak memiliki SPREADSHEET_ID.'
+    );
+
+  }
+
   const ss =
     SpreadsheetApp.openById(
       context.school.spreadsheetId
     );
+
+
   // =====================================================
-  // MASTER DATA
+  // MASTER
   // =====================================================
+
   const masterSheets = {
+
     CONFIG: [
       'KEY',
       'VALUE',
       'KETERANGAN'
     ],
+
     GURU: [
       'NIP',
       'NAMA',
@@ -179,6 +201,7 @@ function setupDatabaseSekolahSaya() {
       'NO_HP',
       'STATUS'
     ],
+
     SISWA: [
       'NISN',
       'NIS',
@@ -187,6 +210,7 @@ function setupDatabaseSekolahSaya() {
       'KELAS',
       'STATUS'
     ],
+
     KARYAWAN: [
       'NIP',
       'NAMA',
@@ -195,6 +219,7 @@ function setupDatabaseSekolahSaya() {
       'NO_HP',
       'STATUS'
     ],
+
     KELAS: [
       'KELAS',
       'TINGKAT',
@@ -202,11 +227,16 @@ function setupDatabaseSekolahSaya() {
       'WALI_KELAS',
       'STATUS'
     ]
+
   };
+
+
   // =====================================================
-  // TRANSACTION
+  // TRANSAKSI
   // =====================================================
+
   const transactionSheets = {
+
     TRX_PRESENSI: [
       'TANGGAL',
       'KELAS',
@@ -215,12 +245,14 @@ function setupDatabaseSekolahSaya() {
       'STATUS',
       'KETERANGAN'
     ],
+
     TRX_PARKIR: [
       'TANGGAL',
       'KENDALA',
       'SOLUSI',
       'UPLOAD_FOTO_PARKIR'
     ],
+
     TRX_PRESTASI: [
       'TANGGAL',
       'NAMA_SISWA',
@@ -228,6 +260,7 @@ function setupDatabaseSekolahSaya() {
       'TINGKAT',
       'KETERANGAN'
     ],
+
     TRX_AGENDA_GURU: [
       'TANGGAL',
       'SESI',
@@ -240,6 +273,7 @@ function setupDatabaseSekolahSaya() {
       'REKAP_MURID_TIDAK_IKUT',
       'BUKTI_FISIK'
     ],
+
     TRX_SBI: [
       'INDIKATOR',
       'SUBINDIKATOR',
@@ -249,18 +283,21 @@ function setupDatabaseSekolahSaya() {
       'KARAKTER',
       'BUKTI_FISIK'
     ],
+
     TRX_KEBERSIHAN: [
       'TANGGAL',
       'KENDALA',
       'SOLUSI',
       'BUKTI_FISIK'
     ],
+
     TRX_KEAMANAN: [
       'TANGGAL',
       'KENDALA',
       'SOLUSI',
       'BUKTI_FISIK'
     ],
+
     TRX_KERJA: [
       'TANGGAL_PELAKSANAAN',
       'SESI',
@@ -272,11 +309,16 @@ function setupDatabaseSekolahSaya() {
       'REFLEKSI',
       'BUKTI_FISIK'
     ]
+
   };
+
+
   // =====================================================
-  // SYSTEM HEADER UNTUK TRANSACTION
+  // HEADER SISTEM TRANSAKSI
   // =====================================================
+
   const transactionSystemHeaders = [
+
     'TRANSACTION_ID',
     'TIMESTAMP',
     'NPSN',
@@ -285,73 +327,136 @@ function setupDatabaseSekolahSaya() {
     'NIP',
     'NAMA_USER',
     'ROLE'
+
   ];
-  const createdMaster = [];
-  const createdTransaction = [];
+
+
+  const createdSheets = [];
+  const existingSheets = [];
+  const addedHeaders = [];
+
+
   // =====================================================
-  // 1. BUAT MASTER SHEET
+  // HELPER LOKAL
   // =====================================================
-  Object.keys(masterSheets)
-    .forEach(function(sheetName) {
-      let sheet =
-        ss.getSheetByName(
+
+  function ensureSheet_(
+    sheetName,
+    headers,
+    category
+  ) {
+
+    let sheet =
+      ss.getSheetByName(
+        sheetName
+      );
+
+
+    // ---------------------------------------------------
+    // BUAT JIKA BELUM ADA
+    // ---------------------------------------------------
+
+    if (!sheet) {
+
+      sheet =
+        ss.insertSheet(
           sheetName
         );
-      if (!sheet) {
-        sheet =
-          ss.insertSheet(
-            sheetName
-          );
-        createdMaster.push(
-          sheetName
-        );
-      }
-      setupHeaders_(
+
+      createdSheets.push({
+        name: sheetName,
+        category: category
+      });
+
+    } else {
+
+      existingSheets.push({
+        name: sheetName,
+        category: category
+      });
+
+    }
+
+
+    // ---------------------------------------------------
+    // HEADER NON-DESTRUCTIVE
+    // ---------------------------------------------------
+
+    const result =
+      ensureHeadersNonDestructive_(
         sheet,
-        masterSheets[sheetName]
+        headers
       );
-    });
-  // =====================================================
-  // 2. BUAT TRANSACTION SHEET
-  // =====================================================
-  Object.keys(transactionSheets)
-    .forEach(function(sheetName) {
-      let sheet =
-        ss.getSheetByName(
-          sheetName
-        );
-      if (!sheet) {
-        sheet =
-          ss.insertSheet(
-            sheetName
-          );
-        createdTransaction.push(
-          sheetName
-        );
-      }
-      setupHeaders_(
-        sheet,
-        transactionSystemHeaders
-          .concat(
-            transactionSheets[sheetName]
-          )
-      );
-    });
-  // =====================================================
-  // 3. BUAT LOG
-  // =====================================================
-  let log =
-    ss.getSheetByName(
-      'LOG'
-    );
-  if (!log) {
-    log =
-      ss.insertSheet(
-        'LOG'
-      );
+
+
+    if (
+      result.added &&
+      result.added.length > 0
+    ) {
+
+      addedHeaders.push({
+
+        sheet:
+          sheetName,
+
+        category:
+          category,
+
+        headers:
+          result.added
+
+      });
+
+    }
+
   }
-  setupHeaders_(
-    log,
+
+
+  // =====================================================
+  // 1. MASTER
+  // =====================================================
+
+  Object.keys(
+    masterSheets
+  ).forEach(function(sheetName) {
+
+    ensureSheet_(
+      sheetName,
+      masterSheets[sheetName],
+      'MASTER'
+    );
+
+  });
+
+
+  // =====================================================
+  // 2. TRANSAKSI
+  // =====================================================
+
+  Object.keys(
+    transactionSheets
+  ).forEach(function(sheetName) {
+
+    ensureSheet_(
+      sheetName,
+
+      transactionSystemHeaders.concat(
+        transactionSheets[sheetName]
+      ),
+
+      'TRANSACTION'
+    );
+
+  });
+
+
+  // =====================================================
+  // 3. LOG
+  // =====================================================
+
+  ensureSheet_(
+    'LOG',
+
     [
       'TIMESTAMP',
       'NPSN',
@@ -364,123 +469,343 @@ function setupDatabaseSekolahSaya() {
       'MODULE',
       'DESCRIPTION',
       'TRANSACTION_ID'
-    ]
+    ],
+
+    'SYSTEM'
   );
+
+
   // =====================================================
-  // 4. CONFIG DEFAULT
+  // 4. CONFIG
   // =====================================================
+
   const config =
     ss.getSheetByName(
       'CONFIG'
     );
-  const configValues = [
-    [
-      'NPSN',
+
+
+  if (!config) {
+
+    throw new Error(
+      'CONFIG gagal dibuat.'
+    );
+
+  }
+
+
+  // =====================================================
+  // CONFIG:
+  // JANGAN MENIMPA DATA LAMA
+  // =====================================================
+
+  const configKeys = {
+
+    NPSN:
       context.npsn,
-      'NPSN sekolah'
-    ],
-    [
-      'NAMA_SEKOLAH',
+
+    NAMA_SEKOLAH:
       context.school.namaSekolah,
-      'Nama sekolah'
-    ],
-    [
-      'SPREADSHEET_ID',
+
+    SPREADSHEET_ID:
       context.school.spreadsheetId,
-      'ID Spreadsheet sekolah'
-    ],
-    [
-      'DRIVE_FOLDER_ID',
+
+    DRIVE_FOLDER_ID:
       context.school.driveFolderId,
-      'ID folder Drive sekolah'
-    ],
-    [
-      'STATUS',
+
+    STATUS:
       'ACTIVE',
-      'Status sekolah'
-    ],
-    [
-      'VERSI_DATABASE',
-      '1.0',
-      'Versi struktur database'
-    ]
-  ];
-  /*
-   * Hanya isi CONFIG jika masih kosong.
-   * Tidak menimpa konfigurasi yang sudah ada.
-   */
+
+    VERSI_DATABASE:
+      '1.0'
+
+  };
+
+
+  const configLastRow =
+    config.getLastRow();
+
+
+  const existingConfig = {};
+
+
   if (
-    config.getLastRow() <= 1
+    configLastRow >= 2
   ) {
+
+    const values =
+      config
+        .getRange(
+          2,
+          1,
+          configLastRow - 1,
+          3
+        )
+        .getValues();
+
+
+    values.forEach(function(row) {
+
+      const key =
+        String(
+          row[0] || ''
+        )
+        .trim()
+        .toUpperCase();
+
+
+      if (key) {
+
+        existingConfig[key] = {
+          row: row,
+          value: row[1]
+        };
+
+      }
+
+    });
+
+  }
+
+
+  // Tambahkan CONFIG yang belum ada
+  const configToAdd = [];
+
+
+  Object.keys(
+    configKeys
+  ).forEach(function(key) {
+
+    if (
+      !existingConfig[key]
+    ) {
+
+      configToAdd.push([
+
+        key,
+
+        configKeys[key],
+
+        getConfigDescription_(
+          key
+        )
+
+      ]);
+
+    }
+
+  });
+
+
+  if (
+    configToAdd.length > 0
+  ) {
+
     config
       .getRange(
-        2,
+        config.getLastRow() + 1,
         1,
-        configValues.length,
+        configToAdd.length,
         3
       )
       .setValues(
-        configValues
+        configToAdd
       );
+
   }
+
+
   // =====================================================
-  // 5. RAPIAKAN HEADER
+  // HASIL
   // =====================================================
-  Object.keys(masterSheets)
-    .concat(
-      Object.keys(transactionSheets)
-    )
-    .concat([
-      'LOG'
-    ])
-    .forEach(function(sheetName) {
-      const sheet =
-        ss.getSheetByName(
-          sheetName
-        );
-      if (!sheet) return;
-      sheet
-        .setFrozenRows(
-          1
-        );
-      const lastColumn =
-        sheet.getLastColumn();
-      if (
-        lastColumn > 0
-      ) {
-        sheet
-          .getRange(
-            1,
-            1,
-            1,
-            lastColumn
-          )
-          .setFontWeight(
-            'bold'
-          );
-      }
-    });
-  // =====================================================
-  // 6. HASIL
-  // =====================================================
+
+  const hasChanges =
+    createdSheets.length > 0 ||
+    addedHeaders.length > 0 ||
+    configToAdd.length > 0;
+
+
   return {
-    success:
-      true,
+
+    success: true,
+
+    status:
+      hasChanges
+        ? 'COMPLETED_MISSING'
+        : 'ALREADY_COMPLETE',
+
     email:
       context.email,
+
     npsn:
       context.npsn,
+
     sekolah:
       context.school.namaSekolah,
+
     spreadsheet:
       ss.getName(),
+
     spreadsheetId:
       ss.getId(),
-    createdMaster:
-      createdMaster,
-    createdTransaction:
-      createdTransaction,
+
+    createdSheets:
+      createdSheets,
+
+    existingSheets:
+      existingSheets,
+
+    addedHeaders:
+      addedHeaders,
+
+    addedConfig:
+      configToAdd,
+
     message:
-      'Database Sekolah berhasil dibuat lengkap.'
+      hasChanges
+        ? 'Database sekolah berhasil dilengkapi tanpa menghapus data yang sudah ada.'
+        : 'Database sekolah sudah lengkap. Tidak ada perubahan.'
+
   };
+
+}
+
+function getDatabaseSetupMessage_(
+  createdSheets,
+  addedHeaders
+) {
+
+  if (
+    createdSheets.length === 0 &&
+    addedHeaders.length === 0
+  ) {
+
+    return (
+      'Database sudah lengkap. ' +
+      'Tidak ada sheet atau header yang diubah.'
+    );
+
+  }
+
+
+  return (
+    'Setup database selesai. ' +
+
+    createdSheets.length +
+    ' sheet dibuat dan ' +
+
+    addedHeaders.length +
+    ' sheet memperoleh tambahan header. ' +
+
+    'Data yang sudah ada dipertahankan.'
+  );
+
+}
+
+function ensureHeadersNonDestructive_(sheet, requiredHeaders) {
+
+  if (!sheet) {
+    throw new Error('Sheet tidak ditemukan.');
+  }
+
+  const headers = requiredHeaders
+    .map(function(h) {
+      return String(h || '')
+        .trim()
+        .toUpperCase();
+    })
+    .filter(function(h) {
+      return h !== '';
+    });
+
+  const lastColumn = sheet.getLastColumn();
+
+  // Sheet benar-benar kosong
+  if (lastColumn === 0) {
+
+    if (headers.length > 0) {
+      sheet
+        .getRange(1, 1, 1, headers.length)
+        .setValues([headers]);
+    }
+
+    sheet.setFrozenRows(1);
+
+    return {
+      existing: [],
+      added: headers.slice()
+    };
+  }
+
+  // Header yang sudah ada
+  const existingHeaders = sheet
+    .getRange(1, 1, 1, lastColumn)
+    .getValues()[0]
+    .map(function(h) {
+      return String(h || '')
+        .trim()
+        .toUpperCase();
+    });
+
+  const added = [];
+
+  headers.forEach(function(header) {
+
+    if (!existingHeaders.includes(header)) {
+
+      const newColumn =
+        sheet.getLastColumn() + 1;
+
+      sheet
+        .getRange(1, newColumn)
+        .setValue(header);
+
+      added.push(header);
+    }
+
+  });
+
+  sheet.setFrozenRows(1);
+
+  sheet
+    .getRange(
+      1,
+      1,
+      1,
+      sheet.getLastColumn()
+    )
+    .setFontWeight('bold');
+
+  return {
+    existing: existingHeaders,
+    added: added
+  };
+}
+
+function getConfigDescription_(key) {
+
+  const descriptions = {
+
+    NPSN:
+      'NPSN sekolah',
+
+    NAMA_SEKOLAH:
+      'Nama sekolah',
+
+    SPREADSHEET_ID:
+      'ID Spreadsheet sekolah',
+
+    DRIVE_FOLDER_ID:
+      'ID folder Drive sekolah',
+
+    STATUS:
+      'Status sekolah',
+
+    VERSI_DATABASE:
+      'Versi struktur database'
+
+  };
+
+  return descriptions[key] || '';
+
 }
