@@ -4,8 +4,6 @@
  * PRESENSI PRINT ENGINE
  * ============================================================
  */
-
-
 /**
  * Ambil daftar kelas yang memiliki
  * data presensi pada rentang tanggal.
@@ -14,231 +12,156 @@ function getKelasUntukCetakPresensi(
   tanggalAwal,
   tanggalAkhir
 ) {
-
   tanggalAwal =
     String(
       tanggalAwal || ''
     ).trim();
-
   tanggalAkhir =
     String(
       tanggalAkhir || ''
     ).trim();
-
-
   if (!tanggalAwal) {
     throw new Error(
       'Tanggal awal belum dipilih.'
     );
   }
-
-
   if (!tanggalAkhir) {
     throw new Error(
       'Tanggal akhir belum dipilih.'
     );
   }
-
-
   if (
     tanggalAwal >
     tanggalAkhir
   ) {
-
     throw new Error(
       'Tanggal awal tidak boleh lebih besar dari tanggal akhir.'
     );
-
   }
-
-
   const context =
     getCurrentUserContext();
-
-
   const school =
     context.school ||
     {};
-
-
   const spreadsheetId =
     String(
       school.spreadsheetId ||
       context.spreadsheetId ||
       ''
     ).trim();
-
-
   if (!spreadsheetId) {
-
     throw new Error(
       'Spreadsheet sekolah aktif tidak ditemukan.'
     );
-
   }
-
-
   const ss =
     SpreadsheetApp.openById(
       spreadsheetId
     );
-
-
   const sheet =
     ss.getSheetByName(
       'TRX_PRESENSI'
     );
-
-
   if (!sheet) {
-
     throw new Error(
       'TRX_PRESENSI tidak ditemukan.'
     );
-
   }
-
-
   const values =
     sheet
       .getDataRange()
       .getDisplayValues();
-
-
   if (
     values.length < 2
   ) {
-
     return [];
-
   }
-
-
   const headers =
     values[0];
-
-
   const colTanggal =
     headers.indexOf(
       'TANGGAL'
     );
-
-
   const colKelas =
     headers.indexOf(
       'KELAS'
     );
-
-
   if (
     colTanggal < 0 ||
     colKelas < 0
   ) {
-
     throw new Error(
       'Kolom TANGGAL atau KELAS tidak ditemukan.'
     );
-
   }
-
-
   const kelasSet =
     new Set();
-
-
   values
     .slice(1)
     .forEach(
       function(row) {
-
         const tanggal =
           String(
             row[colTanggal] ||
             ''
           ).trim();
-
-
         const kelas =
           String(
             row[colKelas] ||
             ''
           ).trim();
-
-
         if (
           tanggal >= tanggalAwal &&
           tanggal <= tanggalAkhir &&
           kelas
         ) {
-
           kelasSet.add(
             kelas
           );
-
         }
-
       }
     );
-
-
   return Array.from(
     kelasSet
   ).sort();
-
 }
-
-
 /**
  * ============================================================
  * CETAK PRESENSI PER KELAS
  * ============================================================
  */
-
 function cetakPresensiPerkelas(
   tanggalAwal,
   tanggalAkhir,
   kelas
 ) {
-
   tanggalAwal =
     String(
       tanggalAwal || ''
     ).trim();
-
-
   tanggalAkhir =
     String(
       tanggalAkhir || ''
     ).trim();
-
-
   kelas =
     String(
       kelas || ''
     ).trim();
-
-
   if (!tanggalAwal) {
     throw new Error(
       'Tanggal awal belum dipilih.'
     );
   }
-
-
   if (!tanggalAkhir) {
     throw new Error(
       'Tanggal akhir belum dipilih.'
     );
   }
-
-
   if (!kelas) {
     throw new Error(
       'Kelas belum dipilih.'
     );
   }
-
-
   if (
     tanggalAwal >
     tanggalAkhir
@@ -247,37 +170,26 @@ function cetakPresensiPerkelas(
       'Tanggal awal tidak boleh lebih besar dari tanggal akhir.'
     );
   }
-
-
   /* ======================================================
      SCHOOL CONTEXT
      ====================================================== */
-
   const context =
     getCurrentUserContext();
-
-
   const school =
     context.school ||
     {};
-
-
   const spreadsheetId =
     String(
       school.spreadsheetId ||
       context.spreadsheetId ||
       ''
     ).trim();
-
-
   const npsn =
     String(
       school.npsn ||
       context.npsn ||
       ''
     ).trim();
-
-
   const namaSekolah =
     String(
       school.namaSekolah ||
@@ -285,44 +197,31 @@ function cetakPresensiPerkelas(
       context.sekolah ||
       ''
     ).trim();
-
-
   if (!spreadsheetId) {
     throw new Error(
       'Spreadsheet sekolah aktif tidak ditemukan.'
     );
   }
-
-
   /* ======================================================
      DATABASE
      ====================================================== */
-
   const ss =
     SpreadsheetApp.openById(
       spreadsheetId
     );
-
-
   const sheet =
     ss.getSheetByName(
       'TRX_PRESENSI'
     );
-
-
   if (!sheet) {
     throw new Error(
       'TRX_PRESENSI tidak ditemukan.'
     );
   }
-
-
   const values =
     sheet
       .getDataRange()
       .getDisplayValues();
-
-
   if (
     values.length < 2
   ) {
@@ -330,47 +229,34 @@ function cetakPresensiPerkelas(
       'Belum ada data presensi.'
     );
   }
-
-
   const headers =
     values[0];
-
-
   const col = {
-
     tanggal:
       headers.indexOf(
         'TANGGAL'
       ),
-
     kelas:
       headers.indexOf(
         'KELAS'
       ),
-
     nisn:
       headers.indexOf(
         'NISN'
       ),
-
     nama:
       headers.indexOf(
         'NAMA_SISWA'
       ),
-
     status:
       headers.indexOf(
         'STATUS'
       ),
-
     keterangan:
       headers.indexOf(
         'KETERANGAN'
       )
-
   };
-
-
   if (
     col.tanggal < 0 ||
     col.kelas < 0 ||
@@ -378,74 +264,50 @@ function cetakPresensiPerkelas(
     col.nama < 0 ||
     col.status < 0
   ) {
-
     throw new Error(
       'Struktur TRX_PRESENSI tidak lengkap.'
     );
-
   }
-
-
   /* ======================================================
      REKAP SISWA
      ====================================================== */
-
   const siswaMap =
     new Map();
-
-
   values
     .slice(1)
     .forEach(
       function(row) {
-
         const tanggal =
           String(
             row[col.tanggal] ||
             ''
           ).trim();
-
-
         const rowKelas =
           String(
             row[col.kelas] ||
             ''
           ).trim();
-
-
         if (
           tanggal < tanggalAwal ||
           tanggal > tanggalAkhir
         ) {
-
           return;
-
         }
-
-
         if (
           rowKelas !== kelas
         ) {
-
           return;
-
         }
-
-
         const nisn =
           String(
             row[col.nisn] ||
             ''
           ).trim();
-
-
         const nama =
           String(
             row[col.nama] ||
             ''
           ).trim();
-
-
         const status =
           String(
             row[col.status] ||
@@ -453,212 +315,137 @@ function cetakPresensiPerkelas(
           )
           .trim()
           .toUpperCase();
-
-
         if (!nisn) {
           return;
         }
-
-
         if (
           !siswaMap.has(
             nisn
           )
         ) {
-
           siswaMap.set(
             nisn,
             {
-
               nisn:
                 nisn,
-
               nama:
                 nama,
-
               hadir:
                 0,
-
               sakit:
                 0,
-
               izin:
                 0,
-
               alpa:
                 0,
-
               lainnya:
                 0
-
             }
           );
-
         }
-
-
         const siswa =
           siswaMap.get(
             nisn
           );
-
-
         if (
           status ===
           'HADIR'
         ) {
-
           siswa.hadir++;
-
         }
-
         else if (
           status ===
           'SAKIT'
         ) {
-
           siswa.sakit++;
-
         }
-
         else if (
           status ===
           'IZIN'
         ) {
-
           siswa.izin++;
-
         }
-
         else if (
           status ===
           'ALPA'
         ) {
-
           siswa.alpa++;
-
         }
-
         else {
-
           siswa.lainnya++;
-
         }
-
       }
     );
-
-
   const siswa =
     Array.from(
       siswaMap.values()
     );
-
-
   if (
     siswa.length === 0
   ) {
-
     throw new Error(
       'Tidak ada data presensi kelas ' +
       kelas +
       ' pada periode tersebut.'
     );
-
   }
-
-
   /* ======================================================
      TOTAL KELAS
      ====================================================== */
-
   const total = {
-
     hadir: 0,
-
     sakit: 0,
-
     izin: 0,
-
     alpa: 0,
-
     lainnya: 0
-
   };
-
-
   siswa.forEach(
     function(item) {
-
       total.hadir +=
         item.hadir;
-
       total.sakit +=
         item.sakit;
-
       total.izin +=
         item.izin;
-
       total.alpa +=
         item.alpa;
-
       total.lainnya +=
         item.lainnya;
-
     }
   );
-
-
   /* ======================================================
      KEPALA SEKOLAH
      ====================================================== */
-
   const kepalaSekolah =
     getKepalaSekolahFromMaster_(
       npsn
     );
-
-
   /* ======================================================
      TEMPLATE
      ====================================================== */
-
   const template =
     HtmlService
       .createTemplateFromFile(
         'presensiPerkelasPrintTemplate'
       );
-
-
   template.data = {
-
     namaSekolah:
       namaSekolah,
-
     npsn:
       npsn,
-
     kelas:
       kelas,
-
     tanggalAwal:
       tanggalAwal,
-
     tanggalAkhir:
       tanggalAkhir,
-
     siswa:
       siswa,
-
     total:
       total,
-
     kepalaSekolah:
       kepalaSekolah
-
   };
-
-
   const html =
     template
       .evaluate()
@@ -666,20 +453,15 @@ function cetakPresensiPerkelas(
         'Presensi ' +
         kelas
       );
-
-
   /* ======================================================
      PDF
      ====================================================== */
-
   const pdfBlob =
     html
       .getBlob()
       .getAs(
         MimeType.PDF
       );
-
-
   const uniqueId =
     Utilities
       .getUuid()
@@ -688,15 +470,11 @@ function cetakPresensiPerkelas(
         8
       )
       .toUpperCase();
-
-
   const safeKelas =
     kelas.replace(
       /[\\/:*?"<>|]/g,
       '_'
     );
-
-
   const fileName =
     'Presensi_' +
     safeKelas +
@@ -707,80 +485,57 @@ function cetakPresensiPerkelas(
     '_' +
     uniqueId +
     '.pdf';
-
-
   pdfBlob.setName(
     fileName
   );
-
-
   /* ======================================================
      FOLDER PRESENSI
      ====================================================== */
-
   const folder =
     getPresensiFolder_(
       context
     );
-
-
   const file =
     folder.createFile(
       pdfBlob
     );
-
-
   /* ======================================================
      LOG
      ====================================================== */
-
   try {
-
     const user =
       context.user ||
       {};
-
-
     writePresensiLog_(
       spreadsheetId,
       {
-
         npsp:
           npsn,
-
         npsn:
           npsn,
-
         userId:
           user.userId ||
           context.userId ||
           '',
-
         email:
           user.email ||
           context.email ||
           '',
-
         nip:
           user.nip ||
           '',
-
         namaUser:
           user.nama ||
           context.nama ||
           '',
-
         role:
           user.role ||
           context.role ||
           '',
-
         action:
           'CETAK',
-
         module:
           'PRESENSI_PERKELAS',
-
         description:
           'Cetak PDF presensi kelas ' +
           kelas +
@@ -790,65 +545,41 @@ function cetakPresensiPerkelas(
           tanggalAkhir +
           ', file: ' +
           fileName,
-
         transactionId:
           'PRINT-' +
           uniqueId
-
       }
     );
-
   }
   catch (error) {
-
     console.error(
       '[PRESENSI PRINT LOG]',
       error
     );
-
   }
-
-
   return {
-
     success:
       true,
-
     fileId:
       file.getId(),
-
     fileName:
       file.getName(),
-
     folderName:
       folder.getName(),
-
     url:
       file.getUrl(),
-
     kelas:
       kelas,
-
     tanggalAwal:
       tanggalAwal,
-
     tanggalAkhir:
       tanggalAkhir,
-
     jumlahSiswa:
       siswa.length,
-
     total:
       total
-
   };
-
 }
-
-
-
-
-
 /**
  * ============================================================
  * MENCARI / MEMBUAT FOLDER PRESENSI
@@ -860,81 +591,53 @@ function cetakPresensiPerkelas(
 function getPresensiFolder_(
   context
 ) {
-
   const school =
     context.school ||
     {};
-
-
   /*
    * Coba gunakan folder root sekolah
    * jika tersedia pada School Context.
    */
-
   const rootFolderId =
     school.driveRootFolderId ||
     school.driveFolderId ||
     context.driveRootFolderId ||
     context.driveFolderId ||
     '';
-
-
   if (rootFolderId) {
-
     const root =
       DriveApp.getFolderById(
         rootFolderId
       );
-
-
     const folders =
       root.getFoldersByName(
         'PRESENSI'
       );
-
-
     if (
       folders.hasNext()
     ) {
-
       return folders.next();
-
     }
-
-
     return root.createFolder(
       'PRESENSI'
     );
-
   }
-
-
   /*
    * Fallback.
    */
-
   const folders =
     DriveApp.getFoldersByName(
       'PRESENSI'
     );
-
-
   if (
     folders.hasNext()
   ) {
-
     return folders.next();
-
   }
-
-
   return DriveApp.createFolder(
     'PRESENSI'
   );
-
 }
-
-
 /**
  * ============================================================
  * KEPALA SEKOLAH
@@ -947,28 +650,18 @@ function getPresensiFolder_(
 function getKepalaSekolahFromMaster_(
   npsn
 ) {
-
   npsn =
     String(
       npsn || ''
     ).trim();
-
-
   if (!npsn) {
-
     return {
-
       nama:
         '',
-
       nip:
         ''
-
     };
-
   }
-
-
   /*
    * Gunakan ID Spreadsheet MASTER
    * dari konfigurasi sistem Anda.
@@ -977,68 +670,43 @@ function getKepalaSekolahFromMaster_(
    * fungsi ini bisa langsung menggunakan
    * constant tersebut.
    */
-
   const masterId =
     getMasterSpreadsheetId_();
-
-
   if (!masterId) {
-
     throw new Error(
       'Spreadsheet SIM SATRIA MASTER belum dikonfigurasi.'
     );
-
   }
-
-
   const ss =
     SpreadsheetApp.openById(
       masterId
     );
-
-
   const sheet =
     ss.getSheetByName(
       'schools'
     );
-
-
   if (!sheet) {
-
     throw new Error(
       'Sheet "schools" pada SIM SATRIA MASTER tidak ditemukan.'
     );
-
   }
-
-
   const values =
     sheet
       .getDataRange()
       .getDisplayValues();
-
-
   if (
     values.length < 2
   ) {
-
     return {
-
       nama:
         '',
-
       nip:
         ''
-
     };
-
   }
-
-
   const headers =
     values[0].map(
       function(h) {
-
         return String(
           h || ''
         )
@@ -1048,53 +716,35 @@ function getKepalaSekolahFromMaster_(
           /\s+/g,
           '_'
         );
-
       }
     );
-
-
   /*
    * Kemungkinan nama header.
    */
-
   const findColumn =
     function(
       candidates
     ) {
-
       for (
         const candidate
         of candidates
       ) {
-
         const index =
           headers.indexOf(
             candidate
           );
-
-
         if (
           index >= 0
         ) {
-
           return index;
-
         }
-
       }
-
-
       return -1;
-
     };
-
-
   const colNpsn =
     findColumn([
       'NPSN'
     ]);
-
-
   const colNama =
     findColumn([
       'NAMA_KEPALA_SEKOLAH',
@@ -1102,8 +752,6 @@ function getKepalaSekolahFromMaster_(
       'NAMA_KEPSEK',
       'KEPALA'
     ]);
-
-
   const colNip =
     findColumn([
       'NIP_KEPALA_SEKOLAH',
@@ -1111,39 +759,28 @@ function getKepalaSekolahFromMaster_(
       'NIP_KEPALA',
       'NIP'
     ]);
-
-
   if (
     colNpsn < 0
   ) {
-
     throw new Error(
       'Kolom NPSN pada sheet schools tidak ditemukan.'
     );
-
   }
-
-
   for (
     let i = 1;
     i < values.length;
     i++
   ) {
-
     const rowNpsn =
       String(
         values[i][colNpsn] ||
         ''
       ).trim();
-
-
     if (
       rowNpsn ===
       npsn
     ) {
-
       return {
-
         nama:
           colNama >= 0
             ? String(
@@ -1151,7 +788,6 @@ function getKepalaSekolahFromMaster_(
                 ''
               ).trim()
             : '',
-
         nip:
           colNip >= 0
             ? String(
@@ -1159,22 +795,13 @@ function getKepalaSekolahFromMaster_(
                 ''
               ).trim()
             : ''
-
       };
-
     }
-
   }
-
-
   return {
-
     nama:
       '',
-
     nip:
       ''
-
   };
-
 }
