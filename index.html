@@ -1,396 +1,77 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SIM SATRIA</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet">
-  <style>
-    body {
-      background: #f4fff8;
-      font-family: Arial, sans-serif;
-    }
-    .topbar {
-      background: linear-gradient(135deg, #0b3d2e, #2e7d32);
-      color: #fff;
-      padding: 18px 22px;
-    }
-    .brand {
-      font-weight: 800;
-      letter-spacing: .5px;
-    }
-    .school-card {
-      margin: 20px;
-      border: 0;
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
-    }
-    .status {
-      border-radius: 12px;
-      padding: 12px;
-      background: #fff;
-      margin-top: 10px;
-    }
-    .diagnostic {
-      margin: 20px;
-    }
-    .small-label {
-      color: #777;
-      font-size: .78rem;
-    }
-    .value {
-      font-weight: 700;
-    }
-    .spinner {
-      display: none;
-    }
-    .hidden {
-      display: none !important;
-    }
-  </style>
+  <base target="_top">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <?!= include('css'); ?>
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">SIM SATRIA</div>
-    <div id="loadingText">Menghubungkan akun...</div>
-  </div>
-  <div class="card school-card">
-    <div class="card-body">
-      <h4 id="schoolName">
-        Memuat sekolah...
-      </h4>
-      <div class="row g-3 mt-1">
-        <div class="col-md-3">
-          <div class="small-label">NPSN</div>
-          <div class="value" id="schoolNpsn">-</div>
+
+
+
+  <div class="container-fluid">
+    <div class="row">
+      <?!= include('sidebar'); ?>
+
+      <!-- CONTENT -->
+      <div class="col-md-9 col-lg-9 p-3">
+
+        <!-- HEADER UTAMA DENGAN PROFIL USER DI KANAN ATAS -->
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+          <!-- SISI KIRI: JUDUL APLIKASI -->
+          <div>
+            <div class="header-title fw-bold text-success fs-4">
+              <h4 id="schoolName">
+                    Memuat sekolah...
+                  </h4>
+            </div>
+            <div class="header-subtitle text-muted small d-none d-sm-block">
+              Sistem Informasi Manajemen SINERGIS, AKUNTABEL, TERPADU, RAMAH, INTEGRITAS, ADAPTIF
+            </div>
+
+             
+                
+
+
+
+
+          </div>
+
         </div>
-        <div class="col-md-3">
-          <div class="small-label">Pengguna</div>
-          <div class="value" id="userName">-</div>
-        </div>
-        <div class="col-md-3">
-          <div class="small-label">Role</div>
-          <div class="value" id="userRole">-</div>
-        </div>
-        <div class="col-md-3">
-          <div class="small-label">Email</div>
-          <div class="value" id="userEmail">-</div>
-        </div>
-<button
-  id="btnRefreshContext"
-  class="btn btn-outline-danger"
-  onclick="refreshSchoolContext()">
-  REFRESH SCHOOL CONTEXT
-</button>
-        <button
-  id="btnSetupDatabase"
-  class="btn btn-primary"
-  onclick="setupDatabaseSekolahSaya()">
-  SETUP DATABASE SEKOLAH
-</button>
-<button
-  id="btnSetupDrive"
-  class="btn btn-primary"
-  onclick="setupDriveSekolahSaya()">
-  SETUP FOLDER DRIVE
-</button>
-      </div>
-      <div id="loginError"
-           class="alert alert-danger mt-3 hidden"></div>
-    </div>
-  </div>
-  <div class="card diagnostic">
-    <div class="card-body">
-      <h5>FASE 4 — Multi-School Diagnostic</h5>
-      <p class="text-muted">
-        Tombol di bawah hanya untuk pengujian. Hapus setelah FASE 4 dinyatakan lulus.
-      </p>
-      <div class="d-flex flex-wrap gap-2">
-        <button
-          id="btnResource"
-          class="btn btn-warning"
-          onclick="testResources()">
-          TEST DATABASE & DRIVE
-        </button>
-        <button
-          id="btnContext"
-          class="btn btn-secondary"
-          onclick="testContext()">
-          TEST SCHOOL CONTEXT
-        </button>
-        <button
-          id="btnTransaction"
-          class="btn btn-success"
-          onclick="testTransaction()">
-          TEST TRANSACTION ENGINE
-        </button>
-      </div>
-      <div class="status mt-3">
-        <pre id="result"
-             style="white-space:pre-wrap;margin:0;"></pre>
+
+        <!-- DYNAMIC CONTENT -->
+        <div id="content"></div>
+
       </div>
     </div>
   </div>
+
+  <?!= include('koneksiMenu'); ?>
+  <?!= include('presensiPerkelasMenu'); ?>
+
+
+
+
+
+
+ 
+ 
 <script>
-let CURRENT_USER_CONTEXT = null;
-function showResult(value) {
-  document.getElementById('result').textContent =
-    typeof value === 'string'
-      ? value
-      : JSON.stringify(value, null, 2);
-}
-function setButtonLoading(id, loading, text) {
-  const btn = document.getElementById(id);
-  if (!btn) return;
-  btn.disabled = loading;
-  if (loading) {
-    btn.dataset.oldText = btn.innerHTML;
-    btn.innerHTML =
-      '<span class="spinner-border spinner-border-sm me-2"></span>' +
-      text;
-  } else {
-    btn.innerHTML = btn.dataset.oldText || text;
-  }
-}
-function loadApplication() {
-  google.script.run
-    .withSuccessHandler(function(result) {
-      if (!result || !result.success) {
-        showLoginError(
-          result && result.message
-            ? result.message
-            : 'Autentikasi gagal.'
-        );
-        return;
-      }
-      CURRENT_USER_CONTEXT = result;
-      document.getElementById('schoolName').textContent =
-        result.school.namaSekolah || '-';
-      document.getElementById('schoolNpsn').textContent =
-        result.school.npsn || '-';
-      document.getElementById('userName').textContent =
-        result.user.nama || '-';
-      document.getElementById('userRole').textContent =
-        result.user.role || '-';
-      document.getElementById('userEmail').textContent =
-        result.user.email || '-';
-      document.getElementById('loadingText').textContent =
-        'Terhubung';
-    })
-    .withFailureHandler(function(error) {
-      showLoginError(error.message);
-    })
-    .getLoginInfo();
-}
-function showLoginError(message) {
-  document.getElementById('loadingText').textContent =
-    'Gagal terhubung';
-  const el = document.getElementById('loginError');
-  el.textContent = message || 'Terjadi kesalahan.';
-  el.classList.remove('hidden');
-}
-function testResources() {
-  setButtonLoading(
-    'btnResource',
-    true,
-    'Testing...'
-  );
-  google.script.run
-    .withSuccessHandler(function(result) {
-      setButtonLoading(
-        'btnResource',
-        false
-      );
-      showResult(result);
-    })
-    .withFailureHandler(function(error) {
-      setButtonLoading(
-        'btnResource',
-        false
-      );
-      showResult({
-        success: false,
-        error: error.message
-      });
-    })
-    .testSchoolResources();
-}
-function testContext() {
-  setButtonLoading(
-    'btnContext',
-    true,
-    'Testing...'
-  );
-  google.script.run
-    .withSuccessHandler(function(result) {
-      setButtonLoading(
-        'btnContext',
-        false
-      );
-      showResult(result);
-    })
-    .withFailureHandler(function(error) {
-      setButtonLoading(
-        'btnContext',
-        false
-      );
-      showResult({
-        success: false,
-        error: error.message
-      });
-    })
-    .testSchoolContextSpeed();
-}
-function testTransaction() {
-  setButtonLoading(
-    'btnTransaction',
-    true,
-    'Testing...'
-  );
-  google.script.run
-    .withSuccessHandler(function(result) {
-      setButtonLoading(
-        'btnTransaction',
-        false
-      );
-      showResult(result);
-    })
-    .withFailureHandler(function(error) {
-      setButtonLoading(
-        'btnTransaction',
-        false
-      );
-      showResult({
-        success: false,
-        error: error.message
-      });
-    })
-    .runTestTransaction();
-}
-document.addEventListener(
-  'DOMContentLoaded',
-  loadApplication
-);
-function setupDatabaseSekolahSaya() {
-  const btn =
-    document.getElementById(
-      'btnSetupDatabase'
-    );
-  btn.disabled = true;
-  btn.innerHTML =
-    '<span class="spinner-border spinner-border-sm me-2"></span>' +
-    'Menyiapkan Database...';
-  google.script.run
-    .withSuccessHandler(
-      function(result) {
-        btn.disabled = false;
-        btn.innerHTML =
-          'SETUP DATABASE SEKOLAH';
-        document.getElementById(
-          'result'
-        ).textContent =
-          JSON.stringify(
-            result,
-            null,
-            2
-          );
-      }
-    )
-    .withFailureHandler(
-      function(error) {
-        btn.disabled = false;
-        btn.innerHTML =
-          'SETUP DATABASE SEKOLAH';
-        document.getElementById(
-          'result'
-        ).textContent =
-          'ERROR:\n\n' +
-          error.message;
-      }
-    )
-    .setupDatabaseSekolahSaya();
-}
-function setupDriveSekolahSaya() {
-  const btn =
-    document.getElementById(
-      'btnSetupDrive'
-    );
-  btn.disabled = true;
-  btn.innerHTML =
-    '<span class="spinner-border spinner-border-sm me-2"></span>' +
-    'Menyiapkan Drive...';
-  google.script.run
-    .withSuccessHandler(
-      function(result) {
-        btn.disabled = false;
-        btn.innerHTML =
-          'SETUP FOLDER DRIVE';
-        showResult(
-          result
-        );
-      }
-    )
-    .withFailureHandler(
-      function(error) {
-        btn.disabled = false;
-        btn.innerHTML =
-          'SETUP FOLDER DRIVE';
-        showResult({
-          success: false,
-          error:
-            error.message
-        });
-      }
-    )
-    .setupDriveSekolahSaya();
-}
-function refreshSchoolContext() {
-  const btn =
-    document.getElementById(
-      'btnRefreshContext'
-    );
-  btn.disabled = true;
-  btn.innerHTML =
-    '<span class="spinner-border spinner-border-sm me-2"></span>' +
-    'Refreshing...';
-  google.script.run
-    .withSuccessHandler(
-      function(result) {
-        btn.disabled = false;
-        btn.innerHTML =
-          'REFRESH SCHOOL CONTEXT';
-        showResult(
-          result
-        );
-        /*
-         * Reload halaman supaya frontend
-         * menggunakan School Context terbaru.
-         */
-        setTimeout(
-          function() {
-            location.reload();
-          },
-          1000
-        );
-      }
-    )
-    .withFailureHandler(
-      function(error) {
-        btn.disabled = false;
-        btn.innerHTML =
-          'REFRESH SCHOOL CONTEXT';
-        showResult({
-          success: false,
-          error:
-            error.message
-        });
-      }
-    )
-    .refreshMySchoolContext();
-}
+
 </script>
 </body>
 </html>
