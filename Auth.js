@@ -201,10 +201,6 @@ function buildSchoolContext_(user, school, email) {
   };
 }
 
-/**
- * Binding pengguna sekolah disimpan di Script Properties.
- * User sekolah tidak perlu membaca Spreadsheet MASTER.
- */
 function getUserBindings_() {
   const raw = PropertiesService.getScriptProperties().getProperty(
     AUTH_CONFIG.USER_BINDINGS_PROPERTY,
@@ -331,7 +327,16 @@ function getCurrentUserContext() {
     }
   }
 
-  // ADMIN_SEKOLAH: Master tetap menjadi sumber otoritatif.
+  // PENTING: cek binding user sekolah terlebih dahulu.
+  // Ini mencegah akun guru harus membuka Spreadsheet MASTER.
+  const boundUser = getBoundSchoolUserContext_(email);
+  if (boundUser) {
+    cache.put(cacheKey, JSON.stringify(boundUser), AUTH_CONFIG.CACHE_SECONDS);
+    return boundUser;
+  }
+
+  // Hanya akun yang belum mempunyai binding yang diperiksa ke MASTER.
+  // Ini adalah jalur ADMIN_SEKOLAH.
   const admin = getAdminByEmail_(email);
   if (admin) {
     const status = String(admin.STATUS || "").trim().toUpperCase();
@@ -359,13 +364,6 @@ function getCurrentUserContext() {
     const context = buildSchoolContext_(admin, school, email);
     cache.put(cacheKey, JSON.stringify(context), AUTH_CONFIG.CACHE_SECONDS);
     return context;
-  }
-
-  // USER SEKOLAH: tidak membaca Spreadsheet MASTER.
-  const localContext = getBoundSchoolUserContext_(email);
-  if (localContext) {
-    cache.put(cacheKey, JSON.stringify(localContext), AUTH_CONFIG.CACHE_SECONDS);
-    return localContext;
   }
 
   throw new Error(
@@ -495,10 +493,6 @@ function refreshMySchoolContext() {
   };
 }
 
-/**
- * Endpoint admin untuk menyinkronkan satu user sekolah yang sudah ada.
- * User sekolah sendiri tidak dapat memanggil fungsi internal binding.
- */
 function syncSchoolUserBinding(email) {
   const context = getCurrentUserContext();
   if (normalizeAuthRole_(context.role) !== "ADMIN_SEKOLAH") {
