@@ -65,7 +65,7 @@ function getKoneksiView() {
 function getPresensiPerkelasView() {
   const html = HtmlService.createHtmlOutputFromFile("presensiPerkelas").getContent();
   let js = HtmlService.createHtmlOutputFromFile("presensiPerkelas_js").getContent();
-  js = js.replace(/\.getKelasPresensiPerkelas\(\)/g, ".securePresensiLoad").replace(/\.getPresensiPerkelasData\(/g, ".securePresensiGetData(").replace(/\.simpanPresensiPerkelas\(/g, ".securePresensiSave(");
+  js = js.replace(/\.getKelasPresensiPerkelas\(\)/g, ".securePresensiLoad()").replace(/\.getPresensiPerkelasData\(/g, ".securePresensiGetData(").replace(/\.simpanPresensiPerkelas\(/g, ".securePresensiSave(");
   return { success: true, html: html, js: js };
 }
 
