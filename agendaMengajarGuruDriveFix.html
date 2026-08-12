@@ -1,0 +1,69 @@
+<script>
+/* =========================================================
+   FIX UPLOAD FOTO AGENDA MENGAJAR
+   Menggunakan Drive Service sekolah yang sama dengan modul lain.
+   Tidak menggunakan folder ID hard-coded.
+   ========================================================= */
+function uploadFileAgenda(base64, fileName) {
+  if (!base64 || !fileName) {
+    throw new Error('Data foto dan nama file wajib diisi.');
+  }
+
+  const match = String(base64).match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) {
+    throw new Error('Format foto tidak valid. Silakan pilih foto kembali.');
+  }
+
+  try {
+    let folder;
+
+    /*
+     * Gunakan Drive Service canonical.
+     * Ini memastikan Agenda memakai folder sekolah aktif yang sama
+     * dengan SchoolDrivePermissions / DriveService.
+     */
+    if (typeof getSchoolModuleFolder_ === 'function') {
+      folder = getSchoolModuleFolder_('AGENDA');
+    } else if (typeof getSchoolDriveFolder_ === 'function') {
+      const root = getSchoolDriveFolder_();
+      const folders = root.getFoldersByName('AGENDA');
+      folder = folders.hasNext() ? folders.next() : root.createFolder('AGENDA');
+    } else {
+      const ctx = getAgendaSchoolContext_();
+      if (!ctx.folderId) {
+        throw new Error('Folder Drive sekolah aktif belum tersedia.');
+      }
+      const root = DriveApp.getFolderById(ctx.folderId);
+      const folders = root.getFoldersByName('AGENDA');
+      folder = folders.hasNext() ? folders.next() : root.createFolder('AGENDA');
+    }
+
+    const mimeType = match[1];
+    const bytes = Utilities.base64Decode(match[2]);
+    const blob = Utilities.newBlob(bytes, mimeType, fileName);
+    const file = folder.createFile(blob);
+
+    return {
+      success: true,
+      url: file.getUrl(),
+      fileId: file.getId(),
+      fileName: file.getName(),
+      folder: folder.getName(),
+      folderId: folder.getId()
+    };
+
+  } catch (err) {
+    const message = err && err.message ? err.message : String(err);
+
+    if (/not found|tidak dapat ditemukan|tidak ditemukan|access|izin|permission/i.test(message)) {
+      throw new Error(
+        'Folder Drive AGENDA tidak dapat diakses oleh akun yang sedang login. ' +
+        'Pastikan guru sudah memiliki akses Editor ke folder Drive sekolah. ' +
+        'Detail: ' + message
+      );
+    }
+
+    throw new Error('Upload foto Agenda gagal: ' + message);
+  }
+}
+</script>
