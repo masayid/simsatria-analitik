@@ -14,13 +14,11 @@
 function getMasterSpreadsheet_() {
   const id = getMasterSpreadsheetId_();
   if (!id) throw new Error("MASTER_SPREADSHEET_ID belum dikonfigurasi.");
-
   try {
     return SpreadsheetApp.openById(id);
   } catch (e) {
     throw new Error(
-      "Akun pengguna tidak dapat membaca Spreadsheet MASTER. Pastikan akun Google yang digunakan untuk Web App memiliki akses minimal Viewer ke MASTER. Detail: " +
-        e.message,
+      "Akun pengguna tidak dapat membaca Spreadsheet MASTER. Pastikan akun Google yang digunakan untuk Web App memiliki akses minimal Viewer ke MASTER. Detail: " + e.message,
     );
   }
 }
@@ -47,6 +45,6 @@ function getSchoolByNpsn(npsn) {
 function getSchoolByNpsnDirect_(npsn) {
   const target = normalizeNpsn_(npsn);
   if (!target) return null;
-  const rows = sheetValuesToObjects_(getMasterSchoolsSheet_());
+  const rows = sheetRowsAsObjects_(getMasterSchoolsSheet_());
   return rows.find(row => normalizeNpsn_(row.NPSN) === target) || null;
 }
