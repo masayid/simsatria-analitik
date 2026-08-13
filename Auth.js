@@ -2,13 +2,15 @@
  * SIM SATRIA - AUTHENTICATION
  *
  * SUMBER KEBENARAN:
- * 1. SUPERADMIN = satu akun pemilik aplikasi.
+ * 1. SUPERADMIN = akun pemilik aplikasi.
  * 2. ADMIN_SEKOLAH = langsung dari MASTER/ADMIN_SEKOLAH.
  * 3. GURU/WALI_KELAS/KARYAWAN/SISWA = USERS pada Spreadsheet sekolah.
- * 4. Binding lokal hanya locator sekolah untuk user non-admin.
+ * 4. Binding lokal hanya cache/locator sekolah untuk user non-admin.
  *
- * TIDAK ADA lagi ketergantungan login terhadap syncMasterAuthRegistry().
- * MASTER dibaca oleh akun eksekusi Web App (Execute as: Me).
+ * DEPLOYMENT WAJIB:
+ * Execute as = User accessing the web app.
+ * Karena itu akun pengguna yang login harus memiliki akses minimal Viewer
+ * ke MASTER dan akses ke Spreadsheet sekolahnya.
  */
 const AUTH_CONFIG = {
   ADMIN_SHEET: "ADMIN_SEKOLAH",
@@ -17,7 +19,7 @@ const AUTH_CONFIG = {
   USER_BINDINGS_PROPERTY: "SIM_SATRIA_USER_BINDINGS_V2",
   ACTIVE_STATUS: "ACTIVE",
   SUPERADMIN_EMAIL: "yazid.mubasir12@admin.sma.belajar.id",
-  CONTEXT_CACHE_VERSION: "V8",
+  CONTEXT_CACHE_VERSION: "V9",
 };
 
 function normalizeEmail_(email) { return String(email || "").trim().toLowerCase(); }
@@ -29,7 +31,7 @@ function getGoogleUserEmail_() {
   const email = user ? normalizeEmail_(user.getEmail()) : "";
   if (!email) {
     throw new Error(
-      'Identitas akun Google tidak dapat diperoleh. Pastikan deployment menggunakan "User accessing the web app" untuk identitas pengguna dan akun sudah memberikan otorisasi.',
+      'Identitas akun Google tidak dapat diperoleh. Pastikan deployment menggunakan "User accessing the web app" dan akun sudah memberikan otorisasi.',
     );
   }
   return email;
@@ -64,36 +66,22 @@ function sheetRowsAsObjects_(sheet) {
   });
 }
 
-/**
- * ADMIN_SEKOLAH selalu dibaca langsung dari MASTER.
- * Tidak memakai CacheService dan tidak memakai registry lokal.
- * Dengan demikian perubahan pada MASTER langsung berlaku pada login berikutnya.
- */
 function getAdminByEmail_(email) {
   const target = normalizeEmail_(email);
   if (!target) return null;
-
   const rows = sheetRowsAsObjects_(getAdminSheet_());
   for (const row of rows) {
-    const rowEmail = normalizeEmail_(row.EMAIL);
-    const role = normalizeAuthRole_(row.ROLE);
-    const status = String(row.STATUS || "").trim().toUpperCase();
-    if (rowEmail === target && role === "ADMIN_SEKOLAH" && status === AUTH_CONFIG.ACTIVE_STATUS) {
-      return row;
-    }
+    if (
+      normalizeEmail_(row.EMAIL) === target &&
+      normalizeAuthRole_(row.ROLE) === "ADMIN_SEKOLAH" &&
+      String(row.STATUS || "").trim().toUpperCase() === AUTH_CONFIG.ACTIVE_STATUS
+    ) return row;
   }
 
-  // SUPERADMIN tetap merupakan identitas global walaupun tidak dicantumkan
-  // sebagai ADMIN_SEKOLAH pada MASTER.
   if (isSuperAdminEmail_(target)) {
     return {
-      USER_ID: "",
-      EMAIL: target,
-      NIP: "",
-      NAMA: "Pemilik Aplikasi",
-      NPSN: "",
-      ROLE: "SUPERADMIN",
-      STATUS: AUTH_CONFIG.ACTIVE_STATUS,
+      USER_ID: "", EMAIL: target, NIP: "", NAMA: "Pemilik Aplikasi",
+      NPSN: "", ROLE: "SUPERADMIN", STATUS: AUTH_CONFIG.ACTIVE_STATUS,
     };
   }
   return null;
@@ -132,7 +120,7 @@ function buildSchoolContext_(user, school, email) {
     nip: String(user.NIP || "").trim(),
     nama: String(user.NAMA || "").trim(),
     role: normalizeAuthRole_(user.ROLE || "GURU"),
-    npsn: normalizeNpsn_(school.NPSN),
+    npsn: normalizeNpsp_(school.NPSN),
     school: {
       npsn: normalizeNpsn_(school.NPSN),
       namaSekolah: String(school.NAMA_SEKOLAH || "").trim(),
@@ -170,8 +158,7 @@ function registerSchoolUserBinding_(context, user) {
     userId:String(user.USER_ID || user.userId || "").trim(),
     nip:String(user.NIP || user.nip || "").trim(),
     nama:String(user.NAMA || user.nama || "").trim(),
-    role:role,
-    status:status,
+    role:role, status:status,
     npsn:normalizeNpsn_(context.npsn),
     spreadsheetId:String(context.school.spreadsheetId || "").trim(),
     namaSekolah:String(context.school.namaSekolah || "").trim(),
@@ -192,7 +179,10 @@ function removeSchoolUserBinding_(email) {
   const target = normalizeEmail_(email);
   if (!target) return;
   const bindings = getUserBindings_();
-  if (Object.prototype.hasOwnProperty.call(bindings,target)) { delete bindings[target]; saveUserBindings_(bindings); }
+  if (Object.prototype.hasOwnProperty.call(bindings,target)) {
+    delete bindings[target];
+    saveUserBindings_(bindings);
+  }
   clearUserContextCache_(target);
 }
 
@@ -217,14 +207,66 @@ function getBoundSchoolUserContext_(email) {
   if (!["GURU","WALI_KELAS","KARYAWAN","SISWA"].includes(role)) throw new Error("Role " + role + " pada USERS tidak valid.");
   if (status !== AUTH_CONFIG.ACTIVE_STATUS) throw new Error("Akun pengguna sekolah tidak aktif. Hubungi ADMIN_SEKOLAH.");
 
-  registerSchoolUserBinding_({npsn:binding.npsn,school:school},{USER_ID:user.USER_ID,EMAIL:target,NIP:user.NIP,NAMA:user.NAMA,ROLE:role,STATUS:status});
   return buildSchoolContext_(user,school,target);
 }
 
 /**
- * Jalur autentikasi utama.
- * ADMIN_SEKOLAH selalu diperiksa lebih dulu langsung ke MASTER.
+ * Menemukan user sekolah yang belum memiliki binding.
+ * Ini adalah fallback bootstrap untuk Guru lama yang sudah ada di USERS
+ * sebelum sistem binding diperkenalkan.
+ *
+ * Keamanan:
+ * - pencarian hanya berdasarkan email akun yang sedang login;
+ * - hanya role sekolah yang diizinkan;
+ * - hanya sekolah ACTIVE;
+ * - setelah ditemukan, binding disimpan agar login berikutnya cepat;
+ * - tidak menerima NPSN/spreadsheetId dari frontend.
  */
+function discoverAndBindSchoolUser_(email) {
+  const target = normalizeEmail_(email);
+  if (!target) return null;
+
+  const schools = sheetRowsAsObjects_(getSchoolsSheet_());
+  for (const school of schools) {
+    const schoolStatus = String(school.STATUS || "").trim().toUpperCase();
+    if (schoolStatus && schoolStatus !== "ACTIVE" && schoolStatus !== "AKTIF") continue;
+
+    const spreadsheetId = String(school.SPREADSHEET_ID || "").trim();
+    const npsn = normalizeNpsn_(school.NPSN);
+    if (!spreadsheetId || !npsn) continue;
+
+    let ss;
+    try {
+      // Execute as User: user harus memang mempunyai akses ke database sekolah.
+      ss = SpreadsheetApp.openById(spreadsheetId);
+    } catch (e) {
+      // Tidak punya akses ke sekolah ini: lanjutkan ke sekolah berikutnya.
+      continue;
+    }
+
+    const usersSheet = ss.getSheetByName(AUTH_CONFIG.USERS_SHEET);
+    if (!usersSheet) continue;
+    const rows = sheetRowsAsObjects_(usersSheet);
+    const user = rows.find(row => normalizeEmail_(row.EMAIL) === target);
+    if (!user) continue;
+
+    const role = normalizeAuthRole_(user.ROLE);
+    const status = String(user.STATUS || "").trim().toUpperCase();
+    if (!["GURU","WALI_KELAS","KARYAWAN","SISWA"].includes(role)) {
+      throw new Error("Role pengguna pada USERS tidak valid untuk akun " + target + ".");
+    }
+    if (status !== AUTH_CONFIG.ACTIVE_STATUS) {
+      throw new Error("Akun pengguna sekolah tidak aktif. Hubungi ADMIN_SEKOLAH.");
+    }
+
+    const context = buildSchoolContext_(user, school, target);
+    registerSchoolUserBinding_(context, user);
+    return context;
+  }
+  return null;
+}
+
+/** Jalur autentikasi utama. */
 function getCurrentUserContext() {
   const email = getGoogleUserEmail_();
   const admin = getAdminByEmail_(email);
@@ -246,19 +288,27 @@ function getCurrentUserContext() {
     return buildSchoolContext_(Object.assign({},admin,{ROLE:role}),school,email);
   }
 
+  // Jalur normal user sekolah jika binding sudah tersedia.
   const bound = getBoundSchoolUserContext_(email);
   if (bound) return bound;
-  throw new Error('Akun Google "' + email + '" belum terdaftar sebagai pengguna sekolah. Hubungi ADMIN_SEKOLAH sekolah Anda.');
+
+  // Jalur bootstrap otomatis untuk Guru lama / user yang belum pernah
+  // dibuat melalui menu Manajemen Pengguna versi baru.
+  const discovered = discoverAndBindSchoolUser_(email);
+  if (discovered) return discovered;
+
+  throw new Error('Akun Google "' + email + '" belum terdaftar sebagai pengguna sekolah. Pastikan email tersebut ada pada USERS sekolah dan statusnya ACTIVE.');
 }
 
 function checkAuthentication() {
   try {
     const c = getCurrentUserContext();
     return {success:true,authenticated:true,email:c.email,userId:c.userId,npsn:c.npsn,sekolah:c.school.namaSekolah,role:c.role};
-  } catch(e) { return {success:false,authenticated:false,message:e.message}; }
+  } catch(e) {
+    return {success:false,authenticated:false,message:e.message};
+  }
 }
 
-/** Maintenance binding user sekolah oleh ADMIN_SEKOLAH. */
 function bindMySchool(npsn) {
   const email = getGoogleUserEmail_();
   const admin = getAdminByEmail_(email);
@@ -284,18 +334,8 @@ function clearUserContextCache_(email) {
   const safe=target.replace(/[^a-zA-Z0-9]/g,"_");
   const cache=CacheService.getScriptCache();
   cache.remove("USER_CONTEXT_"+AUTH_CONFIG.CONTEXT_CACHE_VERSION+"_"+safe);
-  cache.remove("USER_CONTEXT_V7_"+safe); cache.remove("USER_CONTEXT_V6_"+safe); cache.remove("USER_CONTEXT_V5_"+safe); cache.remove("USER_CONTEXT_V4_"+safe);
+  cache.remove("USER_CONTEXT_V8_"+safe); cache.remove("USER_CONTEXT_V7_"+safe); cache.remove("USER_CONTEXT_V6_"+safe); cache.remove("USER_CONTEXT_V5_"+safe); cache.remove("USER_CONTEXT_V4_"+safe);
   cache.remove("LOCAL_USER_"+safe); cache.remove("ADMIN_"+safe);
 }
 function clearMyAuthCache(){clearUserContextCache_(getGoogleUserEmail_());return{success:true};}
-
 function refreshMySchoolContext(){clearMyAuthCache();const c=getCurrentUserContext();return{success:true,message:"School Context berhasil di-refresh.",email:c.email,npsn:c.npsn,sekolah:c.school.namaSekolah,spreadsheetId:c.school.spreadsheetId,driveFolderId:c.school.driveFolderId,role:c.role};}
-
-function syncSchoolUserBinding(email) {
-  const context=getCurrentUserContext();
-  if(!["ADMIN_SEKOLAH","SUPERADMIN"].includes(normalizeAuthRole_(context.role))) throw new Error("Hanya ADMIN_SEKOLAH yang dapat melakukan sinkronisasi binding pengguna.");
-  const target=normalizeEmail_(email); if(!target)throw new Error("Email pengguna wajib diisi.");
-  const user=getSchoolUserByEmail_(context.school.spreadsheetId,target); if(!user)throw new Error("Pengguna tidak ditemukan pada USERS sekolah.");
-  const binding=registerSchoolUserBinding_(context,user);
-  return{success:true,email:target,userId:binding.userId,role:binding.role,status:binding.status,npsn:binding.npsn,sekolah:binding.namaSekolah};
-}
