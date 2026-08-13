@@ -38,19 +38,3 @@ function getSchoolDataSheet_(sheetName, required) {
   }
   return sh;
 }
-
-function getSchoolContextInfo() {
-  const c = getCurrentUserContext();
-  return {
-    success: true,
-    email: c.email,
-    userId: c.userId,
-    nip: c.nip,
-    nama: c.nama,
-    role: c.role,
-    npsn: c.npsn,
-    sekolah: c.school.namaSekolah,
-    spreadsheetId: c.school.spreadsheetId,
-    driveFolderId: c.school.driveFolderId,
-  };
-}
