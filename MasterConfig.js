@@ -154,6 +154,11 @@ function validateMasterAdminSheet_(sheet) {
  * GURU/WALI_KELAS/KARYAWAN/SISWA tidak pernah menjadi registry MASTER.
  */
 function syncMasterAuthRegistry() {
+  const callerEmail = getGoogleUserEmail_();
+  if (!isSuperAdminEmail_(callerEmail)) {
+    throw new Error("Hanya SUPERADMIN yang boleh melakukan sinkronisasi MASTER.");
+  }
+
   const masterId = getMasterSpreadsheetId_();
   const ss = SpreadsheetApp.openById(masterId);
   const props = PropertiesService.getScriptProperties();
