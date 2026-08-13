@@ -1,15 +1,16 @@
 /**
  * SCHOOL REGISTRY
  *
- * MASTER dibaca LANGSUNG oleh akun pengguna yang sedang mengakses Web App.
- * Deployment WAJIB: Execute as = User accessing the web app.
+ * DEPLOYMENT: Execute as = User accessing the web app.
  *
- * ADMIN_SEKOLAH maupun GURU memakai identitas Session.getActiveUser().
- * Karena itu setiap akun yang perlu autentikasi harus memiliki akses minimal
- * Viewer ke Spreadsheet MASTER.
+ * MASTER ACCESS POLICY:
+ * - ADMIN_SEKOLAH / SUPERADMIN may read MASTER because their Google accounts
+ *   are explicitly granted access to MASTER.
+ * - GURU / WALI_KELAS / KARYAWAN / SISWA must NEVER read MASTER directly.
+ * - Non-admin users receive their school Spreadsheet ID through the binding
+ *   created by ADMIN_SEKOLAH and then access only the school database.
  *
- * Database sekolah tetap diambil dari School Context; frontend tidak boleh
- * memilih spreadsheet sekolah secara langsung.
+ * Session.getActiveUser() remains the identity source for every caller.
  */
 function getMasterSpreadsheet_() {
   const id = getMasterSpreadsheetId_();
@@ -18,11 +19,12 @@ function getMasterSpreadsheet_() {
     return SpreadsheetApp.openById(id);
   } catch (e) {
     throw new Error(
-      "Akun pengguna tidak dapat membaca Spreadsheet MASTER. Pastikan akun Google yang digunakan untuk Web App memiliki akses minimal Viewer ke MASTER. Detail: " + e.message,
+      "Akun administrator tidak dapat membaca Spreadsheet MASTER. Pastikan akun ADMIN_SEKOLAH memiliki akses minimal Viewer ke MASTER. Detail: " + e.message,
     );
   }
 }
 
+/* These helpers are ADMIN/SUPERADMIN-only by architecture. */
 function getMasterAdminSheet_() {
   const sheet = getMasterSpreadsheet_().getSheetByName("ADMIN_SEKOLAH");
   if (!sheet) throw new Error("Sheet ADMIN_SEKOLAH tidak ditemukan pada MASTER.");
